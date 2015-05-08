@@ -3,11 +3,13 @@ CakePHP 3
 /vendor/*
 /config/app.php
 /tmp/*
+!/tmp/.keep
 /logs/*
 
 CakePHP 2
 
 /app/tmp/*
+!/app/tmp/.keep
 /app/Config/core.php
 /app/Config/database.php
 /vendors/*
