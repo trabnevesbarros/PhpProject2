@@ -9,10 +9,10 @@
 class DocentesController extends AppController {
 
     public $helpers = array('Html', 'Form');
-    public $uses = array('Docente', 'Docentespergunta', 'Docentesresposta');
+    public $uses = array('Docente', 'Pergunta', 'Docentesresposta');
 
     public function index() {
-        $this->set('perguntas', $this->Docentespergunta->find('all'));
+        $this->set('perguntas', $this->Pergunta->find('all'));
         $this->set('docentes', $this->Docente->find('all'));
     }
 
@@ -34,7 +34,7 @@ class DocentesController extends AppController {
             $this->Docente->create();
             if ($this->Docente->save($this->request->data)) {
                 $this->Session->setFlash(__('Docente cadastrado'));
-                $perguntas = $this->Docentespergunta->find('all');
+                $perguntas = $this->Pergunta->find('all');
                 if (!$perguntas) {
                     $this->Session->setFlash(__('Não foi possivel responder questionario'));
                     $this->redirect(array('action' => 'index'));
@@ -139,7 +139,7 @@ class DocentesController extends AppController {
             $this->set('respostas', $respostas);
         }
 
-        $perguntas = $this->Docentespergunta->find('all');
+        $perguntas = $this->Pergunta->find('all');
         if (!$perguntas) {
             throw new NotFoundException(__('Invalid'));
         }
@@ -177,7 +177,7 @@ class DocentesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $resposta['Docentespergunta'];
+        $pergunta = $resposta['Pergunta'];
         if (!$pergunta) {
             throw new NotFoundException(__('Invalid'));
         }

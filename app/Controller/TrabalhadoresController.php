@@ -9,10 +9,10 @@
 class TrabalhadoresController extends AppController {
 
     public $helpers = array('Html', 'Form');
-    public $uses = array('Trabalhador', 'Trabalhadorespergunta', 'Trabalhadoresresposta');
+    public $uses = array('Trabalhador', 'Pergunta', 'Trabalhadoresresposta');
 
     public function index() {
-        $this->set('perguntas', $this->Trabalhadorespergunta->find('all'));
+        $this->set('perguntas', $this->Pergunta->find('all'));
         $this->set('trabalhadores', $this->Trabalhador->find('all'));
     }
 
@@ -34,7 +34,7 @@ class TrabalhadoresController extends AppController {
             $this->Trabalhador->create();
             if ($this->Trabalhador->save($this->request->data)) {
                 $this->Session->setFlash(__('Trabalhador cadastrado'));
-                $perguntas = $this->Trabalhadorespergunta->find('all');
+                $perguntas = $this->Pergunta->find('all');
                 if (!$perguntas) {
                     $this->Session->setFlash(__('Não foi possivel responder questionario'));
                     $this->redirect(array('action' => 'index'));
@@ -139,7 +139,7 @@ class TrabalhadoresController extends AppController {
             $this->set('respostas', $respostas);
         }
 
-        $perguntas = $this->Trabalhadorespergunta->find('all');
+        $perguntas = $this->Pergunta->find('all');
         if (!$perguntas) {
             throw new NotFoundException(__('Invalid'));
         }
@@ -177,7 +177,7 @@ class TrabalhadoresController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $resposta['Trabalhadorespergunta'];
+        $pergunta = $resposta['Pergunta'];
         if (!$pergunta) {
             throw new NotFoundException(__('Invalid'));
         }

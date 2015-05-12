@@ -6,12 +6,16 @@
  * and open the template in the editor.
  */
 
-class Docentespergunta extends AppModel {
+class Pergunta extends AppModel {
     
     public $validate = array(
         'pergunta' => array('rule' => 'notEmpty')
     );
     
-    public $hasMany = array('Docentesresposta' => array('dependent' => true));
+    public $hasMany = array('Docentesresposta' => array('dependent' => true), 
+        'Empregadoresresposta' => array('dependent' => true),
+        'Trabalhadoresresposta' => array('dependent' => true));
+    
+    public $belongsTo = array('Perguntastipo');
     
 }

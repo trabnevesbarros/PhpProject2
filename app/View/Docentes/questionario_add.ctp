@@ -6,22 +6,22 @@ echo $this->Form->create('Docentesresposta');
 if (isset($respostas)) {
     foreach ($respostas as $key => $resposta) {
         echo $this->Form->input('Docentesresposta.' . $key . '.resposta', array(
-            'label' => $resposta['Docentespergunta']['pergunta'],
+            'label' => $resposta['Pergunta']['pergunta'],
             'value' => $resposta['Docentesresposta']['resposta']));
         echo $this->Form->input('Docentesresposta.' . $key . '.id', array(
             'type' => 'hidden',
             'value' => $resposta['Docentesresposta']['id']));
-        $respondidas[] = $resposta['Docentespergunta'];
+        $respondidas[] = $resposta['Pergunta'];
     }
 
     foreach ($perguntas as $key => $pergunta) {
-        if (array_search($pergunta['Docentespergunta'], $respondidas) === false) {
+        if (array_search($pergunta['Pergunta'], $respondidas) === false) {
             echo $this->Form->input('Docentesresposta.' . $key . '.resposta', array(
-                'label' => $pergunta['Docentespergunta']['pergunta']));
+                'label' => $pergunta['Pergunta']['pergunta']));
             echo $this->Form->hidden('Docentesresposta.' . $key . '.docente_id', array(
                 'value' => $docente['Docente']['id']));
             echo $this->Form->hidden('Docentesresposta.' . $key . '.docentespergunta_id', array(
-                'value' => $pergunta['Docentespergunta']['id']));
+                'value' => $pergunta['Pergunta']['id']));
         } else {
             $key --;
         }
@@ -29,11 +29,11 @@ if (isset($respostas)) {
 } else {
     foreach ($perguntas as $key => $pergunta) {
         echo $this->Form->input('Docentesresposta.' . $key . '.resposta', array(
-            'label' => $pergunta['Docentespergunta']['pergunta']));
+            'label' => $pergunta['Pergunta']['pergunta']));
         echo $this->Form->hidden('Docentesresposta.' . $key . '.docente_id', array(
             'value' => $docente['Docente']['id']));
         echo $this->Form->hidden('Docentesresposta.' . $key . '.docentespergunta_id', array(
-            'value' => $pergunta['Docentespergunta']['id']));
+            'value' => $pergunta['Pergunta']['id']));
     }
 }
 echo $this->Form->end('Salvar');

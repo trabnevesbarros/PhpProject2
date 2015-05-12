@@ -6,22 +6,22 @@ echo $this->Form->create('Trabalhadoresresposta');
 if (isset($respostas)) {
     foreach ($respostas as $key => $resposta) {
         echo $this->Form->input('Trabalhadoresresposta.' . $key . '.resposta', array(
-            'label' => $resposta['Trabalhadorespergunta']['pergunta'],
+            'label' => $resposta['Pergunta']['pergunta'],
             'value' => $resposta['Trabalhadoresresposta']['resposta']));
         echo $this->Form->input('Trabalhadoresresposta.' . $key . '.id', array(
             'type' => 'hidden',
             'value' => $resposta['Trabalhadoresresposta']['id']));
-        $respondidas[] = $resposta['Trabalhadorespergunta'];
+        $respondidas[] = $resposta['Pergunta'];
     }
 
     foreach ($perguntas as $key => $pergunta) {
-        if (array_search($pergunta['Trabalhadorespergunta'], $respondidas) === false) {
+        if (array_search($pergunta['Pergunta'], $respondidas) === false) {
             echo $this->Form->input('Trabalhadoresresposta.' . $key . '.resposta', array(
-                'label' => $pergunta['Trabalhadorespergunta']['pergunta']));
+                'label' => $pergunta['Pergunta']['pergunta']));
             echo $this->Form->hidden('Trabalhadoresresposta.' . $key . '.trabalhador_id', array(
                 'value' => $trabalhador['Trabalhador']['id']));
             echo $this->Form->hidden('Trabalhadoresresposta.' . $key . '.trabalhadorespergunta_id', array(
-                'value' => $pergunta['Trabalhadorespergunta']['id']));
+                'value' => $pergunta['Pergunta']['id']));
         } else {
             $key --;
         }
@@ -29,11 +29,11 @@ if (isset($respostas)) {
 } else {
     foreach ($perguntas as $key => $pergunta) {
         echo $this->Form->input('Trabalhadoresresposta.' . $key . '.resposta', array(
-            'label' => $pergunta['Trabalhadorespergunta']['pergunta']));
+            'label' => $pergunta['Pergunta']['pergunta']));
         echo $this->Form->hidden('Trabalhadoresresposta.' . $key . '.trabalhador_id', array(
             'value' => $trabalhador['Trabalhador']['id']));
         echo $this->Form->hidden('Trabalhadoresresposta.' . $key . '.trabalhadorespergunta_id', array(
-            'value' => $pergunta['Trabalhadorespergunta']['id']));
+            'value' => $pergunta['Pergunta']['id']));
     }
 }
 echo $this->Form->end('Salvar');

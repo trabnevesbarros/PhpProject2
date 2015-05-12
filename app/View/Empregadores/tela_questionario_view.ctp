@@ -1,5 +1,5 @@
 
-<p><strong>Pergunta:</strong> <?php echo h($pergunta['Empregadorespergunta']['pergunta']) ?></p>
+<p><strong>Pergunta:</strong> <?php echo h($pergunta['Pergunta']['pergunta']) ?></p>
 <p><strong>Resposta:</strong> 
     <?php
     if (empty($resposta['Empregadoresresposta']['resposta'])) {

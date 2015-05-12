@@ -8,6 +8,6 @@
 
 class Empregadoresresposta extends AppModel {
     
-    public $belongsTo = array('Empregador', 'Empregadorespergunta');
+    public $belongsTo = array('Empregador', 'Pergunta');
     
 }

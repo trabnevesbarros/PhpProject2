@@ -13,12 +13,12 @@
             <td>
                 <?php
                 $pergunta = $perguntas[$key];
-                $value = $pergunta['Empregadorespergunta']['pergunta'];
+                $value = $pergunta['Pergunta']['pergunta'];
                 if (strlen($value) > 50) $value = substr($value, 0, 50) . "...";
                 echo $this->Html->link($value,  
                     array('action' => 'telaQuestionarioView', 
                         $resposta['Empregadoresresposta']['id'],
-                        $pergunta['Empregadorespergunta']['id'])); 
+                        $pergunta['Pergunta']['id'])); 
                 ?>
             </td>
             <td>

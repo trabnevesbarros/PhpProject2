@@ -11,8 +11,8 @@ class Trabalhadoresresposta extends AppModel {
     public $belongsTo = array('Trabalhador' => array(
             'className' => 'Trabalhador',
             'foreignKey' => 'trabalhador_id'),
-        'Trabalhadorespergunta' => array(
-            'className' => 'Trabalhadorespergunta',
+        'Pergunta' => array(
+            'className' => 'Pergunta',
             'foreignKey' => 'trabalhadorespergunta_id'));
 
 }

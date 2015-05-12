@@ -12,7 +12,7 @@
             <td><?php echo $resposta['Trabalhadoresresposta']['id']; ?></td>        
             <td>
                 <?php
-                $pergunta = $resposta['Trabalhadorespergunta'];
+                $pergunta = $resposta['Pergunta'];
                 $value = $pergunta['pergunta'];
                 if (strlen($value) > 50) {
                     $value = substr($value, 0, 50) . "...";

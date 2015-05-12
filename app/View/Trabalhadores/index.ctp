@@ -29,7 +29,7 @@
             </td>
             <td>
                 <?php
-                if ($perguntas) {
+                if (isset($perguntas)) {
                     echo $this->Html->link('Ver questionario', array('action' => 'questionarioIndex', $trabalhador['Trabalhador']['id']));
                 }
                 ?>

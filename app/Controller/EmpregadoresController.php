@@ -9,10 +9,10 @@
 class EmpregadoresController extends AppController { 
 
     public $helpers = array('Html', 'Form');
-    public $uses = array('Empregador', 'Empregadorespergunta', 'Empregadoresresposta');
+    public $uses = array('Empregador', 'Pergunta', 'Empregadoresresposta');
 
     public function index() {
-        $this->set('perguntas', $this->Empregadorespergunta->find('all'));
+        $this->set('perguntas', $this->Pergunta->find('all'));
         $this->set('empregadores', $this->Empregador->find('all'));
     }
 
@@ -33,7 +33,7 @@ class EmpregadoresController extends AppController {
 
         $this->set('respostas', $respostas);
 
-        $perguntas = $this->Empregadorespergunta->find('all', array('order' => 'Empregadorespergunta.id ASC'));
+        $perguntas = $this->Pergunta->find('all', array('order' => 'Pergunta.id ASC'));
         if (!$perguntas) {
             throw new NotFoundException(__('Invalid'));
         }
@@ -50,7 +50,7 @@ class EmpregadoresController extends AppController {
 
         $this->set('resposta', $resposta);
 
-        $pergunta = $this->Empregadorespergunta->findById($perguntaId);
+        $pergunta = $this->Pergunta->findById($perguntaId);
         if (!$pergunta) {
             throw new NotFoundException(__('Invalid'));
         }
@@ -70,7 +70,7 @@ class EmpregadoresController extends AppController {
 
         $this->set('empregador', $empregador);
 
-        $perguntas = $this->Empregadorespergunta->find('all');
+        $perguntas = $this->Pergunta->find('all');
         if (!$perguntas) {
             throw new NotFoundException(__('Invalid'));
         }
@@ -97,7 +97,7 @@ class EmpregadoresController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $this->Empregadorespergunta->findById($resposta['Empregadoresresposta']['empregadorespergunta_id']);
+        $pergunta = $this->Pergunta->findById($resposta['Empregadoresresposta']['empregadorespergunta_id']);
         if (!$pergunta) {
             throw new NotFoundException(__('Invalid'));
         }
@@ -124,7 +124,7 @@ class EmpregadoresController extends AppController {
 
         $respostas = $this->Empregadoresresposta->find('all', array('conditions' => array('empregador_id' => $empregadorId)));
 
-        $perguntas = $this->Empregadorespergunta->find('all');
+        $perguntas = $this->Pergunta->find('all');
         if (!$perguntas) {
             throw new NotFoundException(__('Invalid'));
         }
@@ -136,7 +136,7 @@ class EmpregadoresController extends AppController {
             $test[] = $resposta['Empregadoresresposta']['empregadorespergunta_id'];
         }
         foreach ($perguntas as $pergunta) {
-            $test2[] = $pergunta['Empregadorespergunta']['id'];
+            $test2[] = $pergunta['Pergunta']['id'];
         }
 
         $diff = array_diff($test2, $test);
@@ -162,7 +162,7 @@ class EmpregadoresController extends AppController {
     }
 
     public function add() {
-        $perguntas = $this->Empregadorespergunta->find('all');
+        $perguntas = $this->Pergunta->find('all');
 
         if ($this->request->is('post')) {
             $this->Empregador->create();

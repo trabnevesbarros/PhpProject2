@@ -6,12 +6,14 @@
  * and open the template in the editor.
  */
 
-class DocentesperguntasController extends AppController {
+class PerguntasController extends AppController {
     
     public $helpers = array('Html', 'Form');
+    public $uses = array('Pergunta', 'Perguntastipo');
     
     public function index() {
-        $this->set('perguntas', $this->Docentespergunta->find('all'));
+        $this->set('perguntastipo', $this->Perguntastipo->find('all'));
+        $this->set('perguntas', $this->Pergunta->find('all'));
     }
 
     public function view($id = null) {
@@ -19,7 +21,7 @@ class DocentesperguntasController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $this->Docentespergunta->findById($id);
+        $pergunta = $this->Pergunta->findById($id);
         if (!$pergunta) {
             throw new NotFoundException(__('Invalid'));
         }
@@ -29,8 +31,8 @@ class DocentesperguntasController extends AppController {
 
     public function add() {
         if ($this->request->is('post')) {
-            $this->Docentespergunta->create();
-            if ($this->Docentespergunta->save($this->request->data)) {
+            $this->Pergunta->create();
+            if ($this->Pergunta->save($this->request->data)) {
                 $this->Session->setFlash(__('Pergunta cadastrada'));
                 return $this->redirect(array('action' => 'index'));
             } else {
@@ -44,14 +46,14 @@ class DocentesperguntasController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $this->Docentespergunta->findById($id);
+        $pergunta = $this->Pergunta->findById($id);
         if (!$pergunta) {
             throw new NotFoundException(__('Invalid'));
         }
 
         if ($this->request->is(array('post', 'put'))) {
-            $this->Docentespergunta->id = $id;
-            if ($this->Docentespergunta->save($this->request->data)) {
+            $this->Pergunta->id = $id;
+            if ($this->Pergunta->save($this->request->data)) {
                 $this->Session->setFlash(__('Registro alterado'));
                 return $this->redirect(array('action' => 'index'));
             }
@@ -71,12 +73,12 @@ class DocentesperguntasController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $this->Docentespergunta->findById($id);
+        $pergunta = $this->Pergunta->findById($id);
         if (!$pergunta) {
             throw new NotFoundException(__('Invalid'));
         }
         
-        if($this->Docentespergunta->delete($id)){
+        if($this->Pergunta->delete($id)){
             $this->Session->setFlash(__('Pergunta removida'));
         } else {
             $this->Session->setFlash(__('Não foi possivel remover pergunta'));

@@ -6,12 +6,12 @@
  * and open the template in the editor.
  */
 
-class EmpregadoresperguntasController extends AppController {
+class PerguntastiposController extends AppController {
     
     public $helpers = array('Html', 'Form');
     
     public function index() {
-        $this->set('perguntas', $this->Empregadorespergunta->find('all'));
+        $this->set('perguntastipos', $this->Perguntastipo->find('all'));
     }
 
     public function view($id = null) {
@@ -19,22 +19,22 @@ class EmpregadoresperguntasController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $this->Empregadorespergunta->findById($id);
-        if (!$pergunta) {
+        $perguntastipo = $this->Perguntastipo->findById($id);
+        if (!$perguntastipo) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->set('pergunta', $pergunta);
+        $this->set('perguntastipo', $perguntastipo);
     }
 
     public function add() {
         if ($this->request->is('post')) {
-            $this->Empregadorespergunta->create();
-            if ($this->Empregadorespergunta->save($this->request->data)) {
-                $this->Session->setFlash(__('Pergunta cadastrada'));
+            $this->Perguntastipo->create();
+            if ($this->Perguntastipo->save($this->request->data)) {
+                $this->Session->setFlash(__('Tipo cadastrado'));
                 return $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('Não foi possivel cadastrar Pergunta'));
+                $this->Session->setFlash(__('Não foi possivel cadastrar tipo'));
             }
         }
     }
@@ -44,21 +44,21 @@ class EmpregadoresperguntasController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $this->Empregadorespergunta->findById($id);
-        if (!$pergunta) {
+        $perguntastipo = $this->Perguntastipo->findById($id);
+        if (!$perguntastipo) {
             throw new NotFoundException(__('Invalid'));
         }
 
         if ($this->request->is(array('post', 'put'))) {
-            $this->Empregadorespergunta->id = $id;
-            if ($this->Empregadorespergunta->save($this->request->data)) {
+            $this->Perguntastipo->id = $id;
+            if ($this->Perguntastipo->save($this->request->data)) {
                 $this->Session->setFlash(__('Registro alterado'));
                 return $this->redirect(array('action' => 'index'));
             }
         }
 
         if (!$this->request->data) {
-            $this->request->data = $pergunta;
+            $this->request->data = $perguntastipo;
         }
     }
 
@@ -71,15 +71,15 @@ class EmpregadoresperguntasController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $this->Empregadorespergunta->findById($id);
-        if (!$pergunta) {
+        $perguntastipo = $this->Perguntastipo->findById($id);
+        if (!$perguntastipo) {
             throw new NotFoundException(__('Invalid'));
         }
         
-        if($this->Empregadorespergunta->delete($id)){
-            $this->Session->setFlash(__('Pergunta removida'));
+        if($this->Perguntastipo->delete($id)){
+            $this->Session->setFlash(__('Tipo removido'));
         } else {
-            $this->Session->setFlash(__('Não foi possivel remover Pergunta'));
+            $this->Session->setFlash(__('Não foi possivel remover tipo'));
         }
         return $this->redirect(array('action' => 'index'));
     }
