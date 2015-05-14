@@ -97,8 +97,6 @@ class DocentesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->set('docenteId', $docenteId);
-
         $respostas = $this->Docentesresposta->find('all', array(
             'conditions' => array('docente_id' => $docenteId)));
         if (!$respostas) {
@@ -177,10 +175,7 @@ class DocentesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $resposta['Pergunta'];
-        if (!$pergunta) {
-            throw new NotFoundException(__('Invalid'));
-        }
+        $this->set('resposta', $resposta);
 
         if ($this->request->is(array('post', 'put'))) {
             $this->Docentesresposta->id = $respostaId;

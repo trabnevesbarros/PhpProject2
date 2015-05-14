@@ -1,4 +1,4 @@
-<h1>Questionario <?php echo '[Id do docente = ' . $docenteId . ']'; ?></h1>
+<h1>Questionario <?php echo '[Nome do docente = ' . $respostas[0]['Docente']['nome'] . ']'; ?></h1>
 
 <table>
     <thead>
@@ -42,6 +42,6 @@
 </table>
 
 <?php
-echo $this->Html->Link('Responder questionario', array('action' => 'questionarioAdd', $docenteId));
+echo $this->Html->Link('Responder questionario', array('action' => 'questionarioAdd', $respostas[0]['Docente']['id']));
 echo '<br/>';
 echo $this->Html->Link('Voltar', array('action' => 'index'));

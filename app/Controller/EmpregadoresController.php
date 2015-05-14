@@ -26,7 +26,7 @@ class EmpregadoresController extends AppController {
 
         $respostas = $this->Empregadoresresposta->find('all', array(
             'conditions' => array('empregador_id' => $empregadorId), 
-            'order' => array('Empregadoresresposta.empregadorespergunta_id ASC')));
+            'order' => array('Empregadoresresposta.pergunta_id ASC')));
         if (!$respostas) {
             throw new NotFoundException(__('Invalid'));
         }
@@ -97,7 +97,7 @@ class EmpregadoresController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $this->Pergunta->findById($resposta['Empregadoresresposta']['empregadorespergunta_id']);
+        $pergunta = $this->Pergunta->findById($resposta['Empregadoresresposta']['pergunta_id']);
         if (!$pergunta) {
             throw new NotFoundException(__('Invalid'));
         }
@@ -133,7 +133,7 @@ class EmpregadoresController extends AppController {
         $test2 = array();
 
         foreach ($respostas as $resposta) {
-            $test[] = $resposta['Empregadoresresposta']['empregadorespergunta_id'];
+            $test[] = $resposta['Empregadoresresposta']['pergunta_id'];
         }
         foreach ($perguntas as $pergunta) {
             $test2[] = $pergunta['Pergunta']['id'];
@@ -142,7 +142,7 @@ class EmpregadoresController extends AppController {
         $diff = array_diff($test2, $test);
 
         foreach ($diff as $value) {
-            $values = array('resposta' => '', 'empregador_id' => $empregadorId, 'empregadorespergunta_id' => $value);
+            $values = array('resposta' => '', 'empregador_id' => $empregadorId, 'pergunta_id' => $value);
             $this->Empregadoresresposta->create();
             $this->Empregadoresresposta->save($values);
         }

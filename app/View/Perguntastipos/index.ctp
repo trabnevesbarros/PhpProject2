@@ -12,7 +12,7 @@
             <td><?php echo $perguntastipo['Perguntastipo']['id']; ?></td>        
             <td>
                 <?php 
-                echo $this->Html->link($perguntastipo['Perguntastipo']['tipo'], 
+                echo $this->Html->link($perguntastipo['Perguntastipo']['name'], 
                         array('action' => 'view', $perguntastipo['Perguntastipo']['id'])); 
                 ?>
             </td>

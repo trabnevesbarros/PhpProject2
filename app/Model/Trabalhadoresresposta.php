@@ -8,11 +8,6 @@
 
 class Trabalhadoresresposta extends AppModel {
 
-    public $belongsTo = array('Trabalhador' => array(
-            'className' => 'Trabalhador',
-            'foreignKey' => 'trabalhador_id'),
-        'Pergunta' => array(
-            'className' => 'Pergunta',
-            'foreignKey' => 'trabalhadorespergunta_id'));
+    public $belongsTo = array('Trabalhador', 'Pergunta');
 
 }

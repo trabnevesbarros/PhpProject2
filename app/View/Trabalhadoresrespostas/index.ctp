@@ -14,7 +14,7 @@
                 echo $this->Html->link('Visualizar', 
                     array('action' => 'view', 
                             $resposta['Trabalhadoresresposta']['id'], 
-                            $resposta['Trabalhadoresresposta']['trabalhadorespergunta_id']
+                            $resposta['Trabalhadoresresposta']['pergunta_id']
                     )
                 ); 
                 ?>

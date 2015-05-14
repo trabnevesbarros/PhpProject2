@@ -9,7 +9,7 @@
 class Perguntastipo extends AppModel{
     
     public $validate = array(
-        'tipo' => array('rule' => 'notEmpty')
+        'name' => array('rule' => 'notEmpty')
     );
     
     public $hasMany = array('Pergunta' => array('dependent' => true));

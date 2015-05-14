@@ -20,7 +20,7 @@ if (isset($respostas)) {
                 'label' => $pergunta['Pergunta']['pergunta']));
             echo $this->Form->hidden('Trabalhadoresresposta.' . $key . '.trabalhador_id', array(
                 'value' => $trabalhador['Trabalhador']['id']));
-            echo $this->Form->hidden('Trabalhadoresresposta.' . $key . '.trabalhadorespergunta_id', array(
+            echo $this->Form->hidden('Trabalhadoresresposta.' . $key . '.pergunta_id', array(
                 'value' => $pergunta['Pergunta']['id']));
         } else {
             $key --;
@@ -32,7 +32,7 @@ if (isset($respostas)) {
             'label' => $pergunta['Pergunta']['pergunta']));
         echo $this->Form->hidden('Trabalhadoresresposta.' . $key . '.trabalhador_id', array(
             'value' => $trabalhador['Trabalhador']['id']));
-        echo $this->Form->hidden('Trabalhadoresresposta.' . $key . '.trabalhadorespergunta_id', array(
+        echo $this->Form->hidden('Trabalhadoresresposta.' . $key . '.pergunta_id', array(
             'value' => $pergunta['Pergunta']['id']));
     }
 }

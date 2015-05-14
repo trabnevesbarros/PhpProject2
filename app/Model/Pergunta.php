@@ -9,7 +9,8 @@
 class Pergunta extends AppModel {
     
     public $validate = array(
-        'pergunta' => array('rule' => 'notEmpty')
+        'pergunta' => array('rule' => 'notEmpty'),
+        'perguntastipo_id' => array('rule' => 'notEmpty')
     );
     
     public $hasMany = array('Docentesresposta' => array('dependent' => true), 

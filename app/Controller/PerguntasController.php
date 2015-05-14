@@ -12,8 +12,10 @@ class PerguntasController extends AppController {
     public $uses = array('Pergunta', 'Perguntastipo');
     
     public function index() {
-        $this->set('perguntastipo', $this->Perguntastipo->find('all'));
-        $this->set('perguntas', $this->Pergunta->find('all'));
+        
+        $this->set('perguntastipos', (($this->Perguntastipo->find('count') > 0 ) ? true : false));
+//  
+ $this->set('perguntas', $this->Pergunta->query('select perguntas.id, pergunta, perguntastipos.name  from perguntas inner join perguntastipos on (perguntastipos.id = perguntas.perguntastipo_id);'));
     }
 
     public function view($id = null) {
@@ -30,6 +32,12 @@ class PerguntasController extends AppController {
     }
 
     public function add() {
+        $perguntastipos = $this->Perguntastipo->find('list');
+        if (!$perguntastipos) {
+            throw new NotFountException(__('Invalid'));
+        }
+        $this->set('perguntastipos', $perguntastipos);
+        
         if ($this->request->is('post')) {
             $this->Pergunta->create();
             if ($this->Pergunta->save($this->request->data)) {
