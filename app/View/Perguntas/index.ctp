@@ -2,34 +2,32 @@
 
 <table>
     <thead>
-        <th>Id</th>
         <th>Pergunta</th>
         <th>Tipo</th>
         <th colspan='2'>Ação</th>
     </thead>
     <tbody>
-        <?php debug($perguntas);foreach ($perguntas as $pergunta): ?>
-        <tr>
-            <td><?php echo $pergunta[0]['id']; ?></td>        
+        <?php foreach ($perguntas as $pergunta): ?>
+        <tr>     
             <td>
                 <?php 
-                $value = $pergunta[0]['pergunta'];
+                $value = $pergunta['Pergunta']['pergunta'];
                 if (strlen($value) > 50) $value = substr($value, 0, 50) . "...";
                 echo $this->Html->link($value, 
-                        array('action' => 'view', $pergunta[0]['id'])); 
+                        array('action' => 'view', $pergunta['Pergunta']['id'])); 
                 ?>
             </td>
-            <td><?php echo $pergunta[0]['name'] ?></td>
+            <td><?php echo $pergunta['Perguntastipo']['name'] ?></td>
             <td>
                 <?php
                 echo $this->Html->link('Alterar', 
-                        array('action' => 'edit', $pergunta[0]['id'])); 
+                        array('action' => 'edit', $pergunta['Pergunta']['id'])); 
                 ?>
             </td>
             <td>
                 <?php
                 echo $this->Form->postLink('Remover', 
-                        array('action' => 'delete', $pergunta[0]['id']), 
+                        array('action' => 'delete', $pergunta['Pergunta']['id']), 
                         array('confirm' => 'Você tem certeza?')
                 );
                 ?>
@@ -41,7 +39,7 @@
 </table>
 
 <?php 
-if($perguntastipos){
+if(isset($perguntastipos[0])){
     echo $this->Html->link('Adicionar pergunta', array('action' => 'add'));
 } else {
     echo $this->Html->link('Adicionar tipos primeiro', array('controller' => 'Perguntastipos', 'action' => 'index'));

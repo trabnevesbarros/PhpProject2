@@ -7,7 +7,7 @@ class DATABASE_CONFIG {
 		'host' => 'localhost',
 		'login' => 'victorvbc',
 		'password' => 'reload',
-		'database' => 'apl',
+		'database' => 'apl.old2',
 		'prefix' => '',
 		'encoding' => 'utf8'
 	);

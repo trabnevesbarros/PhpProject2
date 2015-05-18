@@ -1,15 +1,17 @@
-<h1>Questionario <?php echo '[Nome do docente = ' . $respostas[0]['Docente']['nome'] . ']'; ?></h1>
+<h1>Questionario <?php echo '(Docente ' . $respostas[0]['Docente']['nome'] . ')'; ?></h1>
 
 <table>
     <thead>
-    <th>Id</th>
     <th>Pergunta</th>
+    <th>Status</th>
     <th colspan='2'>Ação</th>
 </thead>
 <tbody>
-    <?php foreach ($respostas as $resposta): ?>
-        <tr>
-            <td><?php echo $resposta['Docentesresposta']['id']; ?></td>        
+    <?php 
+    $respondidas;
+    foreach ($respostas as $resposta): 
+    ?>
+        <tr>    
             <td>
                 <?php
                 $pergunta = $resposta['Pergunta'];
@@ -22,6 +24,7 @@
                     $pergunta['id']));
                 ?>
             </td>
+            <td>Respondida</td>
             <td>
                 <?php
                 echo $this->Html->Link('Editar', array(
@@ -36,7 +39,37 @@
                 ?>
             </td>
         </tr>
-<?php endforeach; ?>
+    <?php 
+    $respondidas[] = $resposta['Pergunta'];
+    endforeach; 
+    
+    foreach ($perguntas as $pergunta): 
+        if (array_search($pergunta['Pergunta'], $respondidas) === false):
+    ?>
+        <tr>    
+            <td>
+                <?php
+                $value = $pergunta['Pergunta']['pergunta'];
+                if (strlen($value) > 50) {
+                    $value = substr($value, 0, 50) . "...";
+                }
+                echo $value;
+                ?>
+            </td>
+            <td>Não respondida</td>
+            <td>
+                <?php
+                echo $this->Html->Link('Responder', array(
+                    'action' => 'questionarioAdd',
+                    $respostas[0]['Docente']['id'],
+                    $pergunta['Pergunta']['id']));
+                ?>
+            </td>
+        </tr>
+    <?php
+        endif;
+    endforeach; 
+    ?>
 
 </tbody>
 </table>

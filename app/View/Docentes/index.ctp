@@ -2,7 +2,6 @@
 
 <table>
     <thead>
-    <th>Id</th>
     <th>Nome</th>
     <th>Área</th>
     <th>Formação</th>
@@ -11,8 +10,7 @@
 </thead>
 <tbody>
     <?php foreach ($docentes as $docente): ?>
-        <tr>
-            <td><?php echo $docente['Docente']['id']; ?></td>        
+        <tr>      
             <td>
                 <?php
                 echo $this->Html->link($docente['Docente']['nome'], array('action' => 'view', $docente['Docente']['id']));
@@ -33,7 +31,7 @@
             </td>
             <td>
                 <?php
-                if ($perguntas) {
+                if (!empty($perguntas)) {
                     echo $this->Html->link('Ver questionario', array('action' => 'questionarioIndex', $docente['Docente']['id']));
                 }
                 ?>

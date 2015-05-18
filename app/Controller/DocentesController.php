@@ -12,8 +12,10 @@ class DocentesController extends AppController {
     public $uses = array('Docente', 'Pergunta', 'Docentesresposta');
 
     public function index() {
-        $this->set('perguntas', $this->Pergunta->find('all'));
-        $this->set('docentes', $this->Docente->find('all'));
+        $this->set('perguntas', $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."perguntastipo_id" AS "Pergunta__perguntastipo_id", "Perguntastipo"."id" AS "Perguntastipo__id", "Perguntastipo"."name" AS "Perguntastipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."perguntastipos" AS "Perguntastipo" ON ("Pergunta"."perguntastipo_id" = "Perguntastipo"."id") WHERE 1 = 1'));
+        //$this->Pergunta->find('all')^
+        $this->set('docentes', $this->Docente->query('SELECT "Docente"."nome" AS "Docente__nome", "Docente"."area" AS "Docente__area", "Docente"."formacao" AS "Docente__formacao", "Docente"."tempo_atuacao" AS "Docente__tempo_atuacao", "Docente"."id" AS "Docente__id" FROM "public"."docentes" AS "Docente" WHERE 1 = 1'));
+        //$this->Docente->find('all')^
     }
 
     public function view($id = null) {
@@ -21,12 +23,13 @@ class DocentesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $docente = $this->Docente->findById($id);
-        if (!$docente) {
+        $docente = $this->Docente->query('SELECT "Docente"."nome" AS "Docente__nome", "Docente"."area" AS "Docente__area", "Docente"."formacao" AS "Docente__formacao", "Docente"."tempo_atuacao" AS "Docente__tempo_atuacao", "Docente"."id" AS "Docente__id" FROM "public"."docentes" AS "Docente" WHERE "Docente"."id" = ' . $id . ' LIMIT 1');
+        //$this->Docente->findById($id)^
+        if (!isset($docente[0])) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->set('docente', $docente);
+        $this->set('docente', $docente[0]);
     }
 
     public function add() {
@@ -34,13 +37,12 @@ class DocentesController extends AppController {
             $this->Docente->create();
             if ($this->Docente->save($this->request->data)) {
                 $this->Session->setFlash(__('Docente cadastrado'));
-                $perguntas = $this->Pergunta->find('all');
-                if (!$perguntas) {
-                    $this->Session->setFlash(__('Não foi possivel responder questionario'));
-                    $this->redirect(array('action' => 'index'));
-                } else {
-                    return $this->redirect(array('action' => 'questionarioAdd', $this->Docente->id, true));
+                $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."perguntastipo_id" AS "Pergunta__perguntastipo_id", "Perguntastipo"."id" AS "Perguntastipo__id", "Perguntastipo"."name" AS "Perguntastipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."perguntastipos" AS "Perguntastipo" ON ("Pergunta"."perguntastipo_id" = "Perguntastipo"."id") WHERE 1 = 1');
+                if (isset($perguntas[0])) {
+                    return $this->redirect(array('action' => 'questionarioAdd', $this->Docente->id, false, true));
                 }
+                $this->Session->setFlash(__('Não foi possivel responder questionario'));
+                $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash(__('Não foi possivel cadastrar docente'));
             }
@@ -52,8 +54,9 @@ class DocentesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $docente = $this->Docente->findById($id);
-        if (!$docente) {
+        $docente = $this->Docente->query('SELECT "Docente"."nome" AS "Docente__nome", "Docente"."area" AS "Docente__area", "Docente"."formacao" AS "Docente__formacao", "Docente"."tempo_atuacao" AS "Docente__tempo_atuacao", "Docente"."id" AS "Docente__id" FROM "public"."docentes" AS "Docente" WHERE "Docente"."id" = ' . $id . ' LIMIT 1');
+        //$this->Docente->findById($id)^
+        if (!isset($docente[0])) {
             throw new NotFoundException(__('Invalid'));
         }
 
@@ -66,7 +69,7 @@ class DocentesController extends AppController {
         }
 
         if (!$this->request->data) {
-            $this->request->data = $docente;
+            $this->request->data = $docente[0];
         }
     }
 
@@ -79,8 +82,9 @@ class DocentesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $docente = $this->Docente->findById($id);
-        if (!$docente) {
+        $docente = $this->Docente->query('SELECT "Docente"."nome" AS "Docente__nome", "Docente"."area" AS "Docente__area", "Docente"."formacao" AS "Docente__formacao", "Docente"."tempo_atuacao" AS "Docente__tempo_atuacao", "Docente"."id" AS "Docente__id" FROM "public"."docentes" AS "Docente" WHERE "Docente"."id" = ' . $id . ' LIMIT 1');
+        //$this->Docente->findById($id)^
+        if (!isset($docente[0])) {
             throw new NotFoundException(__('Invalid'));
         }
 
@@ -104,6 +108,14 @@ class DocentesController extends AppController {
         }
 
         $this->set('respostas', $respostas);
+
+        $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."perguntastipo_id" AS "Pergunta__perguntastipo_id", "Perguntastipo"."id" AS "Perguntastipo__id", "Perguntastipo"."name" AS "Perguntastipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."perguntastipos" AS "Perguntastipo" ON ("Pergunta"."perguntastipo_id" = "Perguntastipo"."id") WHERE 1 = 1');
+        //$this->Pergunta->find('all')^
+        if (!isset($perguntas[0])) {
+            throw new NotFoundException(__('Invalid'));
+        }
+
+        $this->set('perguntas', $perguntas);
     }
 
     public function questionarioView($respostaId = null) {
@@ -119,31 +131,42 @@ class DocentesController extends AppController {
         $this->set('resposta', $resposta);
     }
 
-    public function questionarioAdd($docenteId = null, $first = null) {
+    public function questionarioAdd($docenteId = null, $perguntaId = null, $first = null) {
         if (!$docenteId) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $docente = $this->Docente->findById($docenteId);
-        if (!$docente) {
+        $docente = $this->Docente->query('SELECT "Docente"."nome" AS "Docente__nome", "Docente"."area" AS "Docente__area", "Docente"."formacao" AS "Docente__formacao", "Docente"."tempo_atuacao" AS "Docente__tempo_atuacao", "Docente"."id" AS "Docente__id" FROM "public"."docentes" AS "Docente" WHERE "Docente"."id" = ' . $docenteId . ' LIMIT 1');
+        //$this->Docente->findById($docenteId)^
+        if (!isset($docente[0])) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->set('docente', $docente);
+        $this->set('docente', $docente[0]);
 
-        $respostas = $this->Docentesresposta->find('all', array(
-            'conditions' => array('docente_id' => $docenteId)));
-        if ($respostas) {
-            $this->set('respostas', $respostas);
+        if (!$perguntaId) {
+            $respostas = $this->Docentesresposta->find('all', array(
+                'conditions' => array('docente_id' => $docenteId)));
+            if ($respostas) {
+                $this->set('respostas', $respostas);
+            }
+
+            $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."perguntastipo_id" AS "Pergunta__perguntastipo_id", "Perguntastipo"."id" AS "Perguntastipo__id", "Perguntastipo"."name" AS "Perguntastipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."perguntastipos" AS "Perguntastipo" ON ("Pergunta"."perguntastipo_id" = "Perguntastipo"."id") WHERE 1 = 1');
+            //$this->Pergunta->find('all')^
+            if (!isset($perguntas[0])) {
+                throw new NotFoundException(__('Invalid'));
+            }
+
+            $this->set('perguntas', $perguntas);
+        } else {
+            $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."perguntastipo_id" AS "Pergunta__perguntastipo_id", "Perguntastipo"."id" AS "Perguntastipo__id", "Perguntastipo"."name" AS "Perguntastipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."perguntastipos" AS "Perguntastipo" ON ("Pergunta"."perguntastipo_id" = "Perguntastipo"."id") WHERE "Pergunta"."id" = '.$perguntaId.' LIMIT 1');
+            //$this->Pergunta->findById($id)^
+            if (!isset($perguntas[0])) {
+                throw new NotFoundException(__('Invalid'));
+            }
+            
+            $this->set('perguntas', $perguntas);
         }
-
-        $perguntas = $this->Pergunta->find('all');
-        if (!$perguntas) {
-            throw new NotFoundException(__('Invalid'));
-        }
-
-        $this->set('perguntas', $perguntas);
-
         if ($this->request->is(array('post', 'put'))) {
             foreach ($this->request->data['Docentesresposta'] as $values) {
                 if (!empty($values['resposta'])) {

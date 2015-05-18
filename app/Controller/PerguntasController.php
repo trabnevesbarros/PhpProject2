@@ -11,11 +11,11 @@ class PerguntasController extends AppController {
     public $helpers = array('Html', 'Form');
     public $uses = array('Pergunta', 'Perguntastipo');
     
-    public function index() {
-        
-        $this->set('perguntastipos', (($this->Perguntastipo->find('count') > 0 ) ? true : false));
-//  
- $this->set('perguntas', $this->Pergunta->query('select perguntas.id, pergunta, perguntastipos.name  from perguntas inner join perguntastipos on (perguntastipos.id = perguntas.perguntastipo_id);'));
+    public function index() {      
+        $this->set('perguntastipos', $this->Perguntastipo->query('SELECT "Perguntastipo"."id" AS "Perguntastipo__id", "Perguntastipo"."name" AS "Perguntastipo__name" FROM "public"."perguntastipos" AS "Perguntastipo" WHERE 1 = 1'));
+        //$this->Perguntastipos->find('all')^
+        $this->set('perguntas', $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."perguntastipo_id" AS "Pergunta__perguntastipo_id", "Perguntastipo"."id" AS "Perguntastipo__id", "Perguntastipo"."name" AS "Perguntastipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."perguntastipos" AS "Perguntastipo" ON ("Pergunta"."perguntastipo_id" = "Perguntastipo"."id") WHERE 1 = 1'));
+        //$this->Perguntas->find('all')^
     }
 
     public function view($id = null) {
@@ -23,12 +23,13 @@ class PerguntasController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $this->Pergunta->findById($id);
-        if (!$pergunta) {
+        $pergunta = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."perguntastipo_id" AS "Pergunta__perguntastipo_id", "Perguntastipo"."id" AS "Perguntastipo__id", "Perguntastipo"."name" AS "Perguntastipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."perguntastipos" AS "Perguntastipo" ON ("Pergunta"."perguntastipo_id" = "Perguntastipo"."id") WHERE "Pergunta"."id" = '.$id.' LIMIT 1');
+        //$this->Pergunta->findById($id)^
+        if (!isset($pergunta[0])) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->set('pergunta', $pergunta);
+        $this->set('pergunta', $pergunta[0]);
     }
 
     public function add() {
@@ -54,8 +55,9 @@ class PerguntasController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $this->Pergunta->findById($id);
-        if (!$pergunta) {
+        $pergunta = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."perguntastipo_id" AS "Pergunta__perguntastipo_id", "Perguntastipo"."id" AS "Perguntastipo__id", "Perguntastipo"."name" AS "Perguntastipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."perguntastipos" AS "Perguntastipo" ON ("Pergunta"."perguntastipo_id" = "Perguntastipo"."id") WHERE "Pergunta"."id" = '.$id.' LIMIT 1');
+        //$this->Pergunta->findById($id)^
+        if (!isset($pergunta[0])) {
             throw new NotFoundException(__('Invalid'));
         }
 
@@ -68,7 +70,7 @@ class PerguntasController extends AppController {
         }
 
         if (!$this->request->data) {
-            $this->request->data = $pergunta;
+            $this->request->data = $pergunta[0];
         }
     }
 
@@ -81,8 +83,9 @@ class PerguntasController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $this->Pergunta->findById($id);
-        if (!$pergunta) {
+        $pergunta = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."perguntastipo_id" AS "Pergunta__perguntastipo_id", "Perguntastipo"."id" AS "Perguntastipo__id", "Perguntastipo"."name" AS "Perguntastipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."perguntastipos" AS "Perguntastipo" ON ("Pergunta"."perguntastipo_id" = "Perguntastipo"."id") WHERE "Pergunta"."id" = '.$id.' LIMIT 1');
+        //$this->Pergunta->findById($id)^
+        if (!isset($pergunta[0])) {
             throw new NotFoundException(__('Invalid'));
         }
         
