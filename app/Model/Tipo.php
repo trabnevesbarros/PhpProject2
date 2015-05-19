@@ -6,7 +6,7 @@
  * and open the template in the editor.
  */
 
-class Perguntastipo extends AppModel{
+class Tipo extends AppModel{
     
     public $validate = array(
         'name' => array('rule' => 'notEmpty')

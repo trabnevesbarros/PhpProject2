@@ -10,13 +10,13 @@ class Pergunta extends AppModel {
     
     public $validate = array(
         'pergunta' => array('rule' => 'notEmpty'),
-        'perguntastipo_id' => array('rule' => 'notEmpty')
+        'tipo_id' => array('rule' => 'notEmpty')
     );
     
     public $hasMany = array('Docentesresposta' => array('dependent' => true), 
         'Empregadoresresposta' => array('dependent' => true),
         'Trabalhadoresresposta' => array('dependent' => true));
     
-    public $belongsTo = array('Perguntastipo');
+    public $belongsTo = array('Tipo');
     
 }

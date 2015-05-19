@@ -7,25 +7,25 @@
         <th colspan='2'>Ação</th>
     </thead>
     <tbody>
-        <?php foreach ($perguntastipos as $perguntastipo): ?>
+        <?php foreach ($tipos as $tipo): ?>
         <tr>
-            <td><?php echo $perguntastipo['Perguntastipo']['id']; ?></td>        
+            <td><?php echo $tipo['Tipo']['id']; ?></td>        
             <td>
                 <?php 
-                echo $this->Html->link($perguntastipo['Perguntastipo']['name'], 
-                        array('action' => 'view', $perguntastipo['Perguntastipo']['id'])); 
+                echo $this->Html->link($tipo['Tipo']['name'], 
+                        array('action' => 'view', $tipo['Tipo']['id'])); 
                 ?>
             </td>
             <td>
                 <?php
                 echo $this->Html->link('Alterar', 
-                        array('action' => 'edit', $perguntastipo['Perguntastipo']['id'])); 
+                        array('action' => 'edit', $tipo['Tipo']['id'])); 
                 ?>
             </td>
             <td>
                 <?php
                 echo $this->Form->postLink('Remover', 
-                        array('action' => 'delete', $perguntastipo['Perguntastipo']['id']), 
+                        array('action' => 'delete', $tipo['Tipo']['id']), 
                         array('confirm' => 'Você tem certeza?')
                 );
                 ?>

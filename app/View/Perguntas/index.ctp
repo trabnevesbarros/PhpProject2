@@ -17,7 +17,7 @@
                         array('action' => 'view', $pergunta['Pergunta']['id'])); 
                 ?>
             </td>
-            <td><?php echo $pergunta['Perguntastipo']['name'] ?></td>
+            <td><?php echo $pergunta['Tipo']['name'] ?></td>
             <td>
                 <?php
                 echo $this->Html->link('Alterar', 
@@ -39,8 +39,8 @@
 </table>
 
 <?php 
-if(isset($perguntastipos[0])){
+if(isset($tipos[0])){
     echo $this->Html->link('Adicionar pergunta', array('action' => 'add'));
 } else {
-    echo $this->Html->link('Adicionar tipos primeiro', array('controller' => 'Perguntastipos', 'action' => 'index'));
+    echo $this->Html->link('Adicionar tipos primeiro', array('controller' => 'Tipos', 'action' => 'index'));
 }
