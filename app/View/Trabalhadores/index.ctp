@@ -2,15 +2,13 @@
 
 <table>
     <thead>
-    <th>Id</th>
     <th>Nome</th>
     <th>Formação</th>
     <th colspan='3'>Ação</th>
 </thead>
 <tbody>
     <?php foreach ($trabalhadores as $trabalhador): ?>
-        <tr>
-            <td><?php echo $trabalhador['Trabalhador']['id']; ?></td>        
+        <tr>      
             <td>
                 <?php
                 echo $this->Html->link($trabalhador['Trabalhador']['nome'], array('action' => 'view', $trabalhador['Trabalhador']['id']));

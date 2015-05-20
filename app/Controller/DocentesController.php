@@ -12,8 +12,8 @@ class DocentesController extends AppController {
     public $uses = array('Docente', 'Pergunta', 'Docentesresposta');
 
     public function index() {
-        $this->set('perguntas', $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE 1 = 1'));
-        //$this->Pergunta->find('all')^
+        $this->set('perguntas', $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Docente\' '));
+        //$this->Pergunta->find('all'), (onde tipo.name = Docente)^
         $this->set('docentes', $this->Docente->query('SELECT "Docente"."nome" AS "Docente__nome", "Docente"."area" AS "Docente__area", "Docente"."formacao" AS "Docente__formacao", "Docente"."tempo_atuacao" AS "Docente__tempo_atuacao", "Docente"."id" AS "Docente__id" FROM "public"."docentes" AS "Docente" WHERE 1 = 1'));
         //$this->Docente->find('all')^
     }
@@ -37,7 +37,7 @@ class DocentesController extends AppController {
             $this->Docente->create();
             if ($this->Docente->save($this->request->data)) {
                 $this->Session->setFlash(__('Docente cadastrado'));
-                $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE 1 = 1');
+                $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Docente\'');
                 if (isset($perguntas[0])) {
                     return $this->redirect(array('action' => 'questionarioAdd', $this->Docente->id, 0, true));
                 }
@@ -109,8 +109,8 @@ class DocentesController extends AppController {
 
         $this->set('respostas', $respostas);
 
-        $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE 1 = 1');
-        //$this->Pergunta->find('all')^
+        $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Docente\' ');
+        //$this->Pergunta->find('all'), (onde tipo.name = Docente)^
         if (!isset($perguntas[0])) {
             throw new NotFoundException(__('Invalid'));
         }
@@ -151,8 +151,8 @@ class DocentesController extends AppController {
                 $this->set('respostas', $respostas);
             }
 
-            $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE 1 = 1');
-            //$this->Pergunta->find('all')^
+            $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Docente\' ');
+            //$this->Pergunta->find('all'), (onde tipo.name = Docente)^
             if (!isset($perguntas[0])) {
                 throw new NotFoundException(__('Invalid'));
             }
@@ -161,7 +161,7 @@ class DocentesController extends AppController {
         } else {
             $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Pergunta"."id" = '.$perguntaId.' LIMIT 1');
             //$this->Pergunta->findById($id)^
-            if (!isset($perguntas[0])) {
+            if (!isset($perguntas[0]) || $perguntas[0]['Tipo']['name'] != 'Docente') {
                 throw new NotFoundException(__('Invalid'));
             }
             

@@ -12,8 +12,10 @@ class TrabalhadoresController extends AppController {
     public $uses = array('Trabalhador', 'Pergunta', 'Trabalhadoresresposta');
 
     public function index() {
-        $this->set('perguntas', $this->Pergunta->find('all'));
-        $this->set('trabalhadores', $this->Trabalhador->find('all'));
+        $this->set('perguntas', $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Trabalhador\' '));
+        //$this->Pergunta->find('all'), (onde tipo.name = Trabalhador)^
+        $this->set('trabalhadores', $this->Trabalhador->query('SELECT "Trabalhador"."id" AS "Trabalhador__id", "Trabalhador"."nome" AS "Trabalhador__nome", "Trabalhador"."formacao" AS "Trabalhador__formacao" FROM "public"."trabalhadores" AS "Trabalhador" WHERE 1 = 1'));
+        //$this->Trabalhador->find('all')^
     }
 
     public function view($id = null) {
@@ -21,12 +23,13 @@ class TrabalhadoresController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $trabalhador = $this->Trabalhador->findById($id);
-        if (!$trabalhador) {
+        $trabalhador = $this->Trabalhador->query('SELECT "Trabalhador"."id" AS "Trabalhador__id", "Trabalhador"."nome" AS "Trabalhador__nome", "Trabalhador"."formacao" AS "Trabalhador__formacao" FROM "public"."trabalhadores" AS "Trabalhador" WHERE "Trabalhador"."id" = '.$id.' LIMIT 1');
+        //$this->Trabalhador->findById($id)^
+        if (!isset($trabalhador[0])) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->set('trabalhador', $trabalhador);
+        $this->set('trabalhador', $trabalhador[0]);
     }
 
     public function add() {
@@ -34,13 +37,13 @@ class TrabalhadoresController extends AppController {
             $this->Trabalhador->create();
             if ($this->Trabalhador->save($this->request->data)) {
                 $this->Session->setFlash(__('Trabalhador cadastrado'));
-                $perguntas = $this->Pergunta->find('all');
-                if (!$perguntas) {
-                    $this->Session->setFlash(__('Não foi possivel responder questionario'));
-                    $this->redirect(array('action' => 'index'));
-                } else {
-                    return $this->redirect(array('action' => 'questionarioAdd', $this->Trabalhador->id, true));
+                $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Trabalhador\'');
+                //$this->Pergunta->find('all'), (onde tipo.name = Trabalhador)^                
+                if (isset($perguntas[0])) {
+                    return $this->redirect(array('action' => 'questionarioAdd', $this->Trabalhador->id, 0, true));
                 }
+                $this->Session->setFlash(__('Não foi possivel responder questionario'));
+                $this->redirect(array('action' => 'index'));
             } else {
                 $this->Session->setFlash(__('Não foi possivel cadastrar trabalhador'));
             }
@@ -52,8 +55,9 @@ class TrabalhadoresController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $trabalhador = $this->Trabalhador->findById($id);
-        if (!$trabalhador) {
+        $trabalhador = $this->Trabalhador->query('SELECT "Trabalhador"."id" AS "Trabalhador__id", "Trabalhador"."nome" AS "Trabalhador__nome", "Trabalhador"."formacao" AS "Trabalhador__formacao" FROM "public"."trabalhadores" AS "Trabalhador" WHERE "Trabalhador"."id" = '.$id.' LIMIT 1');
+        //$this->Trabalhador->findById($id)^
+        if (!isset($trabalhador[0])) {
             throw new NotFoundException(__('Invalid'));
         }
 
@@ -66,7 +70,7 @@ class TrabalhadoresController extends AppController {
         }
 
         if (!$this->request->data) {
-            $this->request->data = $trabalhador;
+            $this->request->data = $trabalhador[0];
         }
     }
 
@@ -79,8 +83,9 @@ class TrabalhadoresController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $trabalhador = $this->Trabalhador->findById($id);
-        if (!$trabalhador) {
+        $trabalhador = $this->Trabalhador->query('SELECT "Trabalhador"."id" AS "Trabalhador__id", "Trabalhador"."nome" AS "Trabalhador__nome", "Trabalhador"."formacao" AS "Trabalhador__formacao" FROM "public"."trabalhadores" AS "Trabalhador" WHERE "Trabalhador"."id" = '.$id.' LIMIT 1');
+        //$this->Trabalhador->findById($id)^
+        if (!isset($trabalhador[0])) {
             throw new NotFoundException(__('Invalid'));
         }
 
@@ -97,8 +102,6 @@ class TrabalhadoresController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->set('trabalhadorId', $trabalhadorId);
-
         $respostas = $this->Trabalhadoresresposta->find('all', array(
             'conditions' => array('trabalhador_id' => $trabalhadorId)));
         if (!$respostas) {
@@ -106,6 +109,14 @@ class TrabalhadoresController extends AppController {
         }
 
         $this->set('respostas', $respostas);
+
+        $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Trabalhador\' ');
+        //$this->Pergunta->find('all'), (onde tipo.name = Trabalhador)^
+        if (!isset($perguntas[0])) {
+            throw new NotFoundException(__('Invalid'));
+        }
+
+        $this->set('perguntas', $perguntas);
     }
 
     public function questionarioView($respostaId = null) {
@@ -121,31 +132,42 @@ class TrabalhadoresController extends AppController {
         $this->set('resposta', $resposta);
     }
 
-    public function questionarioAdd($trabalhadorId = null, $first = null) {
+    public function questionarioAdd($trabalhadorId = null, $perguntaId = null, $first = null) {
         if (!$trabalhadorId) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $trabalhador = $this->Trabalhador->findById($trabalhadorId);
-        if (!$trabalhador) {
+        $trabalhador = $this->Trabalhador->query('SELECT "Trabalhador"."id" AS "Trabalhador__id", "Trabalhador"."nome" AS "Trabalhador__nome", "Trabalhador"."formacao" AS "Trabalhador__formacao" FROM "public"."trabalhadores" AS "Trabalhador" WHERE "Trabalhador"."id" = '.$trabalhadorId.' LIMIT 1');
+        //$this->Trabalhador->findById($trabalhadorId)^
+        if (!isset($trabalhador[0])) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->set('trabalhador', $trabalhador);
+        $this->set('trabalhador', $trabalhador[0]);
 
-        $respostas = $this->Trabalhadoresresposta->find('all', array(
-            'conditions' => array('trabalhador_id' => $trabalhadorId)));
-        if ($respostas) {
-            $this->set('respostas', $respostas);
+        if (!isset($perguntaId) || $first) {
+            $respostas = $this->Trabalhadoresresposta->find('all', array(
+                'conditions' => array('trabalhador_id' => $trabalhadorId)));
+            if ($respostas) {
+                $this->set('respostas', $respostas);
+            }
+
+            $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Trabalhador\' ');
+            //$this->Pergunta->find('all'), (onde tipo.name = Trabalhador)^
+            if (!isset($perguntas[0])) {
+                throw new NotFoundException(__('Invalid'));
+            }
+
+            $this->set('perguntas', $perguntas);
+        } else {
+            $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Pergunta"."id" = '.$perguntaId.' LIMIT 1');
+            //$this->Pergunta->findById($id)^
+            if (!isset($perguntas[0]) || $perguntas[0]['Tipo']['name'] != 'Trabalhador') {
+                throw new NotFoundException(__('Invalid'));
+            }
+            
+            $this->set('perguntas', $perguntas);
         }
-
-        $perguntas = $this->Pergunta->find('all');
-        if (!$perguntas) {
-            throw new NotFoundException(__('Invalid'));
-        }
-
-        $this->set('perguntas', $perguntas);
-
         if ($this->request->is(array('post', 'put'))) {
             foreach ($this->request->data['Trabalhadoresresposta'] as $values) {
                 if (!empty($values['resposta'])) {
@@ -177,10 +199,7 @@ class TrabalhadoresController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $resposta['Pergunta'];
-        if (!$pergunta) {
-            throw new NotFoundException(__('Invalid'));
-        }
+        $this->set('resposta', $resposta);
 
         if ($this->request->is(array('post', 'put'))) {
             $this->Trabalhadoresresposta->id = $respostaId;

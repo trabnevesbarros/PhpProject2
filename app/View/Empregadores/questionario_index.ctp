@@ -1,4 +1,4 @@
-<h1>Questionario <?php echo '(Trabalhador ' . $respostas[0]['Trabalhador']['nome'] . ')'; ?></h1>
+<h1>Questionario <?php echo '(Empregador ' . $respostas[0]['Empregador']['nome'] . ')'; ?></h1>
 
 <table>
     <thead>
@@ -20,7 +20,7 @@
                     $value = substr($value, 0, 50) . "...";
                 }
                 echo $this->Html->link($value, array('action' => 'questionarioView',
-                    $resposta['Trabalhadoresresposta']['id'],
+                    $resposta['Empregadoresresposta']['id'],
                     $pergunta['id']));
                 ?>
             </td>
@@ -29,11 +29,11 @@
                 <?php
                 echo $this->Html->Link('Editar', array(
                     'action' => 'questionarioEdit',
-                    $resposta['Trabalhadoresresposta']['id']));
+                    $resposta['Empregadoresresposta']['id']));
                 ?>
                 <?php
                 echo $this->Form->postLink('Remover', 
-                        array('action' => 'questionarioDelete', $resposta['Trabalhadoresresposta']['id']), 
+                        array('action' => 'questionarioDelete', $resposta['Empregadoresresposta']['id']), 
                         array('confirm' => 'Você tem certeza?')
                 );
                 ?>
@@ -61,7 +61,7 @@
                 <?php
                 echo $this->Html->Link('Responder', array(
                     'action' => 'questionarioAdd',
-                    $respostas[0]['Trabalhador']['id'],
+                    $respostas[0]['Empregador']['id'],
                     $pergunta['Pergunta']['id']));
                 ?>
             </td>
@@ -75,6 +75,6 @@
 </table>
 
 <?php
-echo $this->Html->Link('Responder questionario', array('action' => 'questionarioAdd', $respostas[0]['Trabalhador']['id']));
+echo $this->Html->Link('Responder questionario', array('action' => 'questionarioAdd', $respostas[0]['Empregador']['id']));
 echo '<br/>';
 echo $this->Html->Link('Voltar', array('action' => 'index'));

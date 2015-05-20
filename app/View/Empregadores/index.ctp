@@ -2,50 +2,42 @@
 
 <table>
     <thead>
-        <th>Id</th>
-        <th>Nome</th>
-        <th>Cargo</th>
-        <th>Formação</th>
-        <th colspan='3'>Ação</th>
-    </thead>
-    <tbody>
-        <?php foreach ($empregadores as $empregador): ?>
-        <tr>
-            <td><?php echo $empregador['Empregador']['id']; ?></td>        
+    <th>Nome</th>
+    <th>Cargo</th>
+    <th>Formação</th>
+    <th colspan='3'>Ação</th>
+</thead>
+<tbody>
+    <?php foreach ($empregadores as $empregador): ?>
+        <tr>      
             <td>
-                <?php 
-                echo $this->Html->link($empregador['Empregador']['nome'], 
-                        array('action' => 'view', $empregador['Empregador']['id'])); 
+                <?php
+                echo $this->Html->link($empregador['Empregador']['nome'], array('action' => 'view', $empregador['Empregador']['id']));
                 ?>
-            </td>              
-            <td><?php echo $empregador['Empregador']['formacao']; ?></td>
+            </td>           
             <td><?php echo $empregador['Empregador']['cargo']; ?></td>
+            <td><?php echo $empregador['Empregador']['formacao']; ?></td>
             <td>
                 <?php
-                echo $this->Html->link('Alterar', 
-                        array('action' => 'edit', $empregador['Empregador']['id'])); 
+                echo $this->Html->link('Alterar', array('action' => 'edit', $empregador['Empregador']['id']));
                 ?>
             </td>
             <td>
                 <?php
-                echo $this->Form->postLink('Remover', 
-                        array('action' => 'delete', $empregador['Empregador']['id']),
-                        array('confirm' => 'Você tem certeza?')
-                );
+                echo $this->Form->postLink('Remover', array('action' => 'delete', $empregador['Empregador']['id']), array('confirm' => 'Você tem certeza?'));
                 ?>
             </td>
             <td>
                 <?php
-                if ($perguntas) {
-                    echo $this->Html->link('Ver questionario', 
-                        array('action' => 'telaQuestionarioIndex', $empregador['Empregador']['id'])); 
+                if (!empty($perguntas)) {
+                    echo $this->Html->link('Ver questionario', array('action' => 'questionarioIndex', $empregador['Empregador']['id']));
                 }
                 ?>
             </td>
         </tr>
-        
-        <?php endforeach; ?>
-    </tbody>
+
+    <?php endforeach; ?>
+</tbody>
 </table>
 
 <?php echo $this->Html->link('Adicionar empregador', array('action' => 'add')); ?>
