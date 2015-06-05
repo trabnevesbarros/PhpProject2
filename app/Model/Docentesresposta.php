@@ -9,5 +9,14 @@
 class Docentesresposta extends AppModel {
 
     public $belongsTo = array('Docente', 'Pergunta');
+    
+    public $hasAndBelongsToMany = array(
+        'Palavraschave' => array(
+            'className' => 'Palavraschave',
+            'joinTable' => 'docentes_palavras',
+            'fereignKey' => 'docentesresposta_id',
+            'associationForeignKey' => 'palavraschave_id'
+        )
+    );
 
 }

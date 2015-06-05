@@ -9,13 +9,14 @@
 class DocentesController extends AppController {
 
     public $helpers = array('Html', 'Form');
-    public $uses = array('Docente', 'Pergunta', 'Docentesresposta');
+    public $components = array('Acentos');
+    public $uses = array('Docente', 'Pergunta', 'Docentesresposta', 'Palavraschave');
 
     public function index() {
-        $this->set('perguntas', $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Docente\' '));
-        //$this->Pergunta->find('all'), (onde tipo.name = Docente)^
-        $this->set('docentes', $this->Docente->query('SELECT "Docente"."nome" AS "Docente__nome", "Docente"."area" AS "Docente__area", "Docente"."formacao" AS "Docente__formacao", "Docente"."tempo_atuacao" AS "Docente__tempo_atuacao", "Docente"."id" AS "Docente__id" FROM "public"."docentes" AS "Docente" WHERE 1 = 1'));
-        //$this->Docente->find('all')^
+        $this->Pergunta->recursive = 0;
+        $this->Docente->recursive = -1;
+        $this->set('perguntas', $this->Pergunta->find('all', array('conditions' => array('Tipo.name' => 'Docente'))));
+        $this->set('docentes', $this->Docente->find('all'));
     }
 
     public function view($id = null) {
@@ -23,13 +24,13 @@ class DocentesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $docente = $this->Docente->query('SELECT "Docente"."nome" AS "Docente__nome", "Docente"."area" AS "Docente__area", "Docente"."formacao" AS "Docente__formacao", "Docente"."tempo_atuacao" AS "Docente__tempo_atuacao", "Docente"."id" AS "Docente__id" FROM "public"."docentes" AS "Docente" WHERE "Docente"."id" = ' . $id . ' LIMIT 1');
-        //$this->Docente->findById($id)^
-        if (!isset($docente[0])) {
+        $this->Docente->recursive = -1;
+        $docente = $this->Docente->findById($id);
+        if (!$docente) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->set('docente', $docente[0]);
+        $this->set('docente', $docente);
     }
 
     public function add() {
@@ -37,8 +38,8 @@ class DocentesController extends AppController {
             $this->Docente->create();
             if ($this->Docente->save($this->request->data)) {
                 $this->Session->setFlash(__('Docente cadastrado'));
-                $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Docente\'');
-                if (isset($perguntas[0])) {
+                $perguntas = $this->Pergunta->find('count', array('conditions' => array('Tipo.name' => 'Docente')));
+                if ($perguntas) {
                     return $this->redirect(array('action' => 'questionarioAdd', $this->Docente->id, 0, true));
                 }
                 $this->Session->setFlash(__('Não foi possivel responder questionario'));
@@ -54,9 +55,10 @@ class DocentesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $docente = $this->Docente->query('SELECT "Docente"."nome" AS "Docente__nome", "Docente"."area" AS "Docente__area", "Docente"."formacao" AS "Docente__formacao", "Docente"."tempo_atuacao" AS "Docente__tempo_atuacao", "Docente"."id" AS "Docente__id" FROM "public"."docentes" AS "Docente" WHERE "Docente"."id" = ' . $id . ' LIMIT 1');
-        //$this->Docente->findById($id)^
-        if (!isset($docente[0])) {
+        $this->Docente->recursive = -1;
+        $docente = $this->Docente->findById($id);
+
+        if (!$docente) {
             throw new NotFoundException(__('Invalid'));
         }
 
@@ -69,7 +71,7 @@ class DocentesController extends AppController {
         }
 
         if (!$this->request->data) {
-            $this->request->data = $docente[0];
+            $this->request->data = $docente;
         }
     }
 
@@ -82,9 +84,9 @@ class DocentesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $docente = $this->Docente->query('SELECT "Docente"."nome" AS "Docente__nome", "Docente"."area" AS "Docente__area", "Docente"."formacao" AS "Docente__formacao", "Docente"."tempo_atuacao" AS "Docente__tempo_atuacao", "Docente"."id" AS "Docente__id" FROM "public"."docentes" AS "Docente" WHERE "Docente"."id" = ' . $id . ' LIMIT 1');
-        //$this->Docente->findById($id)^
-        if (!isset($docente[0])) {
+        $this->Docente->recursive = -1;
+        $docente = $this->Docente->findById($id);
+        if (!$docente) {
             throw new NotFoundException(__('Invalid'));
         }
 
@@ -109,9 +111,9 @@ class DocentesController extends AppController {
 
         $this->set('respostas', $respostas);
 
-        $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Docente\' ');
-        //$this->Pergunta->find('all'), (onde tipo.name = Docente)^
-        if (!isset($perguntas[0])) {
+        $this->Pergunta->recursive = 0;
+        $perguntas = $this->Pergunta->find('all', array('conditions' => array('Tipo.name' => 'Docente')));
+        if (!$perguntas) {
             throw new NotFoundException(__('Invalid'));
         }
 
@@ -128,6 +130,8 @@ class DocentesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
+        $this->palavrasAdd($resposta);
+
         $this->set('resposta', $resposta);
     }
 
@@ -136,13 +140,13 @@ class DocentesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $docente = $this->Docente->query('SELECT "Docente"."nome" AS "Docente__nome", "Docente"."area" AS "Docente__area", "Docente"."formacao" AS "Docente__formacao", "Docente"."tempo_atuacao" AS "Docente__tempo_atuacao", "Docente"."id" AS "Docente__id" FROM "public"."docentes" AS "Docente" WHERE "Docente"."id" = ' . $docenteId . ' LIMIT 1');
-        //$this->Docente->findById($docenteId)^
-        if (!isset($docente[0])) {
+        $this->Docente->recursive = -1;
+        $docente = $this->Docente->findById($docenteId);
+        if (!$docente) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->set('docente', $docente[0]);
+        $this->set('docente', $docente);
 
         if (!isset($perguntaId) || $first) {
             $respostas = $this->Docentesresposta->find('all', array(
@@ -151,31 +155,33 @@ class DocentesController extends AppController {
                 $this->set('respostas', $respostas);
             }
 
-            $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Docente\' ');
-            //$this->Pergunta->find('all'), (onde tipo.name = Docente)^
-            if (!isset($perguntas[0])) {
+            $this->Pergunta->recursive = 0;
+            $perguntas = $this->Pergunta->find('all', array('conditions' => array('Tipo.name' => 'Docente')));
+            if (!$perguntas) {
                 throw new NotFoundException(__('Invalid'));
             }
 
             $this->set('perguntas', $perguntas);
         } else {
-            $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Pergunta"."id" = '.$perguntaId.' LIMIT 1');
-            //$this->Pergunta->findById($id)^
-            if (!isset($perguntas[0]) || $perguntas[0]['Tipo']['name'] != 'Docente') {
+            $pergunta = $this->Pergunta->findById($id);
+            if (!$pergunta || $pergunta['Tipo']['name'] != 'Docente') {
                 throw new NotFoundException(__('Invalid'));
             }
-            
+
             $this->set('perguntas', $perguntas);
         }
         if ($this->request->is(array('post', 'put'))) {
             foreach ($this->request->data['Docentesresposta'] as $values) {
                 if (!empty($values['resposta'])) {
                     if (!isset($values['id'])) {
-                        $this->Docentesresposta->create();
+                            $this->Docentesresposta->create();
+                            $response = $this->Docentesresposta->save($values);
+                            $this->palavrasAdd($this->Docentesresposta->findById($response['Docentesresposta']['id']));
                     } else {
                         $this->Docentesresposta->id = $values['id'];
+                        $this->Docentesresposta->save($values);
+                        $this->palavrasAdd($this->Docentesresposta->findById($values['id']));
                     }
-                    $this->Docentesresposta->save($values);
                 }
             }
             $this->Session->setFlash(__('Questionario respondido'));
@@ -229,7 +235,7 @@ class DocentesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        if ($this->Docentesresposta->delete($respostaId)) {
+        if ($this->Docentesresposta->delete($respostaId, true)) {
             $this->Session->setFlash(__('Resposta removida'));
         } else {
             $this->Session->setFlash(__('Não foi possivel remover resposta'));
@@ -237,6 +243,40 @@ class DocentesController extends AppController {
         return $this->redirect(array(
                     'action' => 'questionarioIndex',
                     $resposta['Docentesresposta']['docente_id']));
+    }
+    
+    public function palavrasIndex($resposta) {
+        
+        
+    }
+
+    public function palavrasAdd($resposta) {
+        if (!$resposta) {
+            throw new NotFoundException(__('Invalid'));
+        }
+
+        $this->loadModel('Stopword');
+        $stopwords = $this->Stopword->find('list', array('fields' => array('compare')));
+
+        $string = trim($resposta['Docentesresposta']['resposta']);
+        $compares = array_diff(preg_split("/[ \n\r]+/", $this->Acentos->removeAcentos(utf8_decode($string))), $stopwords);
+        $words = preg_split("/[ \n\r]+/", $string);
+        
+        $this->Palavraschave->recursive = -1;
+        foreach ($compares as $i => $compare) {
+            $palavra = $this->Palavraschave->findByCompare($compare);
+        
+            if (!$palavra) {
+                $this->Palavraschave->create();
+                $values = array('Palavraschave' => array('palavra' => $words[$i], 'compare' => $compare));
+                $palavra = $this->Palavraschave->save($values);
+            }
+            
+            $values = array(
+                'Palavraschave' => array('id' => $palavra['Palavraschave']['id']), 
+                'Docentesresposta' => array('id' => $resposta['Docentesresposta']['id']));
+            $this->Palavraschave->save($values);
+        }
     }
 
 }

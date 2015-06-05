@@ -36,5 +36,5 @@
     </tbody>
 </table>
 
-<?php echo $this->Html->link('Adicionar stop word', array('action' => 'add')); ?>
+<?php echo $this->Html->link('Adicionar stop words', array('action' => 'add')); ?>
     

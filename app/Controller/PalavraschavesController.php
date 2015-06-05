@@ -11,14 +11,16 @@ class PalavraschavesController extends AppController {
     public $helpers = array('Html', 'Form');
 
     public function index() {
+        $this->Palavraschave->recursive = -1;
         $this->set('palavraschaves', $this->Palavraschave->find('all'));
     }
-
+    
     public function view($id = null) {
         if (!$id) {
             throw new NotFoundException(__('Invalid'));
         }
 
+        $this->Palavraschave->recursive = -1;
         $palavraschave = $this->Palavraschave->findById($id);
         if (!$palavraschave) {
             throw new NotFoundException(__('Invalid'));
@@ -44,6 +46,7 @@ class PalavraschavesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
+        $this->Palavraschave->recursive = -1;
         $palavraschave = $this->Palavraschave->findById($id);
         if (!$palavraschave) {
             throw new NotFoundException(__('Invalid'));
@@ -67,12 +70,13 @@ class PalavraschavesController extends AppController {
         }
 
         if (!$id) {
-            throw new NotFoundException(__('Invalid id'));
+            throw new NotFoundException(__('Invalid'));
         }
 
+        $this->Palavraschave->recursive = -1;
         $palavraschave = $this->Palavraschave->findById($id);
         if (!$palavraschave) {
-            throw new NotFoundException(__('Invalid id'));
+            throw new NotFoundException(__('Invalid'));
         }
         
         if($this->Palavraschave->delete($id)){

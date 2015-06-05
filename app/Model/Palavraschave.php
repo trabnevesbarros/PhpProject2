@@ -9,6 +9,15 @@
 class Palavraschave extends AppModel {
     
     public $validate = array(
-        'palavra' => array('rule' => 'notEmpty'));
+        'palavra' => array(array('rule' => 'notEmpty'), array('rule' => 'isUnique', 'message' => 'Already exists')));
+    
+    public $hasAndBelongsToMany = array(
+        'Docentesresposta' => array(
+            'className' => 'Docentesresposta',
+            'joinTable' => 'docentes_palavras',
+            'fereignKey' => 'palavraschave_id',
+            'associationForeignKey' => 'docentesresposta_id'
+        )
+    );
 }
 

@@ -9,6 +9,7 @@
 class StopwordsController extends AppController {
 
     public $helpers = array('Html', 'Form');
+    public $components = array('Acentos');
 
     public function index() {
         $this->set('stopwords', $this->Stopword->find('all'));
@@ -29,12 +30,19 @@ class StopwordsController extends AppController {
 
     public function add() {
         if ($this->request->is('post')) {
-            $this->Stopword->create();
-            if ($this->Stopword->save($this->request->data)) {
-                $this->Session->setFlash('Stop word cadastrada');
-                return $this->redirect(array('action' => 'index'));
+            if (empty($this->request->data)) {
+                $this->Session->setFlash('Não foi possivel cadastrar stop words');
             } else {
-                $this->Session->setFlash('Não foi possivel cadastrar stop word');
+                $rows = preg_split("/[ \n\r]+/", trim($this->request->data['Stopword']['termos']));
+                foreach ($rows as $row) {
+                    $data = array('Stopword' => array('termo' => $row, 'compare' => $this->Acentos->removeAcentos(utf8_decode($row))));
+                    $this->Stopword->create();
+                    if (!$this->Stopword->save($data)) {
+                        $this->Session->setFlash('Não foi possivel cadastrar stop word');
+                    }
+                }
+                $this->Session->setFlash('Stop words cadastradas');
+                return $this->redirect(array('action' => 'index'));
             }
         }
     }
@@ -75,12 +83,13 @@ class StopwordsController extends AppController {
         if (!$stopword) {
             throw new NotFoundException(__('Invalid id'));
         }
-        
-        if($this->Stopword->delete($id)){
+
+        if ($this->Stopword->delete($id)) {
             $this->Session->setFlash('Stop word removida');
         } else {
             $this->Session->setFlash('Não foi possivel remover stop word');
         }
         return $this->redirect(array('action' => 'index'));
     }
+
 }

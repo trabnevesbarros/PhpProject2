@@ -1,1 +1,1 @@
-<p><strong>Termo:</strong> <?php echo h($stopwords['Stopword']['termo']) ?>.</p>
+<p><strong>Termo:</strong> <?php echo h($stopword['Stopword']['termo']) ?>.</p>
