@@ -22,20 +22,18 @@
 }
 
 /** General Style Info **/
-
 body {
-	
-	color: white;
+	background: #003d4c;
+	color: #fff;
 	font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
 	font-size:90%;
 	margin: 0;
 }
 a {
-	color: black;
+	color: #003d4c;
 	text-decoration: underline;
 	font-weight: bold;
 }
-
 a:hover {
 	color: #367889;
 	text-decoration:none;
@@ -48,13 +46,13 @@ h1, h2, h3, h4 {
 	margin-bottom:0.5em;
 }
 h1 {
-	background: yellowgreen;
-	color: black;
+	background:#fff;
+	color: #003d4c;
 	font-size: 100%;
 }
 h2 {
-	background: yellowgreen;
-	color: black;
+	background:#fff;
+	color: #e32;
 	font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
 	font-size: 190%;
 }
@@ -64,7 +62,7 @@ h3 {
 	font-size: 165%;
 }
 h4 {
-	color: black;
+	color: #993;
 	font-weight: normal;
 }
 ul, li {
@@ -83,8 +81,9 @@ p {
 	padding: 10px 20px;
 }
 #header h1 {
-	line-height:100px;
-	color: white;
+	line-height:20px;
+	background: #003d4c url('../img/cake.icon.png') no-repeat left;
+	color: #fff;
 	padding: 0px 30px;
 }
 #header h1 a {
@@ -99,11 +98,10 @@ p {
 	text-decoration: underline;
 }
 #content{
-        
-        border: 2px solid;
-	background: yellowgreen;
+	background: #fff;
 	clear: both;
 	color: #333;
+	padding: 10px 20px 40px 20px;
 	overflow: auto;
 }
 #footer {
@@ -139,7 +137,6 @@ div.actions h3 {
 
 /** Tables **/
 table {
-        
 	border-right:0;
 	clear: both;
 	color: #333;
@@ -383,9 +380,9 @@ form .error {
 	font-weight: normal;
 }
 form .error-message {
-	-moz-border-radius: 100%;
-	-webkit-border-radius: 100%;
-	border-radius: 100%;
+	-moz-border-radius: none;
+	-webkit-border-radius: none;
+	border-radius: none;
 	border: none;
 	background: none;
 	margin: 0;
