@@ -8,10 +8,22 @@
 
 class UsersController extends AppController {
 
-    /*public function beforeFilter() {
+    public function beforeFilter() {
         parent::beforeFilter();
-        $this->Auth->allow('add');
-    }*/
+        $this->Auth->allow('add', 'logout');
+    }
+
+    public function login() {
+        if ($this->Auth->login()) {
+            $this->redirect($this->Auth->redirect());
+        } else if ($this->request->is('post')) {
+            $this->Session->setFlash(__('Invalido'));
+        }
+    }
+
+    public function logout() {
+        $this->redirect($this->Auth->logout());
+    }
 
     public function index() {
         $this->User->recursive = 0;
@@ -41,12 +53,12 @@ class UsersController extends AppController {
         if (!$id) {
             throw new NotFoundException(__('Invalid'));
         }
-        
-        $user = $this->User->findById($id);        
+
+        $user = $this->User->findById($id);
         if (!$user) {
             throw new NotFoundException(__('Invalid'));
         }
-        
+
         if ($this->request->is(array('post', 'put'))) {
             $this->User->id = $id;
             if ($this->User->save($this->request->data)) {
@@ -68,12 +80,12 @@ class UsersController extends AppController {
         if (!$id) {
             throw new NotFoundException(__('Invalid'));
         }
-        
+
         $user = $this->User->findById($id);
         if (!$user) {
             throw new NotFoundException(__('Invalid'));
         }
-        
+
         if ($this->User->delete($id)) {
             $this->Session->setFlash(__('Usuario removido'));
             return $this->redirect(array('action' => 'index'));
@@ -83,5 +95,3 @@ class UsersController extends AppController {
     }
 
 }
-
-
