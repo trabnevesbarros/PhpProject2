@@ -1,0 +1,1 @@
+<p><strong>Formação: </strong><?php echo h($formacao['Formacao']['name']) ?></p>
