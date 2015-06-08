@@ -31,7 +31,7 @@ body {
 	margin: 0;
 }
 a {
-	color: black;
+	color: #333;
 	text-decoration: underline;
 	font-weight: bold;
 }
@@ -100,7 +100,7 @@ p {
 }
 #content{
         
-        border: 2px solid;
+        border: 0;
 	background: yellowgreen;
 	clear: both;
 	color: #333;
@@ -148,7 +148,7 @@ table {
 }
 th {
 	border:0;
-	border-bottom:2px solid #555;
+	border-bottom:2px solid #fff;
 	text-align: left;
 	padding:4px;
 }
@@ -167,7 +167,7 @@ table tr td {
 	padding: 6px;
 	text-align: left;
 	vertical-align: top;
-	border-bottom:1px solid #ddd;
+	border-bottom:2px solid #fff;
 }
 table tr:nth-child(even) {
 	background: #f9f9f9;
