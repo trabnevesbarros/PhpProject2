@@ -36,7 +36,7 @@
     <header>
 	<div id="container">
 		<div id="header">
-			<img src="img/observatorio.jpg">
+			<img src="/PhpProject2/img/observatorio.jpg">
 		</div>
 		<div id="content">
 

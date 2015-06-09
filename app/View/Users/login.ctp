@@ -10,6 +10,10 @@
     </fieldset>
 <?php echo $this->Form->end(__('Login')); ?>
 </div>
-<?php
- echo $this->Html->link('Registrar novo usuario', array('action'=>'add')); 
-?>
+<ul style="margin: 1.5em">
+    <list>
+        <li>
+        <?php echo $this->Html->link('Registrar novo usuario', array('action'=>'add')); ?>
+        </li>    
+    </list>
+</ul>
