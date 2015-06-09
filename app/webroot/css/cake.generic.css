@@ -25,7 +25,7 @@
 
 body {
 
-    background: yellowgreen;
+    background: #a9cf46;
     font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
     font-size:90%;
     margin: 0;
@@ -48,12 +48,12 @@ h1, h2, h3, h4 {
     margin-bottom:0.5em;
 }
 h1 {
-    background: yellowgreen;
+    background: white;
     color: black;
     font-size: 100%;
 }
 h2 {
-    background: yellowgreen;
+    background: white;
     color: black;
     font-family:'Gill Sans','lucida grande', helvetica, arial, sans-serif;
     font-size: 190%;
@@ -101,7 +101,7 @@ p {
 #content{
 
     border: 0;
-    background: yellowgreen;
+    background: white;
     clear: both;
     color: #333;
     overflow: auto;
