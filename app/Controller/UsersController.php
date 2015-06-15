@@ -14,10 +14,16 @@ class UsersController extends AppController {
     }
 
     public function login() {
-        if ($this->Auth->login()) {
-            $this->redirect($this->Auth->redirect());
-        } else if ($this->request->is('post')) {
-            $this->Session->setFlash(__('Invalido'));
+        if($this->Session->check('Auth.User')){
+            $this->redirect($this->Auth->redirectUrl());      
+        }
+        
+        if ($this->request->is('post')) {
+            if ($this->Auth->login()) {
+                $this->redirect($this->Auth->redirectUrl());
+            } else {
+                $this->Session->setFlash(__('Invalido'));
+            }
         }
     }
 
@@ -35,6 +41,7 @@ class UsersController extends AppController {
         if (!$this->User->exists()) {
             throw new NotFoundException(__('Invalid'));
         }
+
         $this->set('user', $this->User->findById($id));
     }
 
@@ -86,8 +93,13 @@ class UsersController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
+        if ($user['User']['id'] == $this->Session->read('Auth.User.id')) {
+            throw new NotAllowedException(__('Not allowed'));
+        }
+
         if ($this->User->delete($id)) {
             $this->Session->setFlash(__('Usuario removido'));
+
             return $this->redirect(array('action' => 'index'));
         }
         $this->Session->setFlash(__('Não foi possivel remover usuario'));

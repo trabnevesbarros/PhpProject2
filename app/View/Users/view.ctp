@@ -1,5 +1,6 @@
 
-<p><strong>Usuario:</strong> <?php echo h($user['User']['username']) ?></p>
+<p><strong>Nome:</strong> <?php echo h($user['User']['name']) ?></p>
+<p><strong>E-mail:</strong> <?php echo h($user['User']['email']) ?></p>
 <p>
     <strong>Permissão:</strong> 
     <?php 

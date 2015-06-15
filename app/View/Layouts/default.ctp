@@ -15,39 +15,33 @@
  * @since         CakePHP(tm) v 0.10.0.1076
  * @license       http://www.opensource.org/licenses/mit-license.php MIT License
  */
-
 ?>
 <!DOCTYPE html>
 <html>
-<head>
-	<?php echo $this->Html->charset(); ?>
-	<title>
+    <head>
+        <?php echo $this->Html->charset(); ?>
+        <title>
             Observatório
-	</title>
-	<?php
+        </title>
+        <?php
+        echo $this->Html->css('cake.generic');
 
-		echo $this->Html->css('cake.generic');
+        echo $this->fetch('css');
+        echo $this->fetch('script');
+        ?>
+    </head>
+    <body>
+        <div id="container">
+            <div id="header">
+                <img src="/PhpProject2/img/observatorio.jpg">
+            </div>
+            <div id="content">
 
-		echo $this->fetch('css');
-		echo $this->fetch('script');
-	?>
-</head>
-<body>
-    <header>
-	<div id="container">
-		<div id="header">
-			<img src="/PhpProject2/img/observatorio.jpg">
-		</div>
-		<div id="content">
+                <?php echo $this->Session->flash(); ?>
 
-			<?php echo $this->Session->flash(); ?>
-
-			<?php echo $this->fetch('content'); ?>
-		</div>
-            
-		
-	</div>
-    </header>
-	<?php echo $this->element('sql_dump'); ?>
-</body>
+                <?php echo $this->fetch('content'); ?>
+            </div>
+        </div>
+        <?php echo $this->element('sql_dump'); ?>
+    </body>
 </html>

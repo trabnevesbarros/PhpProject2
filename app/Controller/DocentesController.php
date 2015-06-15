@@ -174,9 +174,9 @@ class DocentesController extends AppController {
             foreach ($this->request->data['Docentesresposta'] as $values) {
                 if (!empty($values['resposta'])) {
                     if (!isset($values['id'])) {
-                            $this->Docentesresposta->create();
-                            $response = $this->Docentesresposta->save($values);
-                            $this->palavrasAdd($this->Docentesresposta->findById($response['Docentesresposta']['id']));
+                        $this->Docentesresposta->create();
+                        $response = $this->Docentesresposta->save($values);
+                        $this->palavrasAdd($this->Docentesresposta->findById($response['Docentesresposta']['id']));
                     } else {
                         $this->Docentesresposta->id = $values['id'];
                         $this->Docentesresposta->save($values);
@@ -244,10 +244,26 @@ class DocentesController extends AppController {
                     'action' => 'questionarioIndex',
                     $resposta['Docentesresposta']['docente_id']));
     }
-    
-    public function palavrasIndex($resposta) {
+
+    public function palavrasIndex($respostaId) {
+        if (!$respostaId) {
+            throw new NotFoundException(__('Invalid'));
+        }        
+
+        $this->Docentesresposta->recursive = 1;
         
+        $resposta = $this->Palavraschave->Docentesresposta->find('all', array(
+            'fields' => array('Docentesresposta.id'),
+            'conditions' => array('Docentesresposta.id' => $respostaId)
+            ));
         
+        if (!$resposta) {
+            throw new NotFoundException(__('Invalid'));
+        }
+        
+        $resposta_palavras = $resposta[0]['Palavraschave'];
+
+        $this->set('resposta_palavras', $resposta_palavras);
     }
 
     public function palavrasAdd($resposta) {
@@ -261,19 +277,19 @@ class DocentesController extends AppController {
         $string = trim($resposta['Docentesresposta']['resposta']);
         $compares = array_diff(preg_split("/[ \n\r]+/", $this->Acentos->removeAcentos(utf8_decode($string))), $stopwords);
         $words = preg_split("/[ \n\r]+/", $string);
-        
+
         $this->Palavraschave->recursive = -1;
         foreach ($compares as $i => $compare) {
             $palavra = $this->Palavraschave->findByCompare($compare);
-        
+
             if (!$palavra) {
                 $this->Palavraschave->create();
                 $values = array('Palavraschave' => array('palavra' => $words[$i], 'compare' => $compare));
                 $palavra = $this->Palavraschave->save($values);
             }
-            
+
             $values = array(
-                'Palavraschave' => array('id' => $palavra['Palavraschave']['id']), 
+                'Palavraschave' => array('id' => $palavra['Palavraschave']['id']),
                 'Docentesresposta' => array('id' => $resposta['Docentesresposta']['id']));
             $this->Palavraschave->save($values);
         }

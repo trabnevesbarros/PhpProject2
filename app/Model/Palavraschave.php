@@ -15,8 +15,20 @@ class Palavraschave extends AppModel {
         'Docentesresposta' => array(
             'className' => 'Docentesresposta',
             'joinTable' => 'docentes_palavras',
-            'fereignKey' => 'palavraschave_id',
+            'foreignKey' => 'palavraschave_id',
             'associationForeignKey' => 'docentesresposta_id'
+        ),
+        'Empregadoresresposta' => array(
+            'className' => 'Empregadoresresposta',
+            'joinTable' => 'empregadores_palavras',
+            'foreignKey' => 'palavraschave_id',
+            'associationForeignKey' => 'empregadoresresposta_id'
+        ),
+        'Trabalhadoresresposta' => array(
+            'className' => 'Trabalhadoresresposta',
+            'joinTable' => 'trabalhadores_palavras',
+            'foreignKey' => 'palavraschave_id',
+            'associationForeignKey' => 'trabalhadoresresposta_id'
         )
     );
 }

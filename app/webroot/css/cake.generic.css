@@ -75,6 +75,47 @@ p {
 }
 
 /** Layout **/
+
+#navbar {
+    background-color: #d90000;
+}
+ 
+#navbar ul {
+    margin: 0; 
+    padding: 0;
+    float: left;
+}
+ 
+#navbar ul li {
+    display: inline;
+    list-style-type: none;
+    padding-right: 20px;
+}
+ 
+#navbar ul li a{
+    float: left; 
+    text-decoration: none;
+    color: white;
+    padding: 10.5px 11px;
+}
+ 
+#navbar ul li a:visited {
+    color: white;
+}
+ 
+#navbar ul li a:hover, #navbar ul li .current{
+    color: #fff;
+    background-color:#bf0000;
+}
+ 
+#navbar .first  {
+    /*You can put stuff here for the first item in the navbar*/
+}
+ 
+#navbar .last  {
+    /*You can put stuff here for the last item in the navbar*/
+}
+
 #container {
     text-align: left;
 }
@@ -99,12 +140,12 @@ p {
     text-decoration: underline;
 }
 #content{
-
     border: 0;
     background: white;
     clear: both;
     color: #333;
     overflow: auto;
+    padding: 1em;
 }
 #footer {
     clear: both;
@@ -140,7 +181,7 @@ div.actions h3 {
 /** Tables **/
 table {
 
-    border-right:0;
+    border-right: 0;
     clear: both;
     color: #333;
     margin-bottom: 10px;
@@ -148,7 +189,7 @@ table {
 }
 th {
     border:0;
-    border-bottom:2px solid #fff;
+    border-bottom:2px solid grey;
     text-align: left;
     padding:4px;
 }
@@ -167,7 +208,7 @@ table tr td {
     padding: 6px;
     text-align: left;
     vertical-align: top;
-    border-bottom:2px solid #fff;
+    border-bottom: 2px solid grey;
 }
 table tr:nth-child(even) {
     background: #f9f9f9;

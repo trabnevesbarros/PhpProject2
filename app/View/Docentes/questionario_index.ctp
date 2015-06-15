@@ -4,7 +4,7 @@
     <thead>
     <th>Pergunta</th>
     <th>Status</th>
-    <th colspan='2'>Ação</th>
+    <th colspan='3'>Ação</th>
 </thead>
 <tbody>
     <?php 
@@ -31,10 +31,19 @@
                     'action' => 'questionarioEdit',
                     $resposta['Docentesresposta']['id']));
                 ?>
+            </td>
+            <td>
                 <?php
                 echo $this->Form->postLink('Remover', 
                         array('action' => 'questionarioDelete', $resposta['Docentesresposta']['id']), 
                         array('confirm' => 'Você tem certeza?')
+                );
+                ?>
+            </td>
+            <td>
+                <?php
+                echo $this->html->Link('Palavras-Chave', 
+                        array('action' => 'palavrasIndex', $resposta['Docentesresposta']['id'])
                 );
                 ?>
             </td>

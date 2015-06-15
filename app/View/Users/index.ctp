@@ -3,6 +3,7 @@
 <table>
     <thead>
         <th>Nome</th>
+        <th>E-mail</th>
         <th>Administrador</th>
         <th colspan='2'>Ação</th>
     </thead>
@@ -11,13 +12,23 @@
         <tr>       
             <td>
                 <?php 
-                echo $this->Html->link($user['User']['username'], 
+                echo $this->Html->link($user['User']['name'], 
                         array('action' => 'view', $user['User']['id'])); 
                 ?>
             </td>
             <td>
-                <?php echo $user['User']['super']?>
+                <?php echo $user['User']['email']; ?>
             </td>
+            <td>
+                <?php
+                if ($user['User']['super']) {
+                    echo 'S';
+                } else {
+                    echo 'N';
+                } 
+                ?>
+            </td>
+            <?php if($this->Session->read('Auth.User.id') == $user['User']['id'] || $this->Session->read('Auth.User.super')): ?>
             <td>
                 <?php
                 echo $this->Html->link('Alterar', 
@@ -25,13 +36,20 @@
                 ?>
             </td>
             <td>
-                <?php
-                echo $this->Form->postLink('Remover', 
-                        array('action' => 'delete', $user['User']['id']), 
-                        array('confirm' => 'Você tem certeza?')
-                );
+                <?php if( $user['User']['id'] != $this->Session->read('Auth.User.id')): 
+                    echo $this->Form->postLink('Remover', 
+                            array('action' => 'delete', $user['User']['id']), 
+                            array('confirm' => 'Você tem certeza?')
+                    );
+                else:
                 ?>
+                <strike>Remover</strike>
+                <?php endif; ?>
             </td>
+            <?php else: ?>
+            <td><strike>Alterar</strike></td>
+            <td><strike>Remover</strike></td>
+            <?php endif; ?>
         </tr>
         
         <?php endforeach; ?>
@@ -39,4 +57,3 @@
 </table>
 
 <?php echo $this->Html->link('Adicionar usuario', array('action' => 'add')); ?>
-    
