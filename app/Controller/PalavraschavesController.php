@@ -30,7 +30,7 @@ class PalavraschavesController extends AppController {
 
         $this->set('palavraschave', $palavraschave);
 
-        $this->respostasIndex($id);
+        $this->autoDelete($id);
     }
 
     public function add() {
@@ -97,6 +97,26 @@ class PalavraschavesController extends AppController {
         return $this->redirect(array('action' => 'index'));
     }
 
+    public function autoDelete ($palavraId) {
+        if (!$palavraId) {
+            throw new NotFoundException(__('Invalid'));
+        }
+        
+        $this->Palavraschave->recursive = 1;
+
+        $palavra = $this->Palavraschave->find('all', array(
+            'fields' => array('Palavraschave.id', 'Palavraschave.palavra'),
+            'conditions' => array('Palavraschave.id' => $palavraId)
+        ))[0];
+        
+        debug($palavra);
+        
+        if (!$palavra['Docentesresposta'] && !$palavra['Docentesresposta'] && !$palavra['Docentesresposta']) {
+            $this->Palavraschave->id = $palavraId;
+            $this->Palavraschave->delete();
+        }
+    } 
+    
     public function respostasIndex($palavraId) {
         if (!$palavraId) {
             throw new NotFoundException(__('Invalid'));
@@ -107,18 +127,16 @@ class PalavraschavesController extends AppController {
         $palavra = $this->Palavraschave->find('all', array(
             'fields' => array('Palavraschave.id', 'Palavraschave.palavra'),
             'conditions' => array('Palavraschave.id' => $palavraId)
-        ));
+        ))[0];
 
         if (!$palavra) {
             throw new NotFoundException(__('Invalid'));
         }
         
-        $this->set('palavra', $palavra[0]['Palavraschave']);
+        $this->set('palavra', $palavra['Palavraschave']);
         $palavra_respostas;
         
-        debug($palavra);
-        
-        foreach ($palavra[0] as $key=>$respostas) {
+        foreach ($palavra as $key=>$respostas) {
             if ($key != 'Palavraschave') {
                 foreach ($respostas as $resposta) {
                     $palavra_respostas[] = $resposta;
