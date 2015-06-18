@@ -50,4 +50,12 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-<?php echo $this->Html->link('Adicionar usuario', array('action' => 'adminAdd'));
+<?php echo $this->Html->link('Adicionar usuario', array('action' => 'adminAdd')); ?>
+
+<div class="paging">
+<?php
+echo $this->Paginator->prev('Anterior');
+echo $this->Paginator->numbers();
+echo $this->Paginator->next('Próximo');
+?>
+<div>

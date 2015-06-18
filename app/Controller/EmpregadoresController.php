@@ -76,7 +76,7 @@ class EmpregadoresController extends AppController {
 
     public function delete($id = null) {
         if ($this->request->is('get')) {
-            throw new NotAllowedException(__('Not allowed'));
+            throw new UnauthorizedException(__('Not allowed'));
         }
 
         if (!$id) {
@@ -218,7 +218,7 @@ class EmpregadoresController extends AppController {
 
     public function questionarioDelete($respostaId = null) {
         if ($this->request->is('get')) {
-            throw new NotAllowedException(__('Not allowed'));
+            throw new UnauthorizedException(__('Not allowed'));
         }
 
         if (!$respostaId) {

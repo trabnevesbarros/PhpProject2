@@ -12,10 +12,14 @@ class UsersController extends AppController {
         parent::beforeFilter();
         $this->Auth->allow('logout');
     }
+
+    public $paginate = array(
+        'limit' => 15,
+    );
     
     public function index() {
         if (!$this->Session->read('Auth.User.super')) {
-            throw new NotAllowedException(__('Not allowed'));
+            throw new UnauthorizedException(__('Not allowed'));
         } else {
             $this->redirect(array('action' => 'adminIndex'));
         }
@@ -42,7 +46,7 @@ class UsersController extends AppController {
     
     public function view($id = null) {
         if ($this->Session->read('Auth.User.id' != $id)) {
-            throw new NotAllowedException(__('Not allowed'));
+            throw new UnauthorizedException(__('Not allowed'));
         }
         
         $this->User->id = $id;
@@ -57,7 +61,7 @@ class UsersController extends AppController {
 
     public function adminIndex() {
         if (!$this->Session->read('Auth.User.super')) {
-            throw new NotAllowedException(__('Not allowed'));
+            throw new UnauthorizedException(__('Not allowed'));
         }
         
         $this->User->recursive = 0;
@@ -66,7 +70,7 @@ class UsersController extends AppController {
 
     public function adminView($id = null) {
         if (!$this->Session->read('Auth.User.super')) {
-            throw new NotAllowedException(__('Not allowed'));
+            throw new UnauthorizedException(__('Not allowed'));
         }
         
         $this->User->id = $id;
@@ -79,7 +83,7 @@ class UsersController extends AppController {
 
     public function adminAdd() {
         if (!$this->Session->read('Auth.User.super')) {
-            throw new NotAllowedException(__('Not allowed'));
+            throw new UnauthorizedException(__('Not allowed'));
         }
         
         if ($this->request->is('post')) {
@@ -94,20 +98,19 @@ class UsersController extends AppController {
 
     public function adminEdit($id = null) {
         if (!$this->Session->read('Auth.User.super')) {
-            throw new NotAllowedException(__('Not allowed'));
+            throw new UnauthorizedException(__('Not allowed'));
         }
         
         if (!$id) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $user = $this->User->findById($id);
-        if (!$user) {
+        $this->User->id = $id;
+        if (!$this->User->exists()) {
             throw new NotFoundException(__('Invalid'));
         }
 
         if ($this->request->is(array('post', 'put'))) {
-            $this->User->id = $id;
             if ($this->User->save($this->request->data)) {
                 $this->Session->setFlash(__('Registro alterado'));
                 return $this->redirect(array('action' => 'index'));
@@ -121,27 +124,27 @@ class UsersController extends AppController {
 
     public function adminDelete($id = null) {
         if (!$this->Session->read('Auth.User.super')) {
-            throw new NotAllowedException(__('Not allowed'));
+            throw new UnauthorizedException(__('Not allowed'));
         }
         
         if ($this->request->is('get')) {
-            throw new NotAllowedException(__('Not allowed'));
+            throw new UnauthorizedException(__('Not allowed'));
         }
 
         if (!$id) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $user = $this->User->findById($id);
-        if (!$user) {
+        $this->User->id = $id;
+        if (!$this->User->exists()) {
             throw new NotFoundException(__('Invalid'));
         }
 
         if ($user['User']['id'] == $this->Session->read('Auth.User.id')) {
-            throw new NotAllowedException(__('Not allowed'));
+            throw new UnauthorizedException(__('Not allowed'));
         }
 
-        if ($this->User->delete($id)) {
+        if ($this->User->delete()) {
             $this->Session->setFlash(__('Usuario removido'));
 
             return $this->redirect(array('action' => 'index'));
