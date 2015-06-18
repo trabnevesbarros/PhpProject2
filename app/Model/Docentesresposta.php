@@ -14,9 +14,9 @@ class Docentesresposta extends AppModel {
         'Palavraschave' => array(
             'className' => 'Palavraschave',
             'joinTable' => 'docentes_palavras',
-            'fereignKey' => 'docentesresposta_id',
+            'foreignKey' => 'docentesresposta_id',
             'associationForeignKey' => 'palavraschave_id'
         )
     );
-
+    
 }

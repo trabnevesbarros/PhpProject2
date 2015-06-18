@@ -4,7 +4,7 @@
     <thead>
         <th>Id</th>
         <th>Palavra</th>
-        <th colspan='2'>Ação</th>
+        <th colspan='3'>Ação</th>
     </thead>
     <tbody>
         <?php foreach ($palavraschaves as $palavraschave): ?>
@@ -29,6 +29,9 @@
                         array('confirm' => 'Você tem certeza?')
                 );
                 ?>
+            </td>
+            <td>
+                <?php echo $this->Html->Link('Respostas', array('action' => 'respostasIndex', $palavraschave['Palavraschave']['id'])); ?>
             </td>
         </tr>
         

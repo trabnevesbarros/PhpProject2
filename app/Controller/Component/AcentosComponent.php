@@ -46,5 +46,4 @@ class AcentosComponent extends Component {
 
         return $string;
     }
-
 }

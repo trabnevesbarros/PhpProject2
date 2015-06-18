@@ -78,7 +78,7 @@ class FormacaosController extends AppController {
     public function delete($id = NULL) {
 
         if ($this->request->is('get')) {
-            throw new NotAllowedException(__('Not allowed'));
+            throw new UnauthorizedException(__('Not allowed'));
         }
 
         if (!$id) {
