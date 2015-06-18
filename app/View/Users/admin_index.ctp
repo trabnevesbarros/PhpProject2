@@ -13,7 +13,7 @@
             <td>
                 <?php 
                 echo $this->Html->link($user['User']['name'], 
-                        array('action' => 'view', $user['User']['id'])); 
+                        array('action' => 'adminView', $user['User']['id'])); 
                 ?>
             </td>
             <td>
@@ -27,18 +27,17 @@
                     echo 'N';
                 } 
                 ?>
-            </td>
-            <?php if($this->Session->read('Auth.User.id') == $user['User']['id'] || $this->Session->read('Auth.User.super')): ?>
+            </td>            
             <td>
                 <?php
                 echo $this->Html->link('Alterar', 
-                        array('action' => 'edit', $user['User']['id'])); 
+                        array('action' => 'adminEdit', $user['User']['id'])); 
                 ?>
             </td>
             <td>
                 <?php if( $user['User']['id'] != $this->Session->read('Auth.User.id')): 
                     echo $this->Form->postLink('Remover', 
-                            array('action' => 'delete', $user['User']['id']), 
+                            array('action' => 'adminDelete', $user['User']['id']), 
                             array('confirm' => 'Você tem certeza?')
                     );
                 else:
@@ -46,14 +45,9 @@
                 <strike>Remover</strike>
                 <?php endif; ?>
             </td>
-            <?php else: ?>
-            <td><strike>Alterar</strike></td>
-            <td><strike>Remover</strike></td>
-            <?php endif; ?>
         </tr>
         
         <?php endforeach; ?>
     </tbody>
 </table>
-
-<?php echo $this->Html->link('Adicionar usuario', array('action' => 'add')); ?>
+<?php echo $this->Html->link('Adicionar usuario', array('action' => 'adminAdd'));

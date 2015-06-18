@@ -74,6 +74,8 @@
                     $pergunta['Pergunta']['id']));
                 ?>
             </td>
+            <td></td>
+            <td></td>
         </tr>
     <?php
         endif;

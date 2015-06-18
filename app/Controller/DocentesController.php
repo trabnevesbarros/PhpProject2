@@ -129,9 +129,7 @@ class DocentesController extends AppController {
         if (!$resposta) {
             throw new NotFoundException(__('Invalid'));
         }
-
-        $this->palavrasAdd($resposta);
-
+        
         $this->set('resposta', $resposta);
     }
 
@@ -163,12 +161,12 @@ class DocentesController extends AppController {
 
             $this->set('perguntas', $perguntas);
         } else {
-            $pergunta = $this->Pergunta->findById($id);
-            if (!$pergunta || $pergunta['Tipo']['name'] != 'Docente') {
+            $pergunta[0] = $this->Pergunta->findById($perguntaId);
+            if (!$pergunta[0] || $pergunta[0]['Tipo']['name'] != 'Docente') {
                 throw new NotFoundException(__('Invalid'));
             }
 
-            $this->set('perguntas', $perguntas);
+            $this->set('perguntas', $pergunta);
         }
         if ($this->request->is(array('post', 'put'))) {
             foreach ($this->request->data['Docentesresposta'] as $values) {
@@ -179,8 +177,8 @@ class DocentesController extends AppController {
                         $this->palavrasAdd($this->Docentesresposta->findById($response['Docentesresposta']['id']));
                     } else {
                         $this->Docentesresposta->id = $values['id'];
-                        $this->Docentesresposta->save($values);
-                        $this->palavrasAdd($this->Docentesresposta->findById($values['id']));
+                        $response = $this->Docentesresposta->save($values);          
+                        $this->palavrasAdd($response);
                     }
                 }
             }
@@ -209,6 +207,7 @@ class DocentesController extends AppController {
         if ($this->request->is(array('post', 'put'))) {
             $this->Docentesresposta->id = $respostaId;
             if ($this->Docentesresposta->save($this->request->data)) {
+                $this->palavrasAdd($respostaId);
                 $this->Session->setFlash(__('Registro alterado'));
                 return $this->redirect(array(
                             'action' => 'questionarioIndex',
@@ -248,25 +247,29 @@ class DocentesController extends AppController {
     public function palavrasIndex($respostaId) {
         if (!$respostaId) {
             throw new NotFoundException(__('Invalid'));
-        }        
+        }
 
         $this->Docentesresposta->recursive = 1;
-        
-        $resposta = $this->Palavraschave->Docentesresposta->find('all', array(
-            'fields' => array('Docentesresposta.id'),
-            'conditions' => array('Docentesresposta.id' => $respostaId)
-            ));
+        $resposta = $this->Docentesresposta->find('first', array(
+            'fields' => array('Docentesresposta.*'), 
+            'conditions' => array('Docentesresposta.id' => $respostaId)));        
         
         if (!$resposta) {
             throw new NotFoundException(__('Invalid'));
         }
         
-        $resposta_palavras = $resposta[0]['Palavraschave'];
-
+        $resposta_palavras = $resposta['Palavraschave'];
         $this->set('resposta_palavras', $resposta_palavras);
     }
 
-    public function palavrasAdd($resposta) {
+    public function palavrasAdd($respostaId) {
+        if (!$respostaId) {
+            throw new NotFoundException(__('Invalid'));
+        }
+        
+        $this->Docentesresposta->recursive = -1;
+        $resposta = $this->Docentesresposta->findById($respostaId);
+        
         if (!$resposta) {
             throw new NotFoundException(__('Invalid'));
         }
@@ -279,19 +282,22 @@ class DocentesController extends AppController {
         $words = preg_split("/[ \n\r]+/", $string);
 
         $this->Palavraschave->recursive = -1;
+        $palavraIds = array();
         foreach ($compares as $i => $compare) {
             $palavra = $this->Palavraschave->findByCompare($compare);
-
             if (!$palavra) {
                 $this->Palavraschave->create();
                 $values = array('Palavraschave' => array('palavra' => $words[$i], 'compare' => $compare));
                 $palavra = $this->Palavraschave->save($values);
             }
+            $palavraIds[] = (int)$palavra['Palavraschave']['id'];
+        }
 
-            $values = array(
-                'Palavraschave' => array('id' => $palavra['Palavraschave']['id']),
-                'Docentesresposta' => array('id' => $resposta['Docentesresposta']['id']));
-            $this->Palavraschave->save($values);
+        if (!empty($palavraIds)) {
+            $resposta = $resposta['Docentesresposta'];
+            $resposta['Palavraschave'] = array_unique($palavraIds);
+            $this->Docentesresposta->id = $respostaId;
+            $this->Docentesresposta->save($resposta);
         }
     }
 

@@ -31,7 +31,7 @@
                 ?>
             </td>
             <td>
-                <?php echo $this->Html->Link('Respostas', array('action' => 'respostas_index', $palavraschave['Palavraschave']['id'])); ?>
+                <?php echo $this->Html->Link('Respostas', array('action' => 'respostasIndex', $palavraschave['Palavraschave']['id'])); ?>
             </td>
         </tr>
         

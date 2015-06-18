@@ -11,7 +11,7 @@ class PalavraschavesController extends AppController {
     public $helpers = array('Html', 'Form');
     public $uses = array('Palavraschave', 'Pergunta', 'Tipo', 'Docentesresposta', 'Empregadoresresposta', 'Trabalhadoresresposta');
     public $components = array('Acentos');
-
+ 
     public function index() {
         $this->Palavraschave->recursive = -1;
         $this->set('palavraschaves', $this->Palavraschave->find('all'));
@@ -30,7 +30,7 @@ class PalavraschavesController extends AppController {
 
         $this->set('palavraschave', $palavraschave);
 
-        $this->autoDelete($id);
+        //$this->autoDelete($id);
     }
 
     public function add() {
@@ -96,26 +96,6 @@ class PalavraschavesController extends AppController {
         }
         return $this->redirect(array('action' => 'index'));
     }
-
-    public function autoDelete ($palavraId) {
-        if (!$palavraId) {
-            throw new NotFoundException(__('Invalid'));
-        }
-        
-        $this->Palavraschave->recursive = 1;
-
-        $palavra = $this->Palavraschave->find('all', array(
-            'fields' => array('Palavraschave.id', 'Palavraschave.palavra'),
-            'conditions' => array('Palavraschave.id' => $palavraId)
-        ))[0];
-        
-        debug($palavra);
-        
-        if (!$palavra['Docentesresposta'] && !$palavra['Docentesresposta'] && !$palavra['Docentesresposta']) {
-            $this->Palavraschave->id = $palavraId;
-            $this->Palavraschave->delete();
-        }
-    } 
     
     public function respostasIndex($palavraId) {
         if (!$palavraId) {
@@ -125,34 +105,36 @@ class PalavraschavesController extends AppController {
         $this->Palavraschave->recursive = 1;
 
         $palavra = $this->Palavraschave->find('all', array(
-            'fields' => array('Palavraschave.id', 'Palavraschave.palavra'),
-            'conditions' => array('Palavraschave.id' => $palavraId)
-        ))[0];
+                    'fields' => array('Palavraschave.id', 'Palavraschave.palavra'),
+                    'conditions' => array('Palavraschave.id' => $palavraId)
+                ))[0];
 
         if (!$palavra) {
             throw new NotFoundException(__('Invalid'));
         }
-        
-        $this->set('palavra', $palavra['Palavraschave']);
-        $palavra_respostas;
-        
-        foreach ($palavra as $key=>$respostas) {
+
+        $palavra_respostas = null;
+
+        foreach ($palavra as $key => $respostas) {
             if ($key != 'Palavraschave') {
                 foreach ($respostas as $resposta) {
                     $palavra_respostas[] = $resposta;
                 }
             }
         }
-        
+
+        if (!$palavra_respostas) {
+            throw new NotFoundException(__('Invalid'));
+        }
+
         $this->Pergunta->recursive = 0;
-        foreach ($palavra_respostas as $key=>$resposta) {
+        foreach ($palavra_respostas as $key => $resposta) {
             $pergunta = $this->Pergunta->findById($resposta['pergunta_id']);
             $palavra_respostas[$key]['Pergunta'] = $pergunta['Pergunta'];
             $palavra_respostas[$key]['Tipo'] = $pergunta['Tipo'];
         }
-        
-        debug($palavra_respostas);
-        
+
+        $this->set('palavra', $palavra['Palavraschave']);
         $this->set('palavra_respostas', $palavra_respostas);
     }
 

@@ -7,10 +7,5 @@
         echo $this->Form->input('password', array('type' => 'password'));
         ?>
     </fieldset>
-<?php echo $this->Form->end(__('Login')); ?>
+<?php echo $this->Form->end('Login'); ?>
 </div>
-<ul>
-    <li>
-    <?php echo $this->Html->link('Cadastrar usuario', array('action'=>'add')); ?>
-    </li>
-</ul>
