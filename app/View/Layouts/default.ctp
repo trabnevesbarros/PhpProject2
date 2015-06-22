@@ -19,29 +19,108 @@
 <!DOCTYPE html>
 <html>
     <head>
+
+
+       
+
+        <link href="css/custom.css" rel="stylesheet">
+        <link href="css/cake.generic.css" rel="stylesheet">
         <?php echo $this->Html->charset(); ?>
         <title>
             Observatório
         </title>
         <?php
-        echo $this->Html->css('cake.generic');
-
         echo $this->fetch('css');
         echo $this->fetch('script');
         ?>
     </head>
     <body>
+
         <div id="container">
             <div id="header">
-                <img src="/PhpProject2/img/observatorio.jpg">
-            </div>
-            <div id="content">
+                <img src="/PhpProject2/img/4.jpg"/>
 
-                <?php echo $this->Session->flash(); ?>
-
-                <?php echo $this->fetch('content'); ?>
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <img src="/PhpProject2/img/logoif.png" class="logoif"/>			
+                            <img src="/PhpProject2/img/observatorio2.jpg" class="logoobs"/>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <?php echo $this->element('sql_dump'); ?>
+        <div id="content">
+
+            <div id="wrapper">
+
+                <div id="sidebar-wrapper">
+                    <ul class="sidebar-nav">
+                        <li class="sidebar-brand">
+                            <a>
+                                Menu
+                            </a>
+                        </li>
+                        <li>
+                            <a href="/PhpProject2/">Início</a>
+                        </li>
+                        <!--<li>
+                        <?php /* if ($this->Auth->read('Auth.User.super')){
+                          echo $this->Html->link('Logout', array('controller' => 'users', 'action' => 'logout'));
+                          }else {
+                          echo $this->Html->link('Login', array('controller' => 'users', 'action' => 'login'));
+                          } */ ?>
+                            
+                        </li>-->
+                        <li>
+                            <?php echo $this->Html->link('Docentes', array('controller' => 'docentes', 'action' => 'index')); ?>
+                        </li>
+                        <li>
+                            <?php echo $this->Html->link('Empregadores', array('controller' => 'empregadores', 'action' => 'index')); ?>
+                        </li>
+                        <li>
+                            <?php echo $this->Html->link('Trabalhadores', array('controller' => 'trabalhadores', 'action' => 'index')); ?>
+                        </li>
+                        <li>
+                            <?php echo $this->Html->link('Formações', array('controller' => 'formacaos', 'action' => 'index')); ?>
+                        </li>
+                        <li>
+                            <?php echo $this->Html->link('Perguntas', array('controller' => 'perguntas', 'action' => 'index')); ?>
+                        </li>
+                        <li>
+                            <?php
+                            /* if ($this->Auth->check('Auth.User')) {
+                              $this->redirect(array('action' => 'login'));
+                              } else {
+                              $this->redirect(array('action' => 'logout'));
+                              } */
+                            ?>
+                        </li>
+                    </ul>
+                </div>
+
+
+                <div id="page-content-wrapper">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-lg-12">
+                                <?php echo $this->Session->flash(); ?>
+
+                                <?php echo $this->fetch('content'); ?>
+
+                                <?php echo $this->element('sql_dump'); ?>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+
     </body>
 </html>

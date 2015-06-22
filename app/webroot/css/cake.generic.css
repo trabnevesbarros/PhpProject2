@@ -23,9 +23,10 @@
 
 /** General Style Info **/
 
+
 body {
 
-    background: #a9cf46;
+    background: #fff;
     font-family:'lucida grande',verdana,helvetica,arial,sans-serif;
     font-size:90%;
     margin: 0;
@@ -41,6 +42,9 @@ a:hover {
     text-decoration:none;
 }
 a img {
+    height: 100%;
+    width: 100%;
+    margin: auto;
     border:none;
 }
 h1, h2, h3, h4 {
@@ -76,15 +80,19 @@ p {
 
 /** Layout **/
 
+
+
 #container {
     text-align: left;
 }
 
 #header{
-    border-bottom: 10px solid #fff;
+    width: 100%;
+    height: 100%;
+    margin: auto;
 }
 #header h1 {
-    line-height:100px;
+    line-height:10%;
     color: white;
     padding: 0px 30px;
 }
@@ -109,7 +117,7 @@ p {
 }
 #footer {
     clear: both;
-    padding: 6px 10px;
+    padding: 1% 2%;
 }
 #header a, #footer a {
     color: #fff;
