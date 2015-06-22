@@ -1,27 +1,27 @@
-<h1>Questionario <?php echo '(Docente ' . $respostas[0]['Docente']['nome'] . ')'; ?></h1>
+<h1>Questionario <?php echo '(Docente ' . $docente['Docente']['nome'] . ')'; ?></h1>
 
 <table>
     <thead>
-    <th>Pergunta</th>
-    <th>Status</th>
+    <th><?php echo $this->Paginator->sort('Pergunta.id', 'Pergunta')?></th>
+    <th><?php echo $this->Paginator->sort('Pergunta.status', 'Status')?></th>
     <th colspan='3'>Ação</th>
 </thead>
 <tbody>
     <?php 
     $respondidas;
-    foreach ($respostas as $resposta): 
+    foreach ($perguntas as $pergunta): 
+        if($pergunta['Docentesresposta']):
     ?>
         <tr>    
             <td>
                 <?php
-                $pergunta = $resposta['Pergunta'];
-                $value = $pergunta['pergunta'];
+                $value = $pergunta['Pergunta']['pergunta'];
                 if (strlen($value) > 50) {
                     $value = substr($value, 0, 50) . "...";
                 }
                 echo $this->Html->link($value, array('action' => 'questionarioView',
-                    $resposta['Docentesresposta']['id'],
-                    $pergunta['id']));
+                    $pergunta['Docentesresposta'][0]['id'],
+                    $pergunta['Pergunta']['id']));
                 ?>
             </td>
             <td>Respondida</td>
@@ -29,13 +29,13 @@
                 <?php
                 echo $this->Html->Link('Editar', array(
                     'action' => 'questionarioEdit',
-                    $resposta['Docentesresposta']['id']));
+                    $pergunta['Docentesresposta'][0]['id']));
                 ?>
             </td>
             <td>
                 <?php
                 echo $this->Form->postLink('Remover', 
-                        array('action' => 'questionarioDelete', $resposta['Docentesresposta']['id']), 
+                        array('action' => 'questionarioDelete', $pergunta['Docentesresposta'][0]['id']), 
                         array('confirm' => 'Você tem certeza?')
                 );
                 ?>
@@ -43,17 +43,13 @@
             <td>
                 <?php
                 echo $this->html->Link('Palavras-Chave', 
-                        array('action' => 'palavrasIndex', $resposta['Docentesresposta']['id'])
+                        array('action' => 'palavrasIndex', $pergunta['Docentesresposta'][0]['id'])
                 );
                 ?>
             </td>
         </tr>
     <?php 
-    $respondidas[] = $resposta['Pergunta'];
-    endforeach; 
-    
-    foreach ($perguntas as $pergunta): 
-        if (array_search($pergunta['Pergunta'], $respondidas) === false):
+        else: 
     ?>
         <tr>    
             <td>
@@ -70,7 +66,7 @@
                 <?php
                 echo $this->Html->Link('Responder', array(
                     'action' => 'questionarioAdd',
-                    $respostas[0]['Docente']['id'],
+                    $docente['Docente']['id'],
                     $pergunta['Pergunta']['id']));
                 ?>
             </td>
@@ -86,6 +82,6 @@
 </table>
 
 <?php
-echo $this->Html->Link('Responder questionario', array('action' => 'questionarioAdd', $respostas[0]['Docente']['id']));
+echo $this->Html->Link('Responder questionario', array('action' => 'questionarioAdd', $docente['Docente']['id']));
 echo '<br/>';
 echo $this->Html->Link('Voltar', array('action' => 'index'));

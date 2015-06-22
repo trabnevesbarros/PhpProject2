@@ -73,12 +73,12 @@ class UsersController extends AppController {
             throw new UnauthorizedException(__('Not allowed'));
         }
         
-        $this->User->id = $id;
-        if (!$this->User->exists()) {
+        $user = $this->User->findById($id);
+        if (!$user) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->set('user', $this->User->findById($id));
+        $this->set('user', $user);
     }
 
     public function adminAdd() {
@@ -105,8 +105,8 @@ class UsersController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->User->id = $id;
-        if (!$this->User->exists()) {
+        $user = $this->User->findById();
+        if (!$user) {
             throw new NotFoundException(__('Invalid'));
         }
 

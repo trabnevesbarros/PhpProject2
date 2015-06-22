@@ -32,7 +32,7 @@
             <td>
                 <?php
                 if (!empty($perguntas)) {
-                    echo $this->Html->link('Ver questionario', array('action' => 'questionarioIndex', $docente['Docente']['id']));
+                    echo $this->Html->link('Ver questionario', array('controller' => 'docentesrespostas', 'action' => 'questionarioIndex', $docente['Docente']['id']));
                 }
                 ?>
             </td>

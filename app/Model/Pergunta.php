@@ -19,4 +19,6 @@ class Pergunta extends AppModel {
     
     public $belongsTo = array('Tipo');
     
+    public $actsAs = array('Containable');
+    
 }

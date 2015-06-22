@@ -11,10 +11,14 @@ class PalavraschavesController extends AppController {
     public $helpers = array('Html', 'Form');
     public $uses = array('Palavraschave', 'Pergunta', 'Tipo', 'Docentesresposta', 'Empregadoresresposta', 'Trabalhadoresresposta');
     public $components = array('Acentos');
- 
+    
+    public $paginate = array(
+        'limit' => 15,
+    );
+
     public function index() {
         $this->Palavraschave->recursive = -1;
-        $this->set('palavraschaves', $this->Palavraschave->find('all'));
+        $this->set('palavraschaves', $this->paginate());
     }
 
     public function view($id = null) {
@@ -29,8 +33,6 @@ class PalavraschavesController extends AppController {
         }
 
         $this->set('palavraschave', $palavraschave);
-
-        //$this->autoDelete($id);
     }
 
     public function add() {
@@ -42,9 +44,8 @@ class PalavraschavesController extends AppController {
             if ($this->Palavraschave->save($data)) {
                 $this->Session->setFlash('Palavraschave cadastrado');
                 return $this->redirect(array('action' => 'index'));
-            } else {
-                $this->Session->setFlash('Não foi possivel cadastrar palavra chave');
             }
+            $this->Session->setFlash('Não foi possivel cadastrar palavra chave');
         }
     }
 
@@ -96,7 +97,7 @@ class PalavraschavesController extends AppController {
         }
         return $this->redirect(array('action' => 'index'));
     }
-    
+
     public function respostasIndex($palavraId) {
         if (!$palavraId) {
             throw new NotFoundException(__('Invalid'));
