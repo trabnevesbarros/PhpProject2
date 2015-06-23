@@ -1,0 +1,1636 @@
+--
+-- PostgreSQL database dump
+--
+
+-- Dumped from database version 9.3.6
+-- Dumped by pg_dump version 9.3.6
+-- Started on 2015-06-23 18:21:39 BRT
+
+SET statement_timeout = 0;
+SET lock_timeout = 0;
+SET client_encoding = 'UTF8';
+SET standard_conforming_strings = on;
+SET check_function_bodies = false;
+SET client_min_messages = warning;
+
+--
+-- TOC entry 198 (class 3079 OID 11789)
+-- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: 
+--
+
+CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
+
+
+--
+-- TOC entry 2169 (class 0 OID 0)
+-- Dependencies: 198
+-- Name: EXTENSION plpgsql; Type: COMMENT; Schema: -; Owner: 
+--
+
+COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+SET search_path = public, pg_catalog;
+
+SET default_tablespace = '';
+
+SET default_with_oids = false;
+
+--
+-- TOC entry 170 (class 1259 OID 98713)
+-- Name: docentes; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE docentes (
+    nome text NOT NULL,
+    area text NOT NULL,
+    formacao text,
+    tempo_atuacao integer NOT NULL,
+    id integer NOT NULL
+);
+
+
+ALTER TABLE public.docentes OWNER TO postgres;
+
+--
+-- TOC entry 171 (class 1259 OID 98719)
+-- Name: docentes_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE docentes_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.docentes_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2170 (class 0 OID 0)
+-- Dependencies: 171
+-- Name: docentes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE docentes_id_seq OWNED BY docentes.id;
+
+
+--
+-- TOC entry 172 (class 1259 OID 98721)
+-- Name: docentes_palavras; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE docentes_palavras (
+    docentesresposta_id integer NOT NULL,
+    id integer NOT NULL,
+    palavraschave_id integer NOT NULL
+);
+
+
+ALTER TABLE public.docentes_palavras OWNER TO postgres;
+
+--
+-- TOC entry 173 (class 1259 OID 98727)
+-- Name: docentes_palavras_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE docentes_palavras_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.docentes_palavras_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2171 (class 0 OID 0)
+-- Dependencies: 173
+-- Name: docentes_palavras_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE docentes_palavras_id_seq OWNED BY docentes_palavras.id;
+
+
+--
+-- TOC entry 174 (class 1259 OID 98737)
+-- Name: docentesrespostas; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE docentesrespostas (
+    id integer NOT NULL,
+    resposta text NOT NULL,
+    docente_id integer NOT NULL,
+    pergunta_id integer
+);
+
+
+ALTER TABLE public.docentesrespostas OWNER TO postgres;
+
+--
+-- TOC entry 175 (class 1259 OID 98743)
+-- Name: docentesrespostas_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE docentesrespostas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.docentesrespostas_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2172 (class 0 OID 0)
+-- Dependencies: 175
+-- Name: docentesrespostas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE docentesrespostas_id_seq OWNED BY docentesrespostas.id;
+
+
+--
+-- TOC entry 176 (class 1259 OID 98745)
+-- Name: empregadores; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE empregadores (
+    id integer NOT NULL,
+    nome character varying(200) NOT NULL,
+    cargo text NOT NULL,
+    palavras text,
+    formacao text
+);
+
+
+ALTER TABLE public.empregadores OWNER TO postgres;
+
+--
+-- TOC entry 177 (class 1259 OID 98751)
+-- Name: empregadores_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE empregadores_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.empregadores_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2173 (class 0 OID 0)
+-- Dependencies: 177
+-- Name: empregadores_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE empregadores_id_seq OWNED BY empregadores.id;
+
+
+--
+-- TOC entry 178 (class 1259 OID 98753)
+-- Name: empregadores_palavras; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE empregadores_palavras (
+    id integer NOT NULL,
+    empregadoresresposta_id integer NOT NULL,
+    palavraschave_id integer NOT NULL
+);
+
+
+ALTER TABLE public.empregadores_palavras OWNER TO postgres;
+
+--
+-- TOC entry 179 (class 1259 OID 98759)
+-- Name: empregadores_palavras_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE empregadores_palavras_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.empregadores_palavras_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2174 (class 0 OID 0)
+-- Dependencies: 179
+-- Name: empregadores_palavras_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE empregadores_palavras_id_seq OWNED BY empregadores_palavras.id;
+
+
+--
+-- TOC entry 180 (class 1259 OID 98769)
+-- Name: empregadoresrespostas; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE empregadoresrespostas (
+    id integer NOT NULL,
+    resposta text,
+    empregador_id integer,
+    pergunta_id integer
+);
+
+
+ALTER TABLE public.empregadoresrespostas OWNER TO postgres;
+
+--
+-- TOC entry 181 (class 1259 OID 98775)
+-- Name: empregadoresrespostas_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE empregadoresrespostas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.empregadoresrespostas_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2175 (class 0 OID 0)
+-- Dependencies: 181
+-- Name: empregadoresrespostas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE empregadoresrespostas_id_seq OWNED BY empregadoresrespostas.id;
+
+
+--
+-- TOC entry 182 (class 1259 OID 98777)
+-- Name: palavraschaves; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE palavraschaves (
+    palavra text NOT NULL,
+    id integer NOT NULL,
+    compare text NOT NULL
+);
+
+
+ALTER TABLE public.palavraschaves OWNER TO postgres;
+
+--
+-- TOC entry 183 (class 1259 OID 98783)
+-- Name: palavraschaves_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE palavraschaves_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.palavraschaves_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2176 (class 0 OID 0)
+-- Dependencies: 183
+-- Name: palavraschaves_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE palavraschaves_id_seq OWNED BY palavraschaves.id;
+
+
+--
+-- TOC entry 191 (class 1259 OID 98958)
+-- Name: perguntas; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE perguntas (
+    id integer NOT NULL,
+    pergunta text NOT NULL,
+    tipo_id integer
+);
+
+
+ALTER TABLE public.perguntas OWNER TO postgres;
+
+--
+-- TOC entry 190 (class 1259 OID 98956)
+-- Name: perguntas_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE perguntas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.perguntas_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2177 (class 0 OID 0)
+-- Dependencies: 190
+-- Name: perguntas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE perguntas_id_seq OWNED BY perguntas.id;
+
+
+--
+-- TOC entry 195 (class 1259 OID 107669)
+-- Name: stopwords; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE stopwords (
+    id integer NOT NULL,
+    termo text NOT NULL,
+    compare text NOT NULL
+);
+
+
+ALTER TABLE public.stopwords OWNER TO postgres;
+
+--
+-- TOC entry 194 (class 1259 OID 107667)
+-- Name: stopwords_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE stopwords_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.stopwords_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2178 (class 0 OID 0)
+-- Dependencies: 194
+-- Name: stopwords_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE stopwords_id_seq OWNED BY stopwords.id;
+
+
+--
+-- TOC entry 193 (class 1259 OID 99024)
+-- Name: tipos; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE tipos (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL
+);
+
+
+ALTER TABLE public.tipos OWNER TO postgres;
+
+--
+-- TOC entry 192 (class 1259 OID 99022)
+-- Name: tipos_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE tipos_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.tipos_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2179 (class 0 OID 0)
+-- Dependencies: 192
+-- Name: tipos_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE tipos_id_seq OWNED BY tipos.id;
+
+
+--
+-- TOC entry 184 (class 1259 OID 98793)
+-- Name: trabalhadores; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE trabalhadores (
+    id integer NOT NULL,
+    nome character varying(200) NOT NULL,
+    formacao text
+);
+
+
+ALTER TABLE public.trabalhadores OWNER TO postgres;
+
+--
+-- TOC entry 185 (class 1259 OID 98799)
+-- Name: trabalhadores_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE trabalhadores_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.trabalhadores_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2180 (class 0 OID 0)
+-- Dependencies: 185
+-- Name: trabalhadores_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE trabalhadores_id_seq OWNED BY trabalhadores.id;
+
+
+--
+-- TOC entry 186 (class 1259 OID 98801)
+-- Name: trabalhadores_palavras; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE trabalhadores_palavras (
+    id integer NOT NULL,
+    trabalhadoresresposta_id integer NOT NULL,
+    palavraschave_id integer NOT NULL
+);
+
+
+ALTER TABLE public.trabalhadores_palavras OWNER TO postgres;
+
+--
+-- TOC entry 187 (class 1259 OID 98807)
+-- Name: trabalhadores_palavras_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE trabalhadores_palavras_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.trabalhadores_palavras_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2181 (class 0 OID 0)
+-- Dependencies: 187
+-- Name: trabalhadores_palavras_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE trabalhadores_palavras_id_seq OWNED BY trabalhadores_palavras.id;
+
+
+--
+-- TOC entry 188 (class 1259 OID 98817)
+-- Name: trabalhadoresrespostas; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE trabalhadoresrespostas (
+    id integer NOT NULL,
+    resposta text NOT NULL,
+    pergunta_id integer,
+    trabalhador_id integer
+);
+
+
+ALTER TABLE public.trabalhadoresrespostas OWNER TO postgres;
+
+--
+-- TOC entry 189 (class 1259 OID 98823)
+-- Name: trabalhadoresrespostas_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE trabalhadoresrespostas_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.trabalhadoresrespostas_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2182 (class 0 OID 0)
+-- Dependencies: 189
+-- Name: trabalhadoresrespostas_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE trabalhadoresrespostas_id_seq OWNED BY trabalhadoresrespostas.id;
+
+
+--
+-- TOC entry 197 (class 1259 OID 107794)
+-- Name: users; Type: TABLE; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE TABLE users (
+    id integer NOT NULL,
+    super boolean DEFAULT false,
+    password text NOT NULL,
+    email text,
+    name text
+);
+
+
+ALTER TABLE public.users OWNER TO postgres;
+
+--
+-- TOC entry 196 (class 1259 OID 107792)
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: postgres
+--
+
+CREATE SEQUENCE users_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+ALTER TABLE public.users_id_seq OWNER TO postgres;
+
+--
+-- TOC entry 2183 (class 0 OID 0)
+-- Dependencies: 196
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: postgres
+--
+
+ALTER SEQUENCE users_id_seq OWNED BY users.id;
+
+
+--
+-- TOC entry 1952 (class 2604 OID 98825)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY docentes ALTER COLUMN id SET DEFAULT nextval('docentes_id_seq'::regclass);
+
+
+--
+-- TOC entry 1953 (class 2604 OID 98826)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY docentes_palavras ALTER COLUMN id SET DEFAULT nextval('docentes_palavras_id_seq'::regclass);
+
+
+--
+-- TOC entry 1954 (class 2604 OID 98828)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY docentesrespostas ALTER COLUMN id SET DEFAULT nextval('docentesrespostas_id_seq'::regclass);
+
+
+--
+-- TOC entry 1955 (class 2604 OID 98829)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY empregadores ALTER COLUMN id SET DEFAULT nextval('empregadores_id_seq'::regclass);
+
+
+--
+-- TOC entry 1956 (class 2604 OID 98830)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY empregadores_palavras ALTER COLUMN id SET DEFAULT nextval('empregadores_palavras_id_seq'::regclass);
+
+
+--
+-- TOC entry 1957 (class 2604 OID 98832)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY empregadoresrespostas ALTER COLUMN id SET DEFAULT nextval('empregadoresrespostas_id_seq'::regclass);
+
+
+--
+-- TOC entry 1958 (class 2604 OID 98833)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY palavraschaves ALTER COLUMN id SET DEFAULT nextval('palavraschaves_id_seq'::regclass);
+
+
+--
+-- TOC entry 1962 (class 2604 OID 98961)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY perguntas ALTER COLUMN id SET DEFAULT nextval('perguntas_id_seq'::regclass);
+
+
+--
+-- TOC entry 1964 (class 2604 OID 107672)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY stopwords ALTER COLUMN id SET DEFAULT nextval('stopwords_id_seq'::regclass);
+
+
+--
+-- TOC entry 1963 (class 2604 OID 99027)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY tipos ALTER COLUMN id SET DEFAULT nextval('tipos_id_seq'::regclass);
+
+
+--
+-- TOC entry 1959 (class 2604 OID 98835)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY trabalhadores ALTER COLUMN id SET DEFAULT nextval('trabalhadores_id_seq'::regclass);
+
+
+--
+-- TOC entry 1960 (class 2604 OID 98836)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY trabalhadores_palavras ALTER COLUMN id SET DEFAULT nextval('trabalhadores_palavras_id_seq'::regclass);
+
+
+--
+-- TOC entry 1961 (class 2604 OID 98838)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY trabalhadoresrespostas ALTER COLUMN id SET DEFAULT nextval('trabalhadoresrespostas_id_seq'::regclass);
+
+
+--
+-- TOC entry 1965 (class 2604 OID 107797)
+-- Name: id; Type: DEFAULT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY users ALTER COLUMN id SET DEFAULT nextval('users_id_seq'::regclass);
+
+
+--
+-- TOC entry 2134 (class 0 OID 98713)
+-- Dependencies: 170
+-- Data for Name: docentes; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY docentes (nome, area, formacao, tempo_atuacao, id) FROM stdin;
+Igor	Informática	Engenharia da Computação	10	18
+Random Person	Anything, really	I don't know	50	19
+\.
+
+
+--
+-- TOC entry 2184 (class 0 OID 0)
+-- Dependencies: 171
+-- Name: docentes_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('docentes_id_seq', 19, true);
+
+
+--
+-- TOC entry 2136 (class 0 OID 98721)
+-- Dependencies: 172
+-- Data for Name: docentes_palavras; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY docentes_palavras (docentesresposta_id, id, palavraschave_id) FROM stdin;
+56	606	398
+56	607	402
+\.
+
+
+--
+-- TOC entry 2185 (class 0 OID 0)
+-- Dependencies: 173
+-- Name: docentes_palavras_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('docentes_palavras_id_seq', 616, true);
+
+
+--
+-- TOC entry 2138 (class 0 OID 98737)
+-- Dependencies: 174
+-- Data for Name: docentesrespostas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY docentesrespostas (id, resposta, docente_id, pergunta_id) FROM stdin;
+59	reload	19	23
+60	hahaha	19	24
+61	adfasdf	18	27
+56	teste testes testes teste	18	23
+\.
+
+
+--
+-- TOC entry 2186 (class 0 OID 0)
+-- Dependencies: 175
+-- Name: docentesrespostas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('docentesrespostas_id_seq', 61, true);
+
+
+--
+-- TOC entry 2140 (class 0 OID 98745)
+-- Dependencies: 176
+-- Data for Name: empregadores; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY empregadores (id, nome, cargo, palavras, formacao) FROM stdin;
+4	asdf	fsda	\N	ss
+\.
+
+
+--
+-- TOC entry 2187 (class 0 OID 0)
+-- Dependencies: 177
+-- Name: empregadores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('empregadores_id_seq', 4, true);
+
+
+--
+-- TOC entry 2142 (class 0 OID 98753)
+-- Dependencies: 178
+-- Data for Name: empregadores_palavras; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY empregadores_palavras (id, empregadoresresposta_id, palavraschave_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2188 (class 0 OID 0)
+-- Dependencies: 179
+-- Name: empregadores_palavras_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('empregadores_palavras_id_seq', 1, false);
+
+
+--
+-- TOC entry 2144 (class 0 OID 98769)
+-- Dependencies: 180
+-- Data for Name: empregadoresrespostas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY empregadoresrespostas (id, resposta, empregador_id, pergunta_id) FROM stdin;
+3	asdf	4	20
+\.
+
+
+--
+-- TOC entry 2189 (class 0 OID 0)
+-- Dependencies: 181
+-- Name: empregadoresrespostas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('empregadoresrespostas_id_seq', 3, true);
+
+
+--
+-- TOC entry 2146 (class 0 OID 98777)
+-- Dependencies: 182
+-- Data for Name: palavraschaves; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY palavraschaves (palavra, id, compare) FROM stdin;
+teste	398	teste
+testes	402	testes
+teeesssttteee	403	teeesssttteee
+\.
+
+
+--
+-- TOC entry 2190 (class 0 OID 0)
+-- Dependencies: 183
+-- Name: palavraschaves_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('palavraschaves_id_seq', 403, true);
+
+
+--
+-- TOC entry 2155 (class 0 OID 98958)
+-- Dependencies: 191
+-- Data for Name: perguntas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY perguntas (id, pergunta, tipo_id) FROM stdin;
+20	asdf	11
+21	Qual a sua altura?	8
+23	asdf	7
+24	teste	7
+25	aasdf	7
+26	asdddddd	7
+27	asddddsssdssdfff	7
+28	ssssss	7
+\.
+
+
+--
+-- TOC entry 2191 (class 0 OID 0)
+-- Dependencies: 190
+-- Name: perguntas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('perguntas_id_seq', 28, true);
+
+
+--
+-- TOC entry 2159 (class 0 OID 107669)
+-- Dependencies: 195
+-- Data for Name: stopwords; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY stopwords (id, termo, compare) FROM stdin;
+1	a	a
+2	à	a
+3	agora	agora
+4	ainda	ainda
+5	alguém	alguem
+6	algum	algum
+7	alguma	alguma
+8	algumas	algumas
+9	alguns	alguns
+10	ampla	ampla
+11	amplas	amplas
+12	amplo	amplo
+13	amplos	amplos
+14	ante	ante
+15	antes	antes
+16	ao	ao
+17	aos	aos
+18	após	apos
+19	aquela	aquela
+20	aquelas	aquelas
+21	aquele	aquele
+22	aqueles	aqueles
+23	aquilo	aquilo
+24	as	as
+25	até	ate
+26	através	atraves
+27	cada	cada
+28	coisa	coisa
+29	coisas	coisas
+30	com	com
+31	como	como
+32	contra	contra
+33	contudo	contudo
+34	da	da
+35	daquele	daquele
+36	daqueles	daqueles
+37	das	das
+38	de	de
+39	dela	dela
+40	delas	delas
+41	dele	dele
+42	deles	deles
+43	depois	depois
+44	dessa	dessa
+45	dessas	dessas
+46	desse	desse
+47	desses	desses
+48	desta	desta
+49	destas	destas
+50	deste	deste
+51	deste	deste
+52	destes	destes
+53	deve	deve
+54	devem	devem
+55	devendo	devendo
+56	dever	dever
+57	deverá	devera
+58	deverão	deverao
+59	deveria	deveria
+60	deveriam	deveriam
+61	devia	devia
+62	deviam	deviam
+63	disse	disse
+64	disso	disso
+65	disto	disto
+66	dito	dito
+67	diz	diz
+68	dizem	dizem
+69	do	do
+70	dos	dos
+71	e	e
+72	é	e
+73	e'	e'
+74	ela	ela
+75	elas	elas
+76	ele	ele
+77	eles	eles
+78	em	em
+79	enquanto	enquanto
+80	entre	entre
+81	era	era
+82	essa	essa
+83	essas	essas
+84	esse	esse
+85	esses	esses
+86	esta	esta
+87	está	esta
+88	estamos	estamos
+89	estão	estao
+90	estas	estas
+91	estava	estava
+92	estavam	estavam
+93	estávamos	estavamos
+94	este	este
+95	estes	estes
+96	estou	estou
+97	eu	eu
+98	fazendo	fazendo
+99	fazer	fazer
+100	feita	feita
+101	feitas	feitas
+102	feito	feito
+103	feitos	feitos
+104	foi	foi
+105	for	for
+106	foram	foram
+107	fosse	fosse
+108	fossem	fossem
+109	grande	grande
+110	grandes	grandes
+111	há	ha
+112	isso	isso
+113	isto	isto
+114	já	ja
+115	la	la
+116	la	la
+117	lá	la
+118	lhe	lhe
+119	lhes	lhes
+120	lo	lo
+121	mas	mas
+122	me	me
+123	mesma	mesma
+124	mesmas	mesmas
+125	mesmo	mesmo
+126	mesmos	mesmos
+127	meu	meu
+128	meus	meus
+129	minha	minha
+130	minhas	minhas
+131	muita	muita
+132	muitas	muitas
+133	muito	muito
+134	muitos	muitos
+135	na	na
+136	não	nao
+137	nas	nas
+138	nem	nem
+139	nenhum	nenhum
+140	nessa	nessa
+141	nessas	nessas
+142	nesta	nesta
+143	nestas	nestas
+144	ninguém	ninguem
+145	no	no
+146	nos	nos
+147	nós	nos
+148	nossa	nossa
+149	nossas	nossas
+150	nosso	nosso
+151	nossos	nossos
+152	num	num
+153	numa	numa
+154	nunca	nunca
+155	o	o
+156	os	os
+157	ou	ou
+158	outra	outra
+159	outras	outras
+160	outro	outro
+161	outros	outros
+162	para	para
+163	pela	pela
+164	pelas	pelas
+165	pelo	pelo
+166	pelos	pelos
+167	pequena	pequena
+168	pequenas	pequenas
+169	pequeno	pequeno
+170	pequenos	pequenos
+171	per	per
+172	perante	perante
+173	pode	pode
+174	pôde	pode
+175	podendo	podendo
+176	poder	poder
+177	poderia	poderia
+178	poderiam	poderiam
+179	podia	podia
+180	podiam	podiam
+181	pois	pois
+182	por	por
+183	porém	porem
+184	porque	porque
+185	posso	posso
+186	pouca	pouca
+187	poucas	poucas
+188	pouco	pouco
+189	poucos	poucos
+190	primeiro	primeiro
+191	primeiros	primeiros
+192	própria	propria
+193	próprias	proprias
+194	próprio	proprio
+195	próprios	proprios
+196	quais	quais
+197	qual	qual
+198	quando	quando
+199	quanto	quanto
+200	quantos	quantos
+201	que	que
+202	quem	quem
+203	são	sao
+204	se	se
+205	seja	seja
+206	sejam	sejam
+207	sem	sem
+208	sempre	sempre
+209	sendo	sendo
+210	será	sera
+211	serão	serao
+212	seu	seu
+213	seus	seus
+214	si	si
+215	sido	sido
+216	só	so
+217	sob	sob
+218	sobre	sobre
+219	sua	sua
+220	suas	suas
+221	talvez	talvez
+222	também	tambem
+223	tampouco	tampouco
+224	te	te
+225	tem	tem
+226	tendo	tendo
+227	tenha	tenha
+228	ter	ter
+229	teu	teu
+230	teus	teus
+231	ti	ti
+232	tido	tido
+233	tinha	tinha
+234	tinham	tinham
+235	toda	toda
+236	todas	todas
+237	todavia	todavia
+238	todo	todo
+239	todos	todos
+240	tu	tu
+241	tua	tua
+242	tuas	tuas
+243	tudo	tudo
+244	última	ultima
+245	últimas	ultimas
+246	último	ultimo
+247	últimos	ultimos
+248	um	um
+249	uma	uma
+250	umas	umas
+251	uns	uns
+252	vendo	vendo
+253	ver	ver
+254	vez	vez
+255	vindo	vindo
+256	vir	vir
+257	vos	vos
+258	vós	vos
+\.
+
+
+--
+-- TOC entry 2192 (class 0 OID 0)
+-- Dependencies: 194
+-- Name: stopwords_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('stopwords_id_seq', 258, true);
+
+
+--
+-- TOC entry 2157 (class 0 OID 99024)
+-- Dependencies: 193
+-- Data for Name: tipos; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY tipos (id, name) FROM stdin;
+7	Docente
+8	Trabalhador
+11	Empregador
+\.
+
+
+--
+-- TOC entry 2193 (class 0 OID 0)
+-- Dependencies: 192
+-- Name: tipos_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('tipos_id_seq', 11, true);
+
+
+--
+-- TOC entry 2148 (class 0 OID 98793)
+-- Dependencies: 184
+-- Data for Name: trabalhadores; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY trabalhadores (id, nome, formacao) FROM stdin;
+6	Michel Neves	Nevologia
+\.
+
+
+--
+-- TOC entry 2194 (class 0 OID 0)
+-- Dependencies: 185
+-- Name: trabalhadores_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('trabalhadores_id_seq', 6, true);
+
+
+--
+-- TOC entry 2150 (class 0 OID 98801)
+-- Dependencies: 186
+-- Data for Name: trabalhadores_palavras; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY trabalhadores_palavras (id, trabalhadoresresposta_id, palavraschave_id) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2195 (class 0 OID 0)
+-- Dependencies: 187
+-- Name: trabalhadores_palavras_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('trabalhadores_palavras_id_seq', 2, true);
+
+
+--
+-- TOC entry 2152 (class 0 OID 98817)
+-- Dependencies: 188
+-- Data for Name: trabalhadoresrespostas; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY trabalhadoresrespostas (id, resposta, pergunta_id, trabalhador_id) FROM stdin;
+4	ddd sss	21	6
+\.
+
+
+--
+-- TOC entry 2196 (class 0 OID 0)
+-- Dependencies: 189
+-- Name: trabalhadoresrespostas_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('trabalhadoresrespostas_id_seq', 4, true);
+
+
+--
+-- TOC entry 2161 (class 0 OID 107794)
+-- Dependencies: 197
+-- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
+--
+
+COPY users (id, super, password, email, name) FROM stdin;
+10	t	118cd060d89f9141e01b184762de848a0d3a4d6f	victorvbc@hotmail.com	Victor Barros Coch
+15	f	cb61f9a3b31d03fd5cbe53ea2964700049389c67	asdfs@hotmail.com	asdf
+16	f	118cd060d89f9141e01b184762de848a0d3a4d6f	michel@michel.com	Michel Neves dos Santos
+17	t	1ce5bcda5705ec1c252666bc728cb5c0d97df5e7	iapereira@gmail.com	Igor Pereira
+\.
+
+
+--
+-- TOC entry 2197 (class 0 OID 0)
+-- Dependencies: 196
+-- Name: users_id_seq; Type: SEQUENCE SET; Schema: public; Owner: postgres
+--
+
+SELECT pg_catalog.setval('users_id_seq', 17, true);
+
+
+--
+-- TOC entry 1988 (class 2606 OID 107829)
+-- Name: compare_unique; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY palavraschaves
+    ADD CONSTRAINT compare_unique UNIQUE (compare);
+
+
+--
+-- TOC entry 1974 (class 2606 OID 98840)
+-- Name: docenterespostas_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY docentesrespostas
+    ADD CONSTRAINT docenterespostas_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1970 (class 2606 OID 98842)
+-- Name: docentes_palavras_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY docentes_palavras
+    ADD CONSTRAINT docentes_palavras_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1968 (class 2606 OID 98844)
+-- Name: docentes_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY docentes
+    ADD CONSTRAINT docentes_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2011 (class 2606 OID 115933)
+-- Name: email_unique; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT email_unique UNIQUE (email);
+
+
+--
+-- TOC entry 1980 (class 2606 OID 98848)
+-- Name: empregadores_palavras_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY empregadores_palavras
+    ADD CONSTRAINT empregadores_palavras_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1978 (class 2606 OID 98850)
+-- Name: empregadores_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY empregadores
+    ADD CONSTRAINT empregadores_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1984 (class 2606 OID 98854)
+-- Name: empregadoresrespostas_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY empregadoresrespostas
+    ADD CONSTRAINT empregadoresrespostas_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1990 (class 2606 OID 98856)
+-- Name: palavraschaves_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY palavraschaves
+    ADD CONSTRAINT palavraschaves_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2003 (class 2606 OID 98966)
+-- Name: perguntas_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY perguntas
+    ADD CONSTRAINT perguntas_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2005 (class 2606 OID 99029)
+-- Name: perguntastipos_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY tipos
+    ADD CONSTRAINT perguntastipos_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2009 (class 2606 OID 107677)
+-- Name: stopwords_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY stopwords
+    ADD CONSTRAINT stopwords_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2007 (class 2606 OID 99031)
+-- Name: tipo_unique; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY tipos
+    ADD CONSTRAINT tipo_unique UNIQUE (name);
+
+
+--
+-- TOC entry 1996 (class 2606 OID 98860)
+-- Name: trabalhadores_palavras_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY trabalhadores_palavras
+    ADD CONSTRAINT trabalhadores_palavras_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1992 (class 2606 OID 98862)
+-- Name: trabalhadores_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY trabalhadores
+    ADD CONSTRAINT trabalhadores_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2000 (class 2606 OID 98866)
+-- Name: trabalhadoresrespostas_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY trabalhadoresrespostas
+    ADD CONSTRAINT trabalhadoresrespostas_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 2013 (class 2606 OID 107803)
+-- Name: users_pk; Type: CONSTRAINT; Schema: public; Owner: postgres; Tablespace: 
+--
+
+ALTER TABLE ONLY users
+    ADD CONSTRAINT users_pk PRIMARY KEY (id);
+
+
+--
+-- TOC entry 1975 (class 1259 OID 98867)
+-- Name: fki_docente_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fki_docente_id ON docentesrespostas USING btree (docente_id);
+
+
+--
+-- TOC entry 1976 (class 1259 OID 99009)
+-- Name: fki_docente_pergunta_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fki_docente_pergunta_id ON docentesrespostas USING btree (pergunta_id);
+
+
+--
+-- TOC entry 1971 (class 1259 OID 98868)
+-- Name: fki_docente_resposta_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fki_docente_resposta_id ON docentes_palavras USING btree (docentesresposta_id);
+
+
+--
+-- TOC entry 1985 (class 1259 OID 98869)
+-- Name: fki_empregador_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fki_empregador_id ON empregadoresrespostas USING btree (empregador_id);
+
+
+--
+-- TOC entry 1986 (class 1259 OID 98977)
+-- Name: fki_empregador_pergunta_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fki_empregador_pergunta_id ON empregadoresrespostas USING btree (pergunta_id);
+
+
+--
+-- TOC entry 1981 (class 1259 OID 98870)
+-- Name: fki_empregador_resposta_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fki_empregador_resposta_id ON empregadores_palavras USING btree (empregadoresresposta_id);
+
+
+--
+-- TOC entry 1982 (class 1259 OID 98871)
+-- Name: fki_palavra_chave2_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fki_palavra_chave2_id ON empregadores_palavras USING btree (palavraschave_id);
+
+
+--
+-- TOC entry 1993 (class 1259 OID 98872)
+-- Name: fki_palavra_chave3_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fki_palavra_chave3_id ON trabalhadores_palavras USING btree (palavraschave_id);
+
+
+--
+-- TOC entry 1972 (class 1259 OID 98873)
+-- Name: fki_palavra_chave_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fki_palavra_chave_id ON docentes_palavras USING btree (palavraschave_id);
+
+
+--
+-- TOC entry 2001 (class 1259 OID 99037)
+-- Name: fki_perguntastipo_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fki_perguntastipo_id ON perguntas USING btree (tipo_id);
+
+
+--
+-- TOC entry 1994 (class 1259 OID 98877)
+-- Name: fki_resposta_trabalhador_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fki_resposta_trabalhador_id ON trabalhadores_palavras USING btree (trabalhadoresresposta_id);
+
+
+--
+-- TOC entry 1997 (class 1259 OID 98878)
+-- Name: fki_trabalhador_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fki_trabalhador_id ON trabalhadoresrespostas USING btree (trabalhador_id);
+
+
+--
+-- TOC entry 1998 (class 1259 OID 98876)
+-- Name: fki_trabalhador_perguntas_id; Type: INDEX; Schema: public; Owner: postgres; Tablespace: 
+--
+
+CREATE INDEX fki_trabalhador_perguntas_id ON trabalhadoresrespostas USING btree (pergunta_id);
+
+
+--
+-- TOC entry 2016 (class 2606 OID 98879)
+-- Name: docente_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY docentesrespostas
+    ADD CONSTRAINT docente_id FOREIGN KEY (docente_id) REFERENCES docentes(id);
+
+
+--
+-- TOC entry 2014 (class 2606 OID 98884)
+-- Name: docentesresposta_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY docentes_palavras
+    ADD CONSTRAINT docentesresposta_id FOREIGN KEY (docentesresposta_id) REFERENCES docentesrespostas(id);
+
+
+--
+-- TOC entry 2020 (class 2606 OID 98894)
+-- Name: empregador_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY empregadoresrespostas
+    ADD CONSTRAINT empregador_id FOREIGN KEY (empregador_id) REFERENCES empregadores(id);
+
+
+--
+-- TOC entry 2018 (class 2606 OID 98904)
+-- Name: empregadoresresposta_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY empregadores_palavras
+    ADD CONSTRAINT empregadoresresposta_id FOREIGN KEY (empregadoresresposta_id) REFERENCES empregadoresrespostas(id);
+
+
+--
+-- TOC entry 2019 (class 2606 OID 98909)
+-- Name: palavraschave2_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY empregadores_palavras
+    ADD CONSTRAINT palavraschave2_id FOREIGN KEY (palavraschave_id) REFERENCES palavraschaves(id);
+
+
+--
+-- TOC entry 2022 (class 2606 OID 98919)
+-- Name: palavraschave3_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY trabalhadores_palavras
+    ADD CONSTRAINT palavraschave3_id FOREIGN KEY (palavraschave_id) REFERENCES palavraschaves(id);
+
+
+--
+-- TOC entry 2015 (class 2606 OID 98914)
+-- Name: palavraschave_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY docentes_palavras
+    ADD CONSTRAINT palavraschave_id FOREIGN KEY (palavraschave_id) REFERENCES palavraschaves(id);
+
+
+--
+-- TOC entry 2025 (class 2606 OID 98967)
+-- Name: pergunta_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY trabalhadoresrespostas
+    ADD CONSTRAINT pergunta_id FOREIGN KEY (pergunta_id) REFERENCES perguntas(id);
+
+
+--
+-- TOC entry 2021 (class 2606 OID 98972)
+-- Name: pergunta_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY empregadoresrespostas
+    ADD CONSTRAINT pergunta_id FOREIGN KEY (pergunta_id) REFERENCES perguntas(id);
+
+
+--
+-- TOC entry 2017 (class 2606 OID 99004)
+-- Name: pergunta_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY docentesrespostas
+    ADD CONSTRAINT pergunta_id FOREIGN KEY (pergunta_id) REFERENCES perguntas(id);
+
+
+--
+-- TOC entry 2023 (class 2606 OID 98924)
+-- Name: respostastrabalhador_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY trabalhadores_palavras
+    ADD CONSTRAINT respostastrabalhador_id FOREIGN KEY (trabalhadoresresposta_id) REFERENCES trabalhadoresrespostas(id);
+
+
+--
+-- TOC entry 2026 (class 2606 OID 99032)
+-- Name: tipo_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY perguntas
+    ADD CONSTRAINT tipo_id FOREIGN KEY (tipo_id) REFERENCES tipos(id);
+
+
+--
+-- TOC entry 2024 (class 2606 OID 98929)
+-- Name: trabalhador_id; Type: FK CONSTRAINT; Schema: public; Owner: postgres
+--
+
+ALTER TABLE ONLY trabalhadoresrespostas
+    ADD CONSTRAINT trabalhador_id FOREIGN KEY (trabalhador_id) REFERENCES trabalhadores(id);
+
+
+--
+-- TOC entry 2168 (class 0 OID 0)
+-- Dependencies: 6
+-- Name: public; Type: ACL; Schema: -; Owner: postgres
+--
+
+REVOKE ALL ON SCHEMA public FROM PUBLIC;
+REVOKE ALL ON SCHEMA public FROM postgres;
+GRANT ALL ON SCHEMA public TO postgres;
+GRANT ALL ON SCHEMA public TO PUBLIC;
+
+
+-- Completed on 2015-06-23 18:21:40 BRT
+
+--
+-- PostgreSQL database dump complete
+--
+
