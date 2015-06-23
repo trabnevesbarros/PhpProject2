@@ -2,8 +2,8 @@
 
 <table>
     <thead>
-        <th>Pergunta</th>
-        <th>Tipo</th>
+        <th><?php echo $this->Paginator->sort('Pergunta.pergunta', 'Pergunta'); ?></th>
+        <th><?php echo $this->Paginator->sort('Pergunta.tipo', 'Tipo'); ?></th>
         <th colspan='2'>Ação</th>
     </thead>
     <tbody>
@@ -17,7 +17,7 @@
                         array('action' => 'view', $pergunta['Pergunta']['id'])); 
                 ?>
             </td>
-            <td><?php echo $pergunta['Tipo']['name'] ?></td>
+            <td><?php echo $pergunta['Pergunta']['tipo'] ?></td>
             <td>
                 <?php
                 echo $this->Html->link('Alterar', 
@@ -44,3 +44,12 @@ if(isset($tipos[0])){
 } else {
     echo $this->Html->link('Adicionar tipos primeiro', array('controller' => 'Tipos', 'action' => 'index'));
 }
+?>
+
+<div class="paging">
+<?php
+echo $this->Paginator->prev('Anterior');
+echo $this->Paginator->numbers();
+echo $this->Paginator->next('Próximo');
+?>
+<div>

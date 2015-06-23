@@ -2,7 +2,7 @@
 
 <table>
     <thead>
-    <th><?php echo $this->Paginator->sort('Pergunta.id', 'Pergunta')?></th>
+    <th><?php echo $this->Paginator->sort('Pergunta.pergunta', 'Pergunta')?></th>
     <th><?php echo $this->Paginator->sort('Pergunta.status', 'Status')?></th>
     <th colspan='3'>Ação</th>
 </thead>
@@ -83,5 +83,12 @@
 
 <?php
 echo $this->Html->Link('Responder questionario', array('action' => 'questionarioAdd', $docente['Docente']['id']));
-echo '<br/>';
-echo $this->Html->Link('Voltar', array('action' => 'index'));
+?>
+
+<div class="paging">
+<?php
+echo $this->Paginator->prev('Anterior');
+echo $this->Paginator->numbers();
+echo $this->Paginator->next('Próximo');
+?>
+<div>

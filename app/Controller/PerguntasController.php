@@ -11,11 +11,14 @@ class PerguntasController extends AppController {
     public $helpers = array('Html', 'Form');
     public $uses = array('Pergunta', 'Tipo');
     
+    public $paginate = array(
+        'limit' => 15
+    );
+    
     public function index() {      
-        $this->set('tipos', $this->Tipo->query('SELECT "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."tipos" AS "Tipo" WHERE 1 = 1'));
-        //$this->Tipos->find('all')^
-        $this->set('perguntas', $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE 1 = 1'));
-        //$this->Perguntas->find('all')^
+        $this->Pergunta->virtualFields['tipo'] = 'select name from tipos where id = "Pergunta"."tipo_id"';
+        $this->Pergunta->recursive = -1;
+        $this->set('perguntas', $this->paginate());
     }
 
     public function view($id = null) {

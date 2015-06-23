@@ -2,9 +2,9 @@
 
 <table>
     <thead>
-        <th>Nome</th>
-        <th>E-mail</th>
-        <th>Administrador</th>
+    <th><?php echo $this->Paginator->sort('User.name', 'Nome'); ?></th>
+        <th><?php echo $this->Paginator->sort('User.email', 'E-mail'); ?></th>
+        <th><?php echo $this->Paginator->sort('User.super', 'Admin'); ?></th>
         <th colspan='2'>Ação</th>
     </thead>
     <tbody>

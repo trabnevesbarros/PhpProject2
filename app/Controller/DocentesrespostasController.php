@@ -11,7 +11,7 @@ class DocentesrespostasController extends AppController {
     public $helpers = array('Html', 'Form');
     public $uses = array('Docentesresposta', 'Docente', 'Pergunta');
     public $paginate = array(
-        'limit' => 3
+        'limit' => 15
     );
 
     public function index() {
@@ -42,25 +42,21 @@ class DocentesrespostasController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
         
-        $this->Pergunta->recursive = 1;
-
+        $this->Pergunta->virtualFields['status'] = 'CASE WHEN "Pergunta"."id" IN (select pergunta_id from docentesrespostas where docente_id = '.$docenteId.') THEN true ELSE false END';
+        
+        $this->Pergunta->recursive = 2;
         $this->paginate['Pergunta'] = array('contain' => 
             array(
                 'Docentesresposta' =>
                 array('conditions' =>
                     array('docente_id' => $docenteId)
                 ),
-                'Tipo' => 
-                array('conditions' => 
-                    array('name' => 'Docente')                
-                )
+                'Tipo',
             ),
+            'conditions' => array('Tipo.name' => 'Docente'),
             'limit' => '15'
         );
-        
         $perguntas = $this->paginate('Pergunta');
-        
-        debug($perguntas);
 
         if (!$perguntas) {
             throw new NotFoundException(__('Invalid'));

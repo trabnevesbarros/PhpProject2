@@ -2,10 +2,10 @@
 
 <table>
     <thead>
-    <th>Nome</th>
-    <th>Área</th>
-    <th>Formação</th>
-    <th>Tempo de atuação</th>
+    <th><?php echo $this->Paginator->sort('Docente.nome', 'Nome'); ?></th>
+    <th><?php echo $this->Paginator->sort('Docente.area', 'Área'); ?></th>
+    <th><?php echo $this->Paginator->sort('Docente.formacao', 'Formação'); ?></th>
+    <th><?php echo $this->Paginator->sort('Docente.tempo_atuacao', 'Tempo de atuação'); ?></th>
     <th colspan='3'>Ação</th>
 </thead>
 <tbody>
@@ -43,4 +43,12 @@
 </table>
 
 <?php echo $this->Html->link('Adicionar docente', array('action' => 'add')); ?>
+
+<div class="paging">
+<?php
+echo $this->Paginator->prev('Anterior');
+echo $this->Paginator->numbers();
+echo $this->Paginator->next('Próximo');
+?>
+<div>
     
