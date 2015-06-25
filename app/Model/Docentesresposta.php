@@ -18,5 +18,7 @@ class Docentesresposta extends AppModel {
             'associationForeignKey' => 'palavraschave_id'
         )
     );
+   
+    public $actsAs = array('Containable');
     
 }

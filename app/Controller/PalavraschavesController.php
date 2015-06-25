@@ -9,16 +9,16 @@
 class PalavraschavesController extends AppController {
 
     public $helpers = array('Html', 'Form');
-    public $uses = array('Palavraschave', 'Pergunta', 'Tipo', 'Docentesresposta', 'Empregadoresresposta', 'Trabalhadoresresposta');
-    public $components = array('Acentos');
-    
+    public $uses = array('Palavraschave','Pergunta', 'Tipo', 'Docentesresposta', 'Empregadoresresposta', 'Trabalhadoresresposta');
     public $paginate = array(
         'limit' => 15,
     );
 
     public function index() {
         $this->Palavraschave->recursive = -1;
-        $this->set('palavraschaves', $this->paginate());
+        $this->Palavraschave->virtualFields['docente'] = 'CASE WHEN 0 IN (select count(*) from docentes_palavras where palavraschave_id = "Palavraschave"."id") THEN false ELSE true END';
+        debug($this->paginate());
+        //$this->set('palavraschaves', $this->paginate());
     }
 
     public function view($id = null) {
@@ -104,11 +104,30 @@ class PalavraschavesController extends AppController {
         }
 
         $this->Palavraschave->recursive = 1;
+        $palavra = $this->Palavraschave->find('first', array(
+            'fields' => array('Palavraschave.id', 'Palavraschave.palavra'),
+            'conditions' => array('Palavraschave.id' => $palavraId)
+        ));
 
-        $palavra = $this->Palavraschave->find('all', array(
-                    'fields' => array('Palavraschave.id', 'Palavraschave.palavra'),
-                    'conditions' => array('Palavraschave.id' => $palavraId)
-                ))[0];
+        /* $palavra = $this->Palavraschave->find('first', array(
+          'fields' => array('Palavraschave.id', 'Palavraschave.palavra'),
+          'conditions' => array('Palavraschave.id' => $palavraId)
+          ));
+
+          $this->paginate['Docentesresposta']
+          $this->paginate['Docentesresposta'] = array('contain' =>
+          array(
+          'Docentesresposta' =>
+          array('conditions' =>
+          array('docente_id' => $docenteId)
+          ),
+          'Tipo',
+          ),
+          'conditions' => array('Tipo.name' => 'Docente'),
+          'limit' => '15'
+          );
+
+          debug($palavra); */
 
         if (!$palavra) {
             throw new NotFoundException(__('Invalid'));
@@ -134,6 +153,8 @@ class PalavraschavesController extends AppController {
             $palavra_respostas[$key]['Pergunta'] = $pergunta['Pergunta'];
             $palavra_respostas[$key]['Tipo'] = $pergunta['Tipo'];
         }
+
+    debug($palavra_respostas);
 
         $this->set('palavra', $palavra['Palavraschave']);
         $this->set('palavra_respostas', $palavra_respostas);

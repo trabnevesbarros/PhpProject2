@@ -2,8 +2,8 @@
 
 <table>
     <thead>
-    <th><?php echo $this->Paginator->sort('Pergunta.pergunta', 'Pergunta')?></th>
-    <th><?php echo $this->Paginator->sort('Pergunta.status', 'Status')?></th>
+    <th><?php echo $this->Paginator->sort('Pergunta.pergunta', 'Pergunta'); ?></th>
+    <th><?php echo $this->Paginator->sort('Pergunta.status', 'Status'); ?></th>
     <th colspan='3'>Ação</th>
 </thead>
 <tbody>

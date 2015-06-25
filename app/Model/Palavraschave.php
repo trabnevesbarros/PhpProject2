@@ -31,5 +31,7 @@ class Palavraschave extends AppModel {
             'associationForeignKey' => 'trabalhadoresresposta_id'
         )
     );
+    
+    public $actsAs = array('Containable');
 }
 

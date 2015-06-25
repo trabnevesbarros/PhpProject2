@@ -2,14 +2,14 @@
 
 <table>
     <thead>
-    <th>Palavra</th>
+    <th><?php echo $this->Paginator->sort('Palavraschave.palavra', 'Palavra'); ?></th>
 </thead>
 <tbody>
-    <?php foreach ($resposta_palavras as $palavra): ?>
+    <?php foreach ($palavras as $palavra): ?>
         <tr>      
             <td>
                 <?php
-                echo $palavra['palavra'];
+                echo $palavra['Palavraschave']['palavra'];
                 ?>
             </td>           
         </tr>
@@ -17,4 +17,12 @@
     <?php endforeach; ?>
 </tbody>
 </table>
+
+<div class="paging">
+<?php
+echo $this->Paginator->prev('Anterior');
+echo $this->Paginator->numbers();
+echo $this->Paginator->next('Próximo');
+?>
+<div>
     

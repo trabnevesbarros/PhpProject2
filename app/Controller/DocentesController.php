@@ -9,7 +9,6 @@
 class DocentesController extends AppController {
 
     public $helpers = array('Html', 'Form');
-    public $components = array('Acentos');
     public $uses = array('Docente', 'Docentesresposta', 'Pergunta');
     
     public $paginate = array(

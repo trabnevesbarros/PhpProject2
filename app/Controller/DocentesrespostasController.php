@@ -9,7 +9,8 @@
 class DocentesrespostasController extends AppController {
 
     public $helpers = array('Html', 'Form');
-    public $uses = array('Docentesresposta', 'Docente', 'Pergunta');
+    public $uses = array('Docentesresposta', 'Docente', 'Pergunta', 'Palavraschave');
+    public $components = array('Acentos');
     public $paginate = array(
         'limit' => 15
     );
@@ -37,15 +38,13 @@ class DocentesrespostasController extends AppController {
         }
 
         $docente = $this->Docente->findById($docenteId);
-        
         if (!$docente) {
             throw new NotFoundException(__('Invalid'));
         }
-        
-        $this->Pergunta->virtualFields['status'] = 'CASE WHEN "Pergunta"."id" IN (select pergunta_id from docentesrespostas where docente_id = '.$docenteId.') THEN true ELSE false END';
-        
+
+        $this->Pergunta->virtualFields['status'] = 'CASE WHEN "Pergunta"."id" IN (select pergunta_id from docentesrespostas where docente_id = ' . $docenteId . ') THEN true ELSE false END';
         $this->Pergunta->recursive = 2;
-        $this->paginate['Pergunta'] = array('contain' => 
+        $this->paginate['Pergunta'] = array('contain' =>
             array(
                 'Docentesresposta' =>
                 array('conditions' =>
@@ -56,8 +55,8 @@ class DocentesrespostasController extends AppController {
             'conditions' => array('Tipo.name' => 'Docente'),
             'limit' => '15'
         );
-        $perguntas = $this->paginate('Pergunta');
 
+        $perguntas = $this->paginate('Pergunta');
         if (!$perguntas) {
             throw new NotFoundException(__('Invalid'));
         }
@@ -120,11 +119,11 @@ class DocentesrespostasController extends AppController {
                     if (!isset($values['id'])) {
                         $this->Docentesresposta->create();
                         $response = $this->Docentesresposta->save($values);
-                        $this->palavrasAdd($this->Docentesresposta->findById($response['Docentesresposta']['id']));
+                        $this->palavrasAdd($response['Docentesresposta']['id']);
                     } else {
                         $this->Docentesresposta->id = $values['id'];
                         $response = $this->Docentesresposta->save($values);
-                        $this->palavrasAdd($response);
+                        $this->palavrasAdd($response['Docentesresposta']['id']);
                     }
                 }
             }
@@ -195,20 +194,28 @@ class DocentesrespostasController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->Docentesresposta->recursive = 1;
-        $resposta = $this->Docentesresposta->find('first', array(
-            'fields' => array('Docentesresposta.*'),
-            'conditions' => array('Docentesresposta.id' => $respostaId)));
-
-        if (!$resposta) {
+        $this->Palavraschave->recursive = -1;
+        $this->paginate['Palavraschave'] = array(
+            'paramType' => 'querystring',
+            'limit' => 15,
+            'joins' => array(
+                array(
+                    'table' => 'docentesrespostas',
+                    'alias' => 'Docentesresposta',
+                    'conditions' => array('Docentesresposta.id' => $respostaId)
+                )
+            )
+        );
+        
+        $palavras = $this->paginate('Palavraschave');
+        if (!$palavras) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $resposta_palavras = $resposta['Palavraschave'];
-        $this->set('resposta_palavras', $resposta_palavras);
+        $this->set('palavras', $palavras);
     }
 
-    public function palavrasAdd($respostaId) {
+    public function palavrasAdd($respostaId = null) {
         if (!$respostaId) {
             throw new NotFoundException(__('Invalid'));
         }
