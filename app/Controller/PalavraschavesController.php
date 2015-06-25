@@ -11,14 +11,14 @@ class PalavraschavesController extends AppController {
     public $helpers = array('Html', 'Form');
     public $uses = array('Palavraschave','Pergunta', 'Tipo', 'Docentesresposta', 'Empregadoresresposta', 'Trabalhadoresresposta');
     public $paginate = array(
-        'limit' => 15,
+        'limit' => 12,
     );
 
     public function index() {
         $this->Palavraschave->recursive = -1;
-        $this->Palavraschave->virtualFields['docente'] = 'CASE WHEN 0 IN (select count(*) from docentes_palavras where palavraschave_id = "Palavraschave"."id") THEN false ELSE true END';
-        debug($this->paginate());
-        //$this->set('palavraschaves', $this->paginate());
+        //$this->Palavraschave->virtualFields['docente'] = 'CASE WHEN 0 IN (select count(*) from docentes_palavras where palavraschave_id = "Palavraschave"."id") THEN false ELSE true END';
+        //debug($this->paginate());
+        $this->set('palavraschaves', $this->paginate());
     }
 
     public function view($id = null) {

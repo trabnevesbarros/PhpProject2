@@ -12,7 +12,7 @@ class PerguntasController extends AppController {
     public $uses = array('Pergunta', 'Tipo');
     
     public $paginate = array(
-        'limit' => 15
+        'limit' => 12
     );
     
     public function index() {      

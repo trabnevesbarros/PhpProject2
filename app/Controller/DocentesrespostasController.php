@@ -12,7 +12,7 @@ class DocentesrespostasController extends AppController {
     public $uses = array('Docentesresposta', 'Docente', 'Pergunta', 'Palavraschave');
     public $components = array('Acentos');
     public $paginate = array(
-        'limit' => 15
+        'limit' => 12
     );
 
     public function index() {
@@ -53,7 +53,7 @@ class DocentesrespostasController extends AppController {
                 'Tipo',
             ),
             'conditions' => array('Tipo.name' => 'Docente'),
-            'limit' => '15'
+            'limit' => 12
         );
 
         $perguntas = $this->paginate('Pergunta');
@@ -197,17 +197,22 @@ class DocentesrespostasController extends AppController {
         $this->Palavraschave->recursive = -1;
         $this->paginate['Palavraschave'] = array(
             'paramType' => 'querystring',
-            'limit' => 15,
+            'limit' => 12,
             'joins' => array(
                 array(
-                    'table' => 'docentesrespostas',
-                    'alias' => 'Docentesresposta',
-                    'conditions' => array('Docentesresposta.id' => $respostaId)
+                    'type' => 'INNER',
+                    'table' => 'docentes_palavras',
+                    'alias' => 'DocentesPalavra',
+                    'conditions' => array('DocentesPalavra.palavraschave_id = Palavraschave.id')
                 )
+            ),
+            'conditions' => array(
+                'docentesresposta_id' => $respostaId
             )
         );
         
         $palavras = $this->paginate('Palavraschave');
+        
         if (!$palavras) {
             throw new NotFoundException(__('Invalid'));
         }

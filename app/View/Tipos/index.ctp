@@ -2,14 +2,12 @@
 
 <table>
     <thead>
-        <th>Id</th>
-        <th>Tipo</th>
-        <th colspan='2'>Ação</th>
+    <th><?php echo $this->Paginator->sort('name', 'Tipo'); ?></th>
+        <th colspan='3'>Ação</th>
     </thead>
     <tbody>
         <?php foreach ($tipos as $tipo): ?>
-        <tr>
-            <td><?php echo $tipo['Tipo']['id']; ?></td>        
+        <tr>       
             <td>
                 <?php 
                 echo $this->Html->link($tipo['Tipo']['name'], 
@@ -38,3 +36,10 @@
 
 <?php echo $this->Html->link('Adicionar tipo', array('action' => 'add')); ?>
     
+<div class="paging">
+<?php
+echo $this->Paginator->prev('Anterior');
+echo $this->Paginator->numbers();
+echo $this->Paginator->next('Próximo');
+?>
+</div>

@@ -12,7 +12,7 @@ class DocentesController extends AppController {
     public $uses = array('Docente', 'Docentesresposta', 'Pergunta');
     
     public $paginate = array(
-        'limit' => 15,
+        'limit' => 12,
     );
 
     public function index() {

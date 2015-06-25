@@ -93,7 +93,7 @@ p {
     background: url(../img/5.jpg);
     background-repeat: no-repeat;
     height: 10em;
-    width: 100%;
+    width: auto;
     margin: auto;
 }
 #header h1 {
@@ -154,7 +154,6 @@ div.actions h3 {
 
 /** Tables **/
 table {
-
     border-right: 0;
     clear: both;
     color: #333;
@@ -179,10 +178,10 @@ th a.desc:after {
     content: ' ⇡';
 }
 table tr td {
-    padding: 6px;
+    padding: 0px;
     text-align: left;
     vertical-align: top;
-    border-bottom: 2px solid grey;
+    border-bottom: 1px solid grey;
 }
 table tr:nth-child(even) {
     background: #f9f9f9;

@@ -24,5 +24,5 @@ echo $this->Paginator->prev('Anterior');
 echo $this->Paginator->numbers();
 echo $this->Paginator->next('Próximo');
 ?>
-<div>
+</div>
     

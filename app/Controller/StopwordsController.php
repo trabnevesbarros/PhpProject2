@@ -10,9 +10,43 @@ class StopwordsController extends AppController {
 
     public $helpers = array('Html', 'Form');
     public $components = array('Acentos');
+    public $paginate = array(
+        'limit' => 12
+    );
 
     public function index() {
-        $this->set('stopwords', $this->Stopword->find('all'));
+        $conditions = array();
+
+        if (($this->request->is('post') || $this->request->is('put')) && isset($this->data['Filter'])) {
+            $filter_url['controller'] = $this->request->params['controller'];
+            $filter_url['action'] = $this->request->params['action'];
+            $filter_url['page'] = 1;
+
+            foreach ($this->data['Filter'] as $name => $value) {
+                if ($value) {
+                    $filter_url[$name] = urlencode($value);
+                }
+            }
+
+            return $this->redirect($filter_url);
+        } else {
+            foreach ($this->params['named'] as $param_name => $value) {
+                if (!in_array($param_name, array('page', 'sort', 'direction', 'limit'))) {
+                    if ($param_name == "search") {
+                        $conditions['OR'] = array(
+                            array('Stopword.termo LIKE' => '%' . $value . '%')
+                        );
+                    } else {
+                        $conditions['Stopword.' . $param_name] = $value;
+                    }
+                    $this->request->data['Filter'][$param_name] = $value;
+                }
+            }
+        }
+        
+        $this->paginate = array('conditions' => $conditions);
+
+        $this->set('stopwords', $this->paginate());
     }
 
     public function view($id = null) {

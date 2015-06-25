@@ -14,7 +14,7 @@ class UsersController extends AppController {
     }
 
     public $paginate = array(
-        'limit' => 15,
+        'limit' => 12,
     );
     
     public function index() {

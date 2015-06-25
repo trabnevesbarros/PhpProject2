@@ -1,8 +1,8 @@
 <ul class="sidebar-nav">
     <li class="sidebar-brand">
-        <a>
+        <h1>
             Menu
-        </a>
+        </h1>
     </li>
     <li>
         <?php
@@ -35,10 +35,16 @@
         <?php echo $this->Html->link('Trabalhadores', array('controller' => 'trabalhadores', 'action' => 'index')); ?>
     </li>
     <li>
-        <?php //echo $this->Html->link('Formações', array('controller' => 'formacaos', 'action' => 'index')); ?>
+        <?php echo $this->Html->link('Stopwords', array('controller' => 'stopwords', 'action' => 'index')); ?>
     </li>
     <li>
         <?php echo $this->Html->link('Perguntas', array('controller' => 'perguntas', 'action' => 'index')); ?>
+    </li>
+    <li>
+        <?php echo $this->Html->link('Tipos', array('controller' => 'tipos', 'action' => 'index')); ?>
+    </li>
+    <li>
+        <?php echo $this->Html->link('Palavras-chave', array('controller' => 'palavraschaves', 'action' => 'index')); ?>
     </li>
 
 </ul>

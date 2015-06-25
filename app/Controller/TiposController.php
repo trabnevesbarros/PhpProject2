@@ -9,9 +9,12 @@
 class TiposController extends AppController {
     
     public $helpers = array('Html', 'Form');
+    public $paginate = array(
+        'limit' => 12
+    );
     
     public function index() {
-        $this->set('tipos', $this->Tipo->find('all'));
+        $this->set('tipos', $this->paginate());
     }
 
     public function view($id = null) {
