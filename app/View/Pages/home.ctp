@@ -25,11 +25,6 @@
     </head>
     
     <body>
-        <ul>
-            <li><a href="/PhpProject2/logout">Logout</a></li>
-            <li><a href="/PhpProject2/docentes">Docentes</a></li>
-            <li><a href="/PhpProject2/perguntas">Perguntas</a></li>
-            <li><a href="/PhpProject2/palavraschaves">Palavras</a></li>
-        </ul>
+        
     </body>
 </html>
