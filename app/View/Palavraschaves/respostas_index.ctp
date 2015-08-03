@@ -10,8 +10,8 @@
         <tr>      
             <td>
                 <?php echo $this->Html->link($resposta['Pergunta']['pergunta'], array(
-                    'controller' => $resposta['Tipo']['name'].'s', 
-                    'action' => 'QuestionarioView', $resposta['id'])) ?>
+                    'controller' => $resposta['Tipo']['name'].'srespostas', 
+                    'action' => 'questionarioView', $resposta['id'])) ?>
             </td>
             <td>
                 <?php echo $resposta['Tipo']['name']; ?>
