@@ -8,6 +8,28 @@ and open the template in the editor.
     Author     : michel
 */
 
+.search {
+    border-radius: 25px;
+    border: 2px solid #8AC007;
+    padding: 20px;
+}
+
+.txtSearch { 
+    width:10em; 
+    height:1em;
+    padding: 0;
+}
+
+.boxSearch select{
+    width: auto; 
+    height: 1.5em;
+}
+
+.tableSearch td {
+    border: 0;
+    background: white;
+}
+
 .rodape {
     width: 4em;
     float: left;

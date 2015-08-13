@@ -8,12 +8,17 @@
 
 class DocentesrespostasController extends AppController {
 
-    public $helpers = array('Html', 'Form');
+    public $helpers = array('Html', 'Form', 'Paginator');
     public $uses = array('Docentesresposta', 'Docente', 'Pergunta', 'Palavraschave');
-    public $components = array('Acentos');
+    public $components = array(
+        'Search.Prg',
+        'Paginator',
+        'Acentos'
+    );
     public $paginate = array(
         'limit' => 12
     );
+    public $presetVars = array('pergunta_search' => array('type' => 'value'));
 
     public function index() {
         $this->set('respostas', $this->Docentesresposta->find('all'));
@@ -30,6 +35,39 @@ class DocentesrespostasController extends AppController {
         }
 
         $this->set('resposta', $resposta);
+    }
+
+    public function questionarioFind($docenteId = null) {
+        $this->Prg->commonProcess();
+
+        if (!$docenteId) {
+            throw new NotFoundException(__('Invalid'));
+        }
+
+        $docente = $this->Docente->findById($docenteId);
+        if (!$docente) {
+            throw new NotFoundException(__('Invalid'));
+        }
+
+        $this->Pergunta->virtualFields['status'] = 'CASE WHEN "Pergunta"."id" IN (select pergunta_id from docentesrespostas where docente_id = ' . $docenteId . ') THEN true ELSE false END';
+        $this->Pergunta->recursive = 1;
+
+        $conditions = $this->Docentesresposta->parseCriteria($this->Prg->parsedParams());
+        $conditions['Tipo.name'] = 'Docente';
+        $this->Paginator->settings['conditions'] = $conditions;
+        $this->Paginator->settings['contain'] = array(
+            'Docentesresposta' =>
+            array('conditions' =>
+                array('docente_id' => $docenteId)
+            ),
+            'Tipo',
+        );
+        $this->Paginator->settings['limit'] = 12;
+
+        $perguntas = $this->paginate('Pergunta');
+
+        $this->set('perguntas', $perguntas);
+        $this->set('docente', $docente);
     }
 
     public function questionarioIndex($docenteId = null) {
@@ -210,9 +248,9 @@ class DocentesrespostasController extends AppController {
                 'docentesresposta_id' => $respostaId
             )
         );
-        
+
         $palavras = $this->paginate('Palavraschave');
-        
+
         if (!$palavras) {
             throw new NotFoundException(__('Invalid'));
         }

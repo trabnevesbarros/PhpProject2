@@ -30,7 +30,11 @@
 </tbody>
 </table>
 
-    <?php echo $this->Html->link('Adicionar stop words', array('action' => 'add')); ?>
+    <?php 
+    echo $this->Html->link('Adicionar stop words', array('action' => 'add')); 
+    echo '<br/>';
+    echo $this->Html->link('Pesquisar', array('action' => 'find'));
+    ?>
 
 
 <div class="paging">

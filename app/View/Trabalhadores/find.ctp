@@ -1,5 +1,46 @@
 <h1>Trabalhadores</h1>
 
+<?php
+echo $this->Form->create('Trabalhador', array(
+'url' => array_merge(
+array(
+'action' => 'find'
+),
+$this->params['pass']
+),
+'inputDefaults' => array('type' => 'text', 'class' => 'txtSearch')
+)
+);
+
+?>  
+
+<div class="search">
+    <h2>Filtros:</h2>
+    <table class="tableSearch">
+        <tbody>
+            <tr>
+                <td><?php
+                    echo $this->Form->input('nome_search', array(
+                        'div' => false,
+                        'label' => 'Nome'
+                            )
+                    );
+                    ?>
+                </td>
+                <td><?php
+                    echo $this->Form->input('formacao_search', array(
+                        'div' => false,
+                        'label' => 'Formação'
+                            )
+                    );
+                    ?>
+                </td>
+            </tr>
+            <tr><td><?php echo $this->Form->end('Pesquisar'); ?></td></tr>
+        </tbody>
+    </table>
+</div>
+
 <table>
     <thead>
     <th><?php echo $this->Paginator->sort('Trabalhador.nome', 'Nome'); ?></th>
@@ -38,17 +79,17 @@
 </tbody>
 </table>
 
-<?php 
-echo $this->Html->link('Adicionar trabalhador', array('action' => 'add'));
+<?php
+echo $this->Html->link('Adicionar trabalhador', array('action' => 'add')); 
 echo '<br/>';
-echo $this->Html->link('Pesquisar', array('action' => 'find'));
+echo $this->Html->link('Voltar', array('action' => 'index'));
 ?>
 
+
 <div class="paging">
-<?php
-echo $this->Paginator->prev('Anterior');
-echo $this->Paginator->numbers();
-echo $this->Paginator->next('Próximo');
-?>
+    <?php
+    echo $this->Paginator->prev('Anterior');
+    echo $this->Paginator->numbers();
+    echo $this->Paginator->next('Próximo');
+    ?>
 </div>
-    

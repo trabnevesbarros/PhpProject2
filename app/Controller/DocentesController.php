@@ -8,12 +8,47 @@
 
 class DocentesController extends AppController {
 
-    public $helpers = array('Html', 'Form');
+    public $helpers = array('Html', 'Form', 'Paginator');
     public $uses = array('Docente', 'Docentesresposta', 'Pergunta');
-    
     public $paginate = array(
-        'limit' => 12,
+        'limit' => 12
     );
+    public $components = array(
+        'Search.Prg',
+        'Paginator'
+    );
+    public $presetVars = array(
+        'nome_search' => array(
+            'type' => 'value'
+        ),
+        'area_search' => array(
+            'type' => 'value'
+        ),
+        'formacao_search' => array(
+            'type' => 'value'
+        ),
+        'tempo_atuacao_search' => array(
+            'type' => 'value'
+        ),
+        'tempo_atuacao_op' => array(
+            'type' => 'value'
+            
+        )
+    );
+
+    public function find() {
+        $this->set('operators', array(
+            '=' => '=',
+            '>' => '>',
+            '<' => '<',
+            '>=' => '>=',
+            '<=' => '<=',
+            '!=' => '!='
+            ));
+        $this->Prg->commonProcess();
+        $this->Paginator->settings['conditions'] = $this->Docente->parseCriteria($this->Prg->parsedParams());
+        $this->set('docentes', $this->paginate());
+    }
 
     public function index() {
         $this->Pergunta->recursive = 0;
@@ -41,7 +76,7 @@ class DocentesController extends AppController {
             $this->Docente->create();
             if ($this->Docente->save($this->request->data)) {
                 $this->Session->setFlash(__('Docente cadastrado'));
-                $perguntas = $this->Pergunta->find('count', array('conditions' => array('Tipo.name' => 'Docente')));
+                $perguntas = $this->Pergunta->find('first', array('conditions' => array('Tipo.name' => 'Docente')));
                 if ($perguntas) {
                     return $this->redirect(array('action' => 'questionarioAdd', $this->Docente->id, 0, true));
                 }
@@ -100,4 +135,5 @@ class DocentesController extends AppController {
         }
         return $this->redirect(array('action' => 'index'));
     }
+
 }

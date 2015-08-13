@@ -8,11 +8,24 @@
 
 class StopwordsController extends AppController {
 
-    public $helpers = array('Html', 'Form');
-    public $components = array('Acentos');
+    public $helpers = array('Html', 'Form', 'Paginator');
     public $paginate = array(
         'limit' => 12
     );
+    
+    public $components = array(
+        'Search.Prg',
+        'Paginator',
+        'Acentos'
+    );
+    
+    public $presetVars = array('termo_search' => array('type' => 'value'));
+
+    public function find() {
+        $this->Prg->commonProcess();
+        $this->Paginator->settings['conditions'] = $this->Stopword->parseCriteria($this->Prg->parsedParams());
+        $this->set('stopwords', $this->paginate());
+    }
 
     public function index() {
         $conditions = array();

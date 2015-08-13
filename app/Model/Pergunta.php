@@ -19,6 +19,29 @@ class Pergunta extends AppModel {
     
     public $belongsTo = array('Tipo');
     
-    public $actsAs = array('Containable');
+    public $actsAs = array('Containable', 'Search.Searchable');
+    
+    public $filterArgs = array(
+    'pergunta_search' => array(
+        'type' => 'ilike',
+        'field' => 'pergunta',
+        'required' => false
+    ),
+    'range' => array(
+        'type' => 'expression',
+        'method' => 'makeRangeCondition',
+        'field' => 'Pergunta.views BETWEEN ? AND ?'
+    ),
+    'enhanced_search' => array(
+        'type' => 'like',
+        'encode' => true,
+        'before' => false,
+        'after' => false,
+        'field' => array(
+            'ThisModel.name', 'OtherModel.name'
+        )
+    ),
+);
+
     
 }

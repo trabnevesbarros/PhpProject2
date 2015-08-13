@@ -8,14 +8,35 @@
 
 class TrabalhadoresController extends AppController {
 
-    public $helpers = array('Html', 'Form');
-    public $uses = array('Trabalhador', 'Pergunta', 'Trabalhadoresresposta');
+    public $helpers = array('Html', 'Form', 'Paginator');
+    public $uses = array('Trabalhador', 'Trabalhadoresresposta', 'Pergunta');
+    public $paginate = array(
+        'limit' => 12
+    );
+    public $components = array(
+        'Search.Prg',
+        'Paginator'
+    );
+    public $presetVars = array(
+        'nome_search' => array(
+            'type' => 'value'
+        ),
+        'formacao_search' => array(
+            'type' => 'value'
+        )
+    );
+
+    public function find() {
+        $this->Prg->commonProcess();
+        $this->Paginator->settings['conditions'] = $this->Trabalhador->parseCriteria($this->Prg->parsedParams());
+        $this->set('trabalhadores', $this->paginate());
+    }
 
     public function index() {
-        $this->set('perguntas', $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Trabalhador\' '));
-        //$this->Pergunta->find('all'), (onde tipo.name = Trabalhador)^
-        $this->set('trabalhadores', $this->Trabalhador->query('SELECT "Trabalhador"."id" AS "Trabalhador__id", "Trabalhador"."nome" AS "Trabalhador__nome", "Trabalhador"."formacao" AS "Trabalhador__formacao" FROM "public"."trabalhadores" AS "Trabalhador" WHERE 1 = 1'));
-        //$this->Trabalhador->find('all')^
+        $this->Pergunta->recursive = 0;
+        $this->Trabalhador->recursive = -1;
+        $this->set('perguntas', $this->Pergunta->find('first', array('conditions' => array('Tipo.name' => 'Trabalhador'))));
+        $this->set('trabalhadores', $this->paginate());
     }
 
     public function view($id = null) {
@@ -23,13 +44,13 @@ class TrabalhadoresController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $trabalhador = $this->Trabalhador->query('SELECT "Trabalhador"."id" AS "Trabalhador__id", "Trabalhador"."nome" AS "Trabalhador__nome", "Trabalhador"."formacao" AS "Trabalhador__formacao" FROM "public"."trabalhadores" AS "Trabalhador" WHERE "Trabalhador"."id" = '.$id.' LIMIT 1');
-        //$this->Trabalhador->findById($id)^
-        if (!isset($trabalhador[0])) {
+        $this->Trabalhador->recursive = -1;
+        $trabalhador = $this->Trabalhador->findById($id);
+        if (!$trabalhador) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->set('trabalhador', $trabalhador[0]);
+        $this->set('trabalhador', $trabalhador);
     }
 
     public function add() {
@@ -37,9 +58,8 @@ class TrabalhadoresController extends AppController {
             $this->Trabalhador->create();
             if ($this->Trabalhador->save($this->request->data)) {
                 $this->Session->setFlash(__('Trabalhador cadastrado'));
-                $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Trabalhador\'');
-                //$this->Pergunta->find('all'), (onde tipo.name = Trabalhador)^                
-                if (isset($perguntas[0])) {
+                $perguntas = $this->Pergunta->find('first', array('conditions' => array('Tipo.name' => 'Trabalhador')));
+                if ($perguntas) {
                     return $this->redirect(array('action' => 'questionarioAdd', $this->Trabalhador->id, 0, true));
                 }
                 $this->Session->setFlash(__('Não foi possivel responder questionario'));
@@ -55,9 +75,10 @@ class TrabalhadoresController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $trabalhador = $this->Trabalhador->query('SELECT "Trabalhador"."id" AS "Trabalhador__id", "Trabalhador"."nome" AS "Trabalhador__nome", "Trabalhador"."formacao" AS "Trabalhador__formacao" FROM "public"."trabalhadores" AS "Trabalhador" WHERE "Trabalhador"."id" = '.$id.' LIMIT 1');
-        //$this->Trabalhador->findById($id)^
-        if (!isset($trabalhador[0])) {
+        $this->Trabalhador->recursive = -1;
+        $trabalhador = $this->Trabalhador->findById($id);
+
+        if (!$trabalhador) {
             throw new NotFoundException(__('Invalid'));
         }
 
@@ -70,7 +91,7 @@ class TrabalhadoresController extends AppController {
         }
 
         if (!$this->request->data) {
-            $this->request->data = $trabalhador[0];
+            $this->request->data = $trabalhador;
         }
     }
 
@@ -83,9 +104,9 @@ class TrabalhadoresController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $trabalhador = $this->Trabalhador->query('SELECT "Trabalhador"."id" AS "Trabalhador__id", "Trabalhador"."nome" AS "Trabalhador__nome", "Trabalhador"."formacao" AS "Trabalhador__formacao" FROM "public"."trabalhadores" AS "Trabalhador" WHERE "Trabalhador"."id" = '.$id.' LIMIT 1');
-        //$this->Trabalhador->findById($id)^
-        if (!isset($trabalhador[0])) {
+        $this->Trabalhador->recursive = -1;
+        $trabalhador = $this->Trabalhador->findById($id);
+        if (!$trabalhador) {
             throw new NotFoundException(__('Invalid'));
         }
 
@@ -95,149 +116,6 @@ class TrabalhadoresController extends AppController {
             $this->Session->setFlash(__('Não foi possivel remover trabalhador'));
         }
         return $this->redirect(array('action' => 'index'));
-    }
-
-    public function questionarioIndex($trabalhadorId = null) {
-        if (!$trabalhadorId) {
-            throw new NotFoundException(__('Invalid'));
-        }
-
-        $respostas = $this->Trabalhadoresresposta->find('all', array(
-            'conditions' => array('trabalhador_id' => $trabalhadorId)));
-        if (!$respostas) {
-            $this->redirect(array('action' => 'questionarioAdd', $trabalhadorId));
-        }
-
-        $this->set('respostas', $respostas);
-
-        $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Trabalhador\' ');
-        //$this->Pergunta->find('all'), (onde tipo.name = Trabalhador)^
-        if (!isset($perguntas[0])) {
-            throw new NotFoundException(__('Invalid'));
-        }
-
-        $this->set('perguntas', $perguntas);
-    }
-
-    public function questionarioView($respostaId = null) {
-        if (!$respostaId) {
-            throw new NotFoundException(__('Invalid'));
-        }
-
-        $resposta = $this->Trabalhadoresresposta->findById($respostaId);
-        if (!$resposta) {
-            throw new NotFoundException(__('Invalid'));
-        }
-
-        $this->set('resposta', $resposta);
-    }
-
-    public function questionarioAdd($trabalhadorId = null, $perguntaId = null, $first = null) {
-        if (!$trabalhadorId) {
-            throw new NotFoundException(__('Invalid'));
-        }
-
-        $trabalhador = $this->Trabalhador->query('SELECT "Trabalhador"."id" AS "Trabalhador__id", "Trabalhador"."nome" AS "Trabalhador__nome", "Trabalhador"."formacao" AS "Trabalhador__formacao" FROM "public"."trabalhadores" AS "Trabalhador" WHERE "Trabalhador"."id" = '.$trabalhadorId.' LIMIT 1');
-        //$this->Trabalhador->findById($trabalhadorId)^
-        if (!isset($trabalhador[0])) {
-            throw new NotFoundException(__('Invalid'));
-        }
-
-        $this->set('trabalhador', $trabalhador[0]);
-
-        if (!isset($perguntaId) || $first) {
-            $respostas = $this->Trabalhadoresresposta->find('all', array(
-                'conditions' => array('trabalhador_id' => $trabalhadorId)));
-            if ($respostas) {
-                $this->set('respostas', $respostas);
-            }
-
-            $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Tipo"."name" = \'Trabalhador\' ');
-            //$this->Pergunta->find('all'), (onde tipo.name = Trabalhador)^
-            if (!isset($perguntas[0])) {
-                throw new NotFoundException(__('Invalid'));
-            }
-
-            $this->set('perguntas', $perguntas);
-        } else {
-            $perguntas = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Pergunta"."id" = '.$perguntaId.' LIMIT 1');
-            //$this->Pergunta->findById($id)^
-            if (!isset($perguntas[0]) || $perguntas[0]['Tipo']['name'] != 'Trabalhador') {
-                throw new NotFoundException(__('Invalid'));
-            }
-            
-            $this->set('perguntas', $perguntas);
-        }
-        if ($this->request->is(array('post', 'put'))) {
-            foreach ($this->request->data['Trabalhadoresresposta'] as $values) {
-                if (!empty($values['resposta'])) {
-                    if (!isset($values['id'])) {
-                        $this->Trabalhadoresresposta->create();
-                    } else {
-                        $this->Trabalhadoresresposta->id = $values['id'];
-                    }
-                    $this->Trabalhadoresresposta->save($values);
-                }
-            }
-            $this->Session->setFlash(__('Questionario respondido'));
-
-            if (!$first) {
-                return $this->redirect(array('action' => 'questionarioIndex', $trabalhadorId));
-            } else {
-                return $this->redirect(array('action' => 'index'));
-            }
-        }
-    }
-
-    public function questionarioEdit($respostaId = null) {
-        if (!$respostaId) {
-            throw new NotFoundException(__('Invalid'));
-        }
-
-        $resposta = $this->Trabalhadoresresposta->findById($respostaId);
-        if (!$resposta) {
-            throw new NotFoundException(__('Invalid'));
-        }
-
-        $this->set('resposta', $resposta);
-
-        if ($this->request->is(array('post', 'put'))) {
-            $this->Trabalhadoresresposta->id = $respostaId;
-            if ($this->Trabalhadoresresposta->save($this->request->data)) {
-                $this->Session->setFlash(__('Registro alterado'));
-                return $this->redirect(array(
-                            'action' => 'questionarioIndex',
-                            $resposta['Trabalhadoresresposta']['trabalhador_id']));
-            }
-        }
-
-        if (!$this->request->data) {
-            $this->request->data = $resposta;
-        }
-    }
-
-    public function questionarioDelete($respostaId = null) {
-        if ($this->request->is('get')) {
-            throw new UnauthorizedException(__('Not allowed'));
-        }
-
-        if (!$respostaId) {
-            throw new NotFoundException(__('Invalid'));
-        }
-
-        $resposta = $this->Trabalhadoresresposta->findById($respostaId);
-        if (!$resposta) {
-            throw new NotFoundException(__('Invalid'));
-        }
-
-        if ($this->Trabalhadoresresposta->delete($respostaId)) {
-            $this->Session->setFlash(__('Resposta removida'));
-        } else {
-            $this->Session->setFlash(__('Não foi possivel remover resposta'));
-        }
-        return $this->redirect(array(
-                    'action' => 'questionarioIndex',
-                    $resposta['Trabalhadoresresposta']['trabalhador_id']));
     }
 
 }
