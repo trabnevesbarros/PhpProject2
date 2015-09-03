@@ -118,7 +118,9 @@ echo $this->Html->link('Voltar', array('action' => 'index'));
 </table>
 
 <?php
-echo $this->Html->Link('Responder questionario', array('action' => 'questionarioAdd', $docente['Docente']['id']));
+echo $this->Html->Link('Responder questionario', array('action' => 'questionarioAdd', $docente['Docente']['id'])); 
+echo '<br/>';
+echo $this->Html->link('Voltar', array('action' => 'questionarioIndex', $docente['Docente']['id']));
 ?>
 
 <div class="paging">

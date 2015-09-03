@@ -1,5 +1,46 @@
 <h1>Usuarios</h1>
 
+<?php
+echo $this->Form->create('User', array(
+'url' => array_merge(
+array(
+'controller' => 'users',
+'action' => 'adminFind'
+),
+$this->params['pass']
+),
+'inputDefaults' => array('type' => 'text', 'class' => 'txtSearch')
+)
+);
+
+?>  
+
+<div class="search">
+    <h2>Filtros:</h2>
+    <table class="tableSearch">
+        <tbody>
+            <tr>
+                <td><?php
+                    echo $this->Form->input('name_search', array(
+                        'div' => false,
+                        'label' => 'Nome'
+                            )
+                    );
+                    ?>
+                </td>
+                <td><?php
+                    echo $this->Form->input('email_search', array(
+                        'div' => false,
+                        'label' => 'e-mail'
+                            )
+                    );
+                    ?>
+                </td>
+            </tr>
+            <tr><td><?php echo $this->Form->end('Pesquisar'); ?></td></tr>
+        </tbody>
+    </table>
+</div>
 <table>
     <thead>
     <th><?php echo $this->Paginator->sort('User.name', 'Nome'); ?></th>
@@ -50,15 +91,17 @@
         <?php endforeach; ?>
     </tbody>
 </table>
-<?php echo $this->Html->link('Adicionar usuario', array('action' => 'adminAdd'));
+
+<?php
+echo $this->Html->link('Adicionar user', array('action' => 'adminAdd')); 
 echo '<br/>';
-echo $this->Html->link('Pesquisar', array('action' => 'adminFind'));
+echo $this->Html->link('Voltar', array('action' => 'adminIndex'));
 ?>
 
 <div class="paging">
-<?php
-echo $this->Paginator->prev('Anterior');
-echo $this->Paginator->numbers();
-echo $this->Paginator->next('Próximo');
-?>
+    <?php
+    echo $this->Paginator->prev('Anterior');
+    echo $this->Paginator->numbers();
+    echo $this->Paginator->next('Próximo');
+    ?>
 </div>

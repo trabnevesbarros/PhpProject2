@@ -83,6 +83,8 @@
 
 <?php
 echo $this->Html->Link('Responder questionario', array('action' => 'questionarioAdd', $docente['Docente']['id']));
+echo '<br/>';
+echo $this->Html->link('Pesquisar', array('action' => 'questionarioFind', $docente['Docente']['id']));
 ?>
 
 <div class="paging">

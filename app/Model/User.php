@@ -11,6 +11,7 @@ App::uses('AuthComponent', 'Controller/Component');
 class User extends AppModel {
 
     public $useTable = 'users';
+    public $actsAs = array('Search.Searchable');
     public $validate = array(
         'name' => array('rule' => 'notEmpty'),
         'password' => array(
@@ -54,9 +55,35 @@ class User extends AppModel {
         )
     );
     
+    public $filterArgs = array(
+        'name_search' => array(
+            'type' => 'ilike',
+            'field' => 'name',
+            'required' => false
+        ),
+        'email_search' => array(
+            'type' => 'ilike',
+            'field' => 'email',
+            'required' => false
+        ),
+        'range' => array(
+            'type' => 'expression',
+            'method' => 'makeRangeCondition',
+            'field' => 'Docente.views BETWEEN ? AND ?'
+        ),
+        'enhanced_search' => array(
+            'type' => 'like',
+            'encode' => true,
+            'before' => false,
+            'after' => false,
+            'field' => array(
+                'ThisModel.name', 'OtherModel.name'
+            )
+        ),
+    );
+    
     public function equaltofield($check,$otherfield) 
     { 
-        //get name of field 
         $fname = ''; 
         foreach ($check as $key => $value){ 
             $fname = $key; 

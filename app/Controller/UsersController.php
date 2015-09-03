@@ -13,8 +13,24 @@ class UsersController extends AppController {
         $this->Auth->allow('logout');
     }
 
+    public  $helpers = array('Html', 'Form', 'Paginator');
+    
+    public $components = array(
+        'Search.Prg',
+        'Paginator'
+    );
+
     public $paginate = array(
         'limit' => 12,
+    );
+    
+    public $presetVars = array(
+        'name_search' => array(
+            'type' => 'value'
+        ),
+        'email_search' => array(
+            'type' => 'value'
+        )
     );
     
     public function index() {
@@ -23,7 +39,6 @@ class UsersController extends AppController {
         } else {
             $this->redirect(array('action' => 'adminIndex'));
         }
-        
     }
 
     public function login() {
@@ -58,6 +73,17 @@ class UsersController extends AppController {
     }
     
     // --Funções de admin--
+
+    public function adminFind() {
+        if (!$this->Session->read('Auth.User.super')) {
+            throw new UnauthorizedException(__('Not allowed'));
+        }
+        
+        $this->Prg->commonProcess();
+        $this->Paginator->settings['conditions'] = $this->User->parseCriteria($this->Prg->parsedParams());
+        $this->User->recursive = 0;
+        $this->set('users', $this->paginate());
+    }
 
     public function adminIndex() {
         if (!$this->Session->read('Auth.User.super')) {
