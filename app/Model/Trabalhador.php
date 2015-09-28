@@ -7,6 +7,8 @@
  */
 
 class Trabalhador extends AppModel {
+    
+    public $useTable = 'trabalhadores';
 
     public $validate = array(
         'nome' => array('rule' => 'notEmpty'),
@@ -15,6 +17,16 @@ class Trabalhador extends AppModel {
     
     public $hasMany = array('Trabalhadoresresposta' => array('dependent' => true));
     
+    public $belongsTo = array('Ocupacao' => array('dependent' => true));
+    
+    public $hasAndBelongsToMany = array(
+        'Formacao'=> array(
+            'className' => 'Formacao',
+            'joinTable' => 'trabalhadores_formacoes',
+            'foreingKey' => 'trabalhador_id',
+            'associationForeinKey' => 'formacao_id')
+    );
+    
     public $actsAs = array('Search.Searchable');
     
     public $filterArgs = array(
@@ -22,26 +34,7 @@ class Trabalhador extends AppModel {
             'type' => 'ilike',
             'field' => 'nome',
             'required' => false
-        ),
-        'formacao_search' => array(
-            'type' => 'ilike',
-            'field' => 'formacao',
-            'required' => false
-        ),
-        'range' => array(
-            'type' => 'expression',
-            'method' => 'makeRangeCondition',
-            'field' => 'Docente.views BETWEEN ? AND ?'
-        ),
-        'enhanced_search' => array(
-            'type' => 'like',
-            'encode' => true,
-            'before' => false,
-            'after' => false,
-            'field' => array(
-                'ThisModel.name', 'OtherModel.name'
-            )
-        ),
+        )
     );
 
 }

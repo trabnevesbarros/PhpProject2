@@ -10,24 +10,31 @@ class PerguntasController extends AppController {
 
     public $helpers = array('Html', 'Form', 'Paginator');
     public $uses = array('Pergunta', 'Tipo');
-    public $paginate = array(
-        'limit' => 12
-    );
     public $components = array(
         'Search.Prg',
         'Paginator'
     );
-    public $presetVars = array('pergunta_search' => array('type' => 'value'));
+    public $paginate = array(
+        'limit' => 12
+    );
+    public $presetVars = array(
+        'pergunta_search' => array('type' => 'value'),
+        'tipo_search' => array('type' => 'value')
+    );
 
-    function find() {
+    public function find() {
+        $this->Paginator->settings = $this->paginate;
         $this->Prg->commonProcess();
         $this->Paginator->settings['conditions'] = $this->Pergunta->parseCriteria($this->Prg->parsedParams());
-        $this->set('Perguntas', $this->paginate());
+        $this->set('perguntas', $this->paginate());
+        $tipos = array('' => '--');
+        array_push($tipos, $this->Tipo->find('list'));
+        $this->set('tipos', $tipos);
     }
 
     public function index() {
-        $this->Pergunta->virtualFields['tipo'] = 'select name from tipos where id = "Pergunta"."tipo_id"';
-        $this->Pergunta->recursive = -1;
+        $this->Paginator->settings = $this->paginate;
+        $this->Pergunta->recursive = 0;
         $this->set('perguntas', $this->paginate());
     }
 
@@ -36,54 +43,56 @@ class PerguntasController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Pergunta"."id" = ' . $id . ' LIMIT 1');
-        //$this->Pergunta->findById($id)^
-        if (!isset($pergunta[0])) {
+        $pergunta = $this->Pergunta->findById($id);
+        if (!$pergunta) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->set('pergunta', $pergunta[0]);
+        $this->set('pergunta', $pergunta);
     }
 
     public function add() {
         $tipos = $this->Tipo->find('list');
         if (!$tipos) {
-            throw new NotFountException(__('Invalid'));
+            throw new NotFoundException(__('Invalid'));
         }
         $this->set('tipos', $tipos);
-
         if ($this->request->is('post')) {
             $this->Pergunta->create();
             if ($this->Pergunta->save($this->request->data)) {
                 $this->Session->setFlash(__('Pergunta cadastrada'));
-                return $this->redirect(array('action' => 'index'));
+                $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('Não foi possivel cadastrar pergunta'));
+                $this->Session->setFlash(__('Nao foi possivel cadastrar pergunta'));
             }
         }
     }
 
     public function edit($id = null) {
+        $tipos = $this->Tipo->find('list');
+        if (!$tipos) {
+            throw new NotFoundException(__('Invalid'));
+        }
+        $this->set('tipos', $tipos);
         if (!$id) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $pergunta = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Pergunta"."id" = ' . $id . ' LIMIT 1');
-        //$this->Pergunta->findById($id)^
-        if (!isset($pergunta[0])) {
+        $pergunta = $this->Pergunta->findById($id);
+        if (!$pergunta) {
             throw new NotFoundException(__('Invalid'));
         }
 
         if ($this->request->is(array('post', 'put'))) {
             $this->Pergunta->id = $id;
             if ($this->Pergunta->save($this->request->data)) {
-                $this->Session->setFlash(__('Registro alterado'));
+                $this->Session->setFlash('Registro alterado');
                 return $this->redirect(array('action' => 'index'));
             }
         }
 
         if (!$this->request->data) {
-            $this->request->data = $pergunta[0];
+            $this->request->data = $pergunta;
         }
     }
 
@@ -93,19 +102,18 @@ class PerguntasController extends AppController {
         }
 
         if (!$id) {
-            throw new NotFoundException(__('Invalid'));
+            throw new NotFoundException(__('Invalid id'));
         }
 
-        $pergunta = $this->Pergunta->query('SELECT "Pergunta"."id" AS "Pergunta__id", "Pergunta"."pergunta" AS "Pergunta__pergunta", "Pergunta"."tipo_id" AS "Pergunta__tipo_id", "Tipo"."id" AS "Tipo__id", "Tipo"."name" AS "Tipo__name" FROM "public"."perguntas" AS "Pergunta" LEFT JOIN "public"."tipos" AS "Tipo" ON ("Pergunta"."tipo_id" = "Tipo"."id") WHERE "Pergunta"."id" = ' . $id . ' LIMIT 1');
-        //$this->Pergunta->findById($id)^
-        if (!isset($pergunta[0])) {
-            throw new NotFoundException(__('Invalid'));
+        $pergunta = $this->Pergunta->findById($id);
+        if (!$pergunta) {
+            throw new NotFoundException(__('Invalid id'));
         }
 
         if ($this->Pergunta->delete($id)) {
-            $this->Session->setFlash(__('Pergunta removida'));
+            $this->Session->setFlash('Pergunta removida');
         } else {
-            $this->Session->setFlash(__('Não foi possivel remover pergunta'));
+            $this->Session->setFlash('Não foi possivel remover pergunta');
         }
         return $this->redirect(array('action' => 'index'));
     }

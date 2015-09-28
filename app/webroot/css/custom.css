@@ -16,13 +16,13 @@ and open the template in the editor.
 
 .txtSearch { 
     width:10em; 
-    height:1em;
+    height:28px;
     padding: 0;
 }
 
-.boxSearch select{
+.boxSearch select {
     width: auto; 
-    height: 1.5em;
+    height: 28px;
 }
 
 .tableSearch td {

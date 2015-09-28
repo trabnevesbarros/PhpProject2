@@ -1,35 +1,34 @@
 <?php
 
-/* 
+/*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
 
-class TiposController extends AppController {
+class CargosController extends AppController {
     
     public $helpers = array('Html', 'Form', 'Paginator');
-    public $paginate = array(
-        'limit' => 12
-    );
     public $components = array(
         'Search.Prg',
         'Paginator'
     );
+    public $paginate = array(
+        'limit' => 12
+    );
+    
     public $presetVars = array('name_search' => array('type' => 'value'));
 
     public function find() {         
         $this->Paginator->settings = $this->paginate;
-        $this->Tipo->recursive = 0;
         $this->Prg->commonProcess();
-        $this->Paginator->settings['conditions'] = $this->Tipo->parseCriteria($this->Prg->parsedParams());
-        $this->set('tipos', $this->paginate());
+        $this->Paginator->settings['conditions'] = $this->Cargo->parseCriteria($this->Prg->parsedParams());
+        $this->set('cargos', $this->paginate());
     }
-    
-    public function index() {
+
+    public function index() {         
         $this->Paginator->settings = $this->paginate;
-        $this->Tipo->recursive = 0;
-        $this->set('tipos', $this->paginate());
+        $this->set('cargos', $this->paginate());
     }
 
     public function view($id = null) {
@@ -37,22 +36,22 @@ class TiposController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $tipo = $this->Tipo->findById($id);
-        if (!$tipo) {
+        $cargo = $this->Cargo->findById($id);
+        if (!$cargo) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->set('tipo', $tipo);
+        $this->set('cargo', $cargo);
     }
 
     public function add() {
         if ($this->request->is('post')) {
-            $this->Tipo->create();
-            if ($this->Tipo->save($this->request->data)) {
-                $this->Session->setFlash(__('Tipo cadastrado'));
-                return $this->redirect(array('action' => 'index'));
+            $this->Cargo->create();
+            if ($this->Cargo->save($this->request->data)) {
+                $this->Session->setFlash(__('Cargo cadastrada'));                      
+                $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('Não foi possivel cadastrar tipo'));
+                $this->Session->setFlash(__('Nao foi possivel cadastrar cargo'));
             }
         }
     }
@@ -62,21 +61,21 @@ class TiposController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $tipo = $this->Tipo->findById($id);
-        if (!$tipo) {
+        $cargo = $this->Cargo->findById($id);
+        if (!$cargo) {
             throw new NotFoundException(__('Invalid'));
         }
 
         if ($this->request->is(array('post', 'put'))) {
-            $this->Tipo->id = $id;
-            if ($this->Tipo->save($this->request->data)) {
-                $this->Session->setFlash(__('Registro alterado'));
+            $this->Cargo->id = $id;
+            if ($this->Cargo->save($this->request->data)) {
+                $this->Session->setFlash('Registro alterado');
                 return $this->redirect(array('action' => 'index'));
             }
         }
 
         if (!$this->request->data) {
-            $this->request->data = $tipo;
+            $this->request->data = $cargo;
         }
     }
 
@@ -86,22 +85,20 @@ class TiposController extends AppController {
         }
 
         if (!$id) {
-            throw new NotFoundException(__('Invalid'));
+            throw new NotFoundException(__('Invalid id'));
         }
 
-        $tipo = $this->Tipo->findById($id);
-        if (!$tipo) {
-            throw new NotFoundException(__('Invalid'));
+        $cargo = $this->Cargo->findById($id);
+        if (!$cargo) {
+            throw new NotFoundException(__('Invalid id'));
         }
-        
-        if($this->Tipo->delete($id)){
-            $this->Session->setFlash(__('Tipo removido'));
+
+        if ($this->Cargo->delete($id)) {
+            $this->Session->setFlash('Cargo removida');
         } else {
-            $this->Session->setFlash(__('Não foi possivel remover tipo'));
+            $this->Session->setFlash('Não foi possivel remover cargo');
         }
         return $this->redirect(array('action' => 'index'));
     }
-    
+
 }
-
-

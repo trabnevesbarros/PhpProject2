@@ -8,13 +8,23 @@
 
 class Empregador extends AppModel {
 
+    public $useTable = 'empregadores';
+    
     public $validate = array(
-        'nome' => array('rule' => 'notEmpty'),
-        'cargo' => array('rule' => 'notEmpty'),
-        'formacao' => array('rule' => 'notEmpty')
+        'nome' => array('rule' => 'notEmpty')
     );
     
     public $hasMany = array('Empregadoresresposta' => array('dependent' => true));
+    
+    public $belongsTo = array('Cargo' => array('dependent' => true));
+    
+    public $hasAndBelongsToMany = array(
+        'Formacao'=> array(
+            'className' => 'Formacao',
+            'joinTable' => 'empregadores_formacoes',
+            'foreingKey' => 'empregador_id',
+            'associationForeinKey' => 'formacao_id')
+    );
     
     public $actsAs = array('Search.Searchable');
     
@@ -23,31 +33,7 @@ class Empregador extends AppModel {
             'type' => 'ilike',
             'field' => 'nome',
             'required' => false
-        ),
-        'cargo_search' => array(
-            'type' => 'ilike',
-            'field' => 'cargo',
-            'required' => false
-        ),
-        'formacao_search' => array(
-            'type' => 'ilike',
-            'field' => 'formacao',
-            'required' => false
-        ),
-        'range' => array(
-            'type' => 'expression',
-            'method' => 'makeRangeCondition',
-            'field' => 'Docente.views BETWEEN ? AND ?'
-        ),
-        'enhanced_search' => array(
-            'type' => 'like',
-            'encode' => true,
-            'before' => false,
-            'after' => false,
-            'field' => array(
-                'ThisModel.name', 'OtherModel.name'
-            )
-        ),
+        )
     );
 
 }

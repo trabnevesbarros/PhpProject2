@@ -36,7 +36,8 @@ class DocentesController extends AppController {
         )
     );
 
-    public function find() {
+    public function find() {         
+        $this->Paginator->settings = $this->paginate;
         $this->set('operators', array(
             '=' => '=',
             '>' => '>',
@@ -50,7 +51,8 @@ class DocentesController extends AppController {
         $this->set('docentes', $this->paginate());
     }
 
-    public function index() {
+    public function index() {         
+        $this->Paginator->settings = $this->paginate;
         $this->Pergunta->recursive = 0;
         $this->Docente->recursive = -1;
         $this->set('perguntas', $this->Pergunta->find('first', array('conditions' => array('Tipo.name' => 'Docente'))));

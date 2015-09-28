@@ -15,6 +15,7 @@ class PalavraschavesController extends AppController {
     );
 
     public function index() {
+        $this->Paginator->settings = $this->paginate;
         $this->Palavraschave->recursive = -1;
         //$this->Palavraschave->virtualFields['docente'] = 'CASE WHEN 0 IN (select count(*) from docentes_palavras where palavraschave_id = "Palavraschave"."id") THEN false ELSE true END';
         //debug($this->paginate());

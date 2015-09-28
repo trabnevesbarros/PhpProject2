@@ -1,0 +1,1 @@
+<p><strong>Area: </strong><?php echo h($area['Area']['name']) ?></p>

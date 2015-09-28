@@ -20,7 +20,8 @@ class DocentesrespostasController extends AppController {
     );
     public $presetVars = array('pergunta_search' => array('type' => 'value'));
 
-    public function index() {
+    public function index() {         
+        $this->Paginator->settings = $this->paginate;
         $this->set('respostas', $this->Docentesresposta->find('all'));
     }
 

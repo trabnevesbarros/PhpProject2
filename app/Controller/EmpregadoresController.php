@@ -29,13 +29,15 @@ class EmpregadoresController extends AppController {
         )
     );
 
-    public function find() {
+    public function find() {         
+        $this->Paginator->settings = $this->paginate;
         $this->Prg->commonProcess();
         $this->Paginator->settings['conditions'] = $this->Empregador->parseCriteria($this->Prg->parsedParams());
         $this->set('empregadores', $this->paginate());
     }
 
-    public function index() {
+    public function index() {         
+        $this->Paginator->settings = $this->paginate;
         $this->Pergunta->recursive = 0;
         $this->Empregador->recursive = -1;
         $this->set('perguntas', $this->Pergunta->find('first', array('conditions' => array('Tipo.name' => 'Empregador'))));

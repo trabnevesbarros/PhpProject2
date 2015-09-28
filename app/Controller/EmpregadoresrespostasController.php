@@ -10,7 +10,8 @@ class EmpregadoresrespostasController extends AppController {
     
     public $helpers = array('Html', 'Form');
     
-    public function index() {
+    public function index() {         
+        $this->Paginator->settings = $this->paginate;
         $this->set('respostas', $this->Empregadoresresposta->find('all'));
     }
 

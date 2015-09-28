@@ -22,43 +22,15 @@ class StopwordsController extends AppController {
     public $presetVars = array('termo_search' => array('type' => 'value'));
 
     public function find() {
+        $this->Paginator->settings = $this->paginate;
         $this->Prg->commonProcess();
         $this->Paginator->settings['conditions'] = $this->Stopword->parseCriteria($this->Prg->parsedParams());
         $this->set('stopwords', $this->paginate());
     }
 
     public function index() {
-        $conditions = array();
-
-        if (($this->request->is('post') || $this->request->is('put')) && isset($this->data['Filter'])) {
-            $filter_url['controller'] = $this->request->params['controller'];
-            $filter_url['action'] = $this->request->params['action'];
-            $filter_url['page'] = 1;
-
-            foreach ($this->data['Filter'] as $name => $value) {
-                if ($value) {
-                    $filter_url[$name] = urlencode($value);
-                }
-            }
-
-            return $this->redirect($filter_url);
-        } else {
-            foreach ($this->params['named'] as $param_name => $value) {
-                if (!in_array($param_name, array('page', 'sort', 'direction', 'limit'))) {
-                    if ($param_name == "search") {
-                        $conditions['OR'] = array(
-                            array('Stopword.termo LIKE' => '%' . $value . '%')
-                        );
-                    } else {
-                        $conditions['Stopword.' . $param_name] = $value;
-                    }
-                    $this->request->data['Filter'][$param_name] = $value;
-                }
-            }
-        }
-        
-        $this->paginate = array('conditions' => $conditions);
-
+        $this->Paginator->settings = $this->paginate;
+        $this->Paginator->settings = $this->paginate;
         $this->set('stopwords', $this->paginate());
     }
 

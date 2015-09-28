@@ -34,6 +34,7 @@ class UsersController extends AppController {
     );
     
     public function index() {
+        $this->Paginator->settings = $this->paginate;
         if (!$this->Session->read('Auth.User.super')) {
             throw new UnauthorizedException(__('Not allowed'));
         } else {

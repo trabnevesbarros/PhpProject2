@@ -6,19 +6,21 @@
  * and open the template in the editor.
  */
 
-class Stopword extends AppModel {
-
-    public $useTable = 'stopwords';
+class Ocupacao extends AppModel {
     
+    public $useTable = 'ocupacoes';
+
     public $validate = array(
-        'termo' => array('rule' => 'notEmpty'));
+        'name' => array('rule' => 'notEmpty'));
     
     public $actsAs = array('Search.Searchable');
     
+    public $hasMany = array('Trabalhador' => array('dependent' => true));
+    
     public $filterArgs = array(
-        'termo_search' => array(
+        'name_search' => array(
             'type' => 'ilike',
-            'field' => 'termo',
+            'field' => 'name',
             'required' => false
         )
     );

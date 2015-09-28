@@ -1,0 +1,1 @@
+<p><strong>Cargo: </strong><?php echo h($cargo['Cargo']['name']) ?></p>

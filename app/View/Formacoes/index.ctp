@@ -1,16 +1,14 @@
-<h1>Formacao</h1>
+<h1>Formação</h1>
 
 <table>
     <thead>
-    <th>ID</th>
-    <th>Nome</th>
-    <th colspan="3">Acao</th>
+    <th><?php echo $this->Paginator->sort('Formacao.name', 'Nome'); ?></th>
+    <th colspan="3">Ação</th>
     </thead>
     
     <tbody>
-        <?php foreach ($formacaos as $formacao):?>
+        <?php foreach ($formacoes as $formacao):?>
             <tr>
-                <td><?php echo $formacao['Formacao']['id'];?></td>
                 
                 <td><?php echo $this->Html->link($formacao['Formacao']['name'], array('action' => 'view', $formacao['Formacao']['id']));  ?></td>
                 
@@ -27,8 +25,18 @@
 
 </table>
 </br>
-<?php echo $this->Html->link('Adicionar formação', array('action' => 'add')); ?>
-    
+<?php echo $this->Html->link('Adicionar formação', array('action' => 'add')); 
+echo '<br/>';
+echo $this->Html->link('Pesquisar', array('action' => 'find'));
+?>
+
+<div class="paging">
+<?php
+echo $this->Paginator->prev('Anterior');
+echo $this->Paginator->numbers();
+echo $this->Paginator->next('Próximo');
+?>
+</div>
     
     
     

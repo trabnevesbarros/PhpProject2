@@ -11,6 +11,7 @@ class TrabalhadoresrespostasController extends AppController {
     public $helpers = array('Html', 'Form');
 
     public function index() {
+        $this->Paginator->settings = $this->paginate;
         $this->set('respostas', $this->Trabalhadoresresposta->find('all'));
     }
 

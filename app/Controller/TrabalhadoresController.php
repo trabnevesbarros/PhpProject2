@@ -26,13 +26,15 @@ class TrabalhadoresController extends AppController {
         )
     );
 
-    public function find() {
+    public function find() {         
+        $this->Paginator->settings = $this->paginate;
         $this->Prg->commonProcess();
         $this->Paginator->settings['conditions'] = $this->Trabalhador->parseCriteria($this->Prg->parsedParams());
         $this->set('trabalhadores', $this->paginate());
     }
 
     public function index() {
+        $this->Paginator->settings = $this->paginate;
         $this->Pergunta->recursive = 0;
         $this->Trabalhador->recursive = -1;
         $this->set('perguntas', $this->Pergunta->find('first', array('conditions' => array('Tipo.name' => 'Trabalhador'))));

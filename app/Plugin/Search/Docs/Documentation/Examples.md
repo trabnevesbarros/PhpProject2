@@ -130,7 +130,8 @@ class ArticlesController extends AppController {
 		'Search.Prg'
 	);
 
-	public function find() {
+	public function find() {         
+                $this->Paginator->settings = $this->paginate;
 		$this->Prg->commonProcess();
 		$this->Paginator->settings['conditions'] = $this->Article->parseCriteria($this->Prg->parsedParams());
 		$this->set('articles', $this->Paginator->paginate());
@@ -163,7 +164,8 @@ class ArticlesController extends AppController {
 		)
 	);
 
-	public function find() {
+	public function find() {         
+                $this->Paginator->settings = $this->paginate;
 		$this->Prg->commonProcess();
 		$this->Paginator->settings['conditions'] = $this->Article->parseCriteria($this->Prg->parsedParams());
 		$this->set('articles', $this->Paginator->paginate());

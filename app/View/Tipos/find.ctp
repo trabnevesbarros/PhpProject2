@@ -1,4 +1,39 @@
-<h1>Tipo</h1>
+<?php?>
+<h1>Tipos</h1>
+
+<?php
+echo $this->Form->create('Tipo', array(
+'url' => array_merge(
+array(
+'action' => 'find'
+),
+$this->params['pass']
+),
+'inputDefaults' => array('type' => 'text', 'class' => 'txtSearch')
+)
+);
+
+?>  
+
+<div class="search">
+    <h2>Filtros:</h2>
+    <table class="tableSearch">
+        <tbody>
+            <tr>
+                <td><?php
+                    echo $this->Form->input('name_search', array(
+                        'div' => false,
+                        'label' => 'Nome'
+                            )
+                    );
+                    ?>
+                </td>
+            </tr>
+            <tr><td><?php echo $this->Form->end('Pesquisar'); ?></td></tr>
+        </tbody>
+    </table>
+</div>
+
 
 <table>
     <thead>
@@ -27,7 +62,7 @@
 </br>
 <?php echo $this->Html->link('Adicionar tipo', array('action' => 'add')); 
 echo '<br/>';
-echo $this->Html->link('Pesquisar', array('action' => 'find'));
+echo $this->Html->link('Voltar', array('action' => 'index'));
 ?>
 
 <div class="paging">
@@ -37,6 +72,3 @@ echo $this->Paginator->numbers();
 echo $this->Paginator->next('Próximo');
 ?>
 </div>
-    
-    
-    

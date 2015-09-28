@@ -107,12 +107,37 @@ CakeLog::config('error', array(
     'file' => 'error',
 ));
 
-Inflector::rules('singular', array('rules' => array('/^([a-zA-Z_-]*)res$/i' => '\1r')
-    , 'irregular' => array('banners' => 'banner')
-    , 'uninflected' => array('lapis')));
-
-
-Inflector::rules('plural', array('rules' => array('/^([a-zA-Z_-]*)r$/i' => '\1res')
-    , 'irregular' => array('banner' => 'banners')
-    , 'uninflected' => array('lapis')));
+// Do plural pro singular
+Inflector::rules('singular', array(
+    'rules' => array(
+        '/^(.*)(oes|aes|aos)$/i' => '\1ao',
+        '/^(.*)(ns)$/i' => '\1m',
+        '/^(.*)(es)$/i' => '\1e',        
+    ),
+    'irregular' => array(
+        'trabalhadores' => 'trabalhador',
+        'empregadores' => 'empregador',
+        'inscricoes' => 'inscricao',
+        'paes' => 'pao',        
+        'perfis' => 'perfil'
+    ),
+    'uninflected' => array()
+));
+ 
+// Do singular pro plural
+Inflector::rules('plural', array(
+    'rules' => array(
+        '/^(.*)ao$/i' => '\1oes',
+        '/^(.*)m$/i' => '\1ns',
+        '/^(.*)e$/i' => '\1es',                
+    ),
+    'irregular' => array(
+        'trabalhador' => 'trabalhadores',
+        'empregador' => 'empregadores',
+        'inscricao' => 'inscricoes',
+        'pao' => 'paes',        
+        'perfil' => 'perfis'
+    ),
+    'uninflected' => array()
+));
 

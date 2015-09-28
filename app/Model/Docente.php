@@ -7,17 +7,25 @@
  */
 
 class Docente extends AppModel {
+    
+    public $useTable = 'docentes';
 
     public $validate = array(
         'nome' => array('rule' => 'notEmpty'),
-        'area' => array('rule' => 'notEmpty'),
-        'formacao' => array('rule' => 'notEmpty'),
         'tempo_atuacao' => array(
             array('rule' => 'notEmpty'),
             array('rule' => 'numeric', 'message' => 'Campo numérico'))
     );
     
     public $hasMany = array('Docentesresposta' => array('dependent' => true));
+    public $belongsTo = array('Area' => array('dependent' => true));
+    public $hasAndBelongsToMany = array(
+        'Formacao'=> array(
+            'className' => 'Formacao',
+            'joinTable' => 'docentes_formacoes',
+            'foreingKey' => 'docente_id',
+            'associationForeinKey' => 'formacao_id')
+    );
     
     public $actsAs = array('Search.Searchable');
     
@@ -45,21 +53,7 @@ class Docente extends AppModel {
         ),
         'tempo_atuacao_op' => array(
             'type' => 'checkbox'
-        ),
-        'range' => array(
-            'type' => 'expression',
-            'method' => 'makeRangeCondition',
-            'field' => 'Docente.views BETWEEN ? AND ?'
-        ),
-        'enhanced_search' => array(
-            'type' => 'like',
-            'encode' => true,
-            'before' => false,
-            'after' => false,
-            'field' => array(
-                'ThisModel.name', 'OtherModel.name'
-            )
-        ),
+        )
     );
     
     public function filterTempoAtuacao($data, $field = null) {
@@ -77,8 +71,7 @@ class Docente extends AppModel {
             '>=' => '>=',
             '<=' => '<=',
             '!=' => '!='
-            );
-            $op = '=';
+            );            $op = '=';
             if (!empty($data['tempo_atuacao_op']) && in_array($data['tempo_atuacao_op'], $operators)) {
                 $op = $data['tempo_atuacao_op'];
             } 
