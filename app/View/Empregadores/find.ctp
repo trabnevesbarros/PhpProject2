@@ -30,15 +30,41 @@ $this->params['pass']
                 <td><?php
                     echo $this->Form->input('cargo_search', array(
                         'div' => false,
-                        'label' => 'Cargo'
+                        'label' => 'Cargo',
+                        'type' => 'select',
+                        'class' => 'boxSearch',
+                        'options' => $cargos
+                            )
+                    );
+                    ?>
+                </td>                
+                <td><?php
+                    echo $this->Form->input('tempo_atuacao_search', array(
+                        'div' => false,
+                        'label' => 'Tempo de atuação',
+                        'type' => 'number'
+                            )
+                    );
+                    echo $this->Form->input('tempo_atuacao_op', array(
+                        'div' => false,
+                        'label' => '',
+                        'type' => 'select',
+                        'class' => 'boxSearch',
+                        'options' => $operators
                             )
                     );
                     ?>
                 </td>
-                <td><?php
-                    echo $this->Form->input('formacao_search', array(
+            </tr>
+            <tr>
+                <td colspan='3'><?php
+                    echo $this->Form->input('formacoes', array(
                         'div' => false,
-                        'label' => 'Formação'
+                        'type' => 'select',
+                        'multiple' => 'true',
+                        'options' => $formacoes,
+                        'label' => 'Formações',
+                        'class' => 'formacoes_input'
                             )
                     );
                     ?>
@@ -52,8 +78,9 @@ $this->params['pass']
 <table>
     <thead>
     <th><?php echo $this->Paginator->sort('Empregador.nome', 'Nome'); ?></th>
-    <th><?php echo $this->Paginator->sort('Empregador.cargo', 'Cargo'); ?></th>
-    <th><?php echo $this->Paginator->sort('Empregador.formacao', 'Formação'); ?></th>
+    <th><?php echo $this->Paginator->sort('Empregador.cargo', 'Área'); ?></th>
+    <th><?php echo 'Nº formações' ?></th>
+    <th><?php echo $this->Paginator->sort('Empregador.tempo_atuacao', 'Tempo de atuação'); ?></th>
     <th colspan='3'>Ação</th>
 </thead>
 <tbody>
@@ -64,8 +91,9 @@ $this->params['pass']
                 echo $this->Html->link($empregador['Empregador']['nome'], array('action' => 'view', $empregador['Empregador']['id']));
                 ?>
             </td>           
-            <td><?php echo $empregador['Empregador']['cargo']; ?></td>
-            <td><?php echo $empregador['Empregador']['formacao']; ?></td>
+            <td><?php echo $empregador['Cargo']['name']; ?></td>
+            <td><?php echo $empregador['Empregador']['formacoes_count']; ?></td>
+            <td><?php echo $empregador['Empregador']['tempo_atuacao']; ?></td>
             <td>
                 <?php
                 echo $this->Html->link('Alterar', array('action' => 'edit', $empregador['Empregador']['id']));

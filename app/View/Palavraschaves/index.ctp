@@ -29,7 +29,11 @@
                 ?>
             </td>
             <td>
-                <?php echo $this->Html->Link('Respostas', array('action' => 'respostasIndex', $palavraschave['Palavraschave']['id'])); ?>
+                <?php
+                if ($palavraschave['Palavraschave']['docentes'] + $palavraschave['Palavraschave']['empregadores'] + $palavraschave['Palavraschave']['trabalhadores'] >= 1) {
+                    echo $this->Html->Link('Respostas', array('action' => 'respostasIndex', $palavraschave['Palavraschave']['id'])); 
+                }
+                ?>
             </td>
         </tr>
         

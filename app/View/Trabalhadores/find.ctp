@@ -28,9 +28,43 @@ $this->params['pass']
                     ?>
                 </td>
                 <td><?php
-                    echo $this->Form->input('formacao_search', array(
+                    echo $this->Form->input('ocupacao_search', array(
                         'div' => false,
-                        'label' => 'Formação'
+                        'label' => 'Ocupacao',
+                        'type' => 'select',
+                        'class' => 'boxSearch',
+                        'options' => $ocupacoes
+                            )
+                    );
+                    ?>
+                </td>                
+                <td><?php
+                    echo $this->Form->input('tempo_atuacao_search', array(
+                        'div' => false,
+                        'label' => 'Tempo de atuação',
+                        'type' => 'number'
+                            )
+                    );
+                    echo $this->Form->input('tempo_atuacao_op', array(
+                        'div' => false,
+                        'label' => '',
+                        'type' => 'select',
+                        'class' => 'boxSearch',
+                        'options' => $operators
+                            )
+                    );
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='3'><?php
+                    echo $this->Form->input('formacoes', array(
+                        'div' => false,
+                        'type' => 'select',
+                        'multiple' => 'true',
+                        'options' => $formacoes,
+                        'label' => 'Formações',
+                        'class' => 'formacoes_input'
                             )
                     );
                     ?>
@@ -44,7 +78,9 @@ $this->params['pass']
 <table>
     <thead>
     <th><?php echo $this->Paginator->sort('Trabalhador.nome', 'Nome'); ?></th>
-    <th><?php echo $this->Paginator->sort('Trabalhador.formacao', 'Formação'); ?></th>
+    <th><?php echo $this->Paginator->sort('Trabalhador.ocupacao', 'Ocupação'); ?></th>
+    <th><?php echo 'Nº formações' ?></th>
+    <th><?php echo $this->Paginator->sort('Trabalhador.tempo_atuacao', 'Tempo de atuação'); ?></th>
     <th colspan='3'>Ação</th>
 </thead>
 <tbody>
@@ -55,7 +91,9 @@ $this->params['pass']
                 echo $this->Html->link($trabalhador['Trabalhador']['nome'], array('action' => 'view', $trabalhador['Trabalhador']['id']));
                 ?>
             </td>           
-            <td><?php echo $trabalhador['Trabalhador']['formacao']; ?></td>
+            <td><?php echo $trabalhador['Ocupacao']['name']; ?></td>
+            <td><?php echo $trabalhador['Trabalhador']['formacoes_count']; ?></td>
+            <td><?php echo $trabalhador['Trabalhador']['tempo_atuacao']; ?></td>
             <td>
                 <?php
                 echo $this->Html->link('Alterar', array('action' => 'edit', $trabalhador['Trabalhador']['id']));

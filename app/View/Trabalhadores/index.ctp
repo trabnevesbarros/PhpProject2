@@ -3,7 +3,9 @@
 <table>
     <thead>
     <th><?php echo $this->Paginator->sort('Trabalhador.nome', 'Nome'); ?></th>
-    <th><?php echo $this->Paginator->sort('Trabalhador.formacao', 'Formação'); ?></th>
+    <th><?php echo $this->Paginator->sort('Trabalhador.ocupacao', 'Ocupação'); ?></th>
+    <th><?php echo 'Nº formações' ?></th>
+    <th><?php echo $this->Paginator->sort('Trabalhador.tempo_atuacao', 'Tempo de atuação'); ?></th>
     <th colspan='3'>Ação</th>
 </thead>
 <tbody>
@@ -14,7 +16,9 @@
                 echo $this->Html->link($trabalhador['Trabalhador']['nome'], array('action' => 'view', $trabalhador['Trabalhador']['id']));
                 ?>
             </td>           
-            <td><?php echo $trabalhador['Trabalhador']['formacao']; ?></td>
+            <td><?php echo $trabalhador['Ocupacao']['name']; ?></td>
+            <td><?php echo $trabalhador['Trabalhador']['formacoes_count']; ?></td>
+            <td><?php echo $trabalhador['Trabalhador']['tempo_atuacao']; ?></td>
             <td>
                 <?php
                 echo $this->Html->link('Alterar', array('action' => 'edit', $trabalhador['Trabalhador']['id']));

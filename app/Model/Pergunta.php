@@ -13,7 +13,7 @@ class Pergunta extends AppModel {
         'tipo_id' => array('rule' => 'notEmpty')
     );
     public $virtualFields = array(
-        'tipo' => 'Tipo.name'
+        'tipo' => 'SELECT name FROM tipos WHERE id = Pergunta.tipo_id'
     );
     public $hasMany = array('Docentesresposta' => array('dependent' => true),
         'Empregadoresresposta' => array('dependent' => true),

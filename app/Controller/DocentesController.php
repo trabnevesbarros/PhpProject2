@@ -9,7 +9,7 @@
 class DocentesController extends AppController {
 
     public $helpers = array('Html', 'Form', 'Paginator');
-    public $uses = array('Docente', 'Docentesresposta', 'Pergunta');
+    public $uses = array('Docente', 'Docentesresposta', 'Pergunta', 'Area', 'Formacao');
     public $paginate = array(
         'limit' => 12
     );
@@ -17,14 +17,12 @@ class DocentesController extends AppController {
         'Search.Prg',
         'Paginator'
     );
+
     public $presetVars = array(
         'nome_search' => array(
             'type' => 'value'
         ),
         'area_search' => array(
-            'type' => 'value'
-        ),
-        'formacao_search' => array(
             'type' => 'value'
         ),
         'tempo_atuacao_search' => array(
@@ -33,11 +31,19 @@ class DocentesController extends AppController {
         'tempo_atuacao_op' => array(
             'type' => 'value'
             
+        ),
+        'formacoes' => array(
+            'type' => 'value'
         )
     );
-
+    
     public function find() {         
         $this->Paginator->settings = $this->paginate;
+        $this->Formacao->recursive = 2;
+        $formacoes = $this->Formacao->find('list');
+        $this->set('formacoes', $formacoes);
+        $areas = $this->Area->find('list');
+        $this->set('areas', $areas);
         $this->set('operators', array(
             '=' => '=',
             '>' => '>',
@@ -51,11 +57,11 @@ class DocentesController extends AppController {
         $this->set('docentes', $this->paginate());
     }
 
-    public function index() {         
+    public function index() {        
         $this->Paginator->settings = $this->paginate;
         $this->Pergunta->recursive = 0;
-        $this->Docente->recursive = -1;
-        $this->set('perguntas', $this->Pergunta->find('first', array('conditions' => array('Tipo.name' => 'Docente'))));
+        $this->Docente->recursive = 1;
+        $this->set('perguntas', $this->Pergunta->find('first', array('conditions' => array('tipo' => 'Docente'))));
         $this->set('docentes', $this->paginate());
     }
 
@@ -64,7 +70,7 @@ class DocentesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->Docente->recursive = -1;
+        $this->Docente->recursive = 1;
         $docente = $this->Docente->findById($id);
         if (!$docente) {
             throw new NotFoundException(__('Invalid'));
@@ -74,13 +80,22 @@ class DocentesController extends AppController {
     }
 
     public function add() {
+        
+        $this->Area->recursive = -1;
+        $areas = $this->Area->find('list');
+        $this->set('areas', $areas);
+        
+        $this->Formacao->recursive = 2;
+        $formacoes = $this->Formacao->find('list');
+        $this->set('formacoes', $formacoes);
+        
         if ($this->request->is('post')) {
             $this->Docente->create();
             if ($this->Docente->save($this->request->data)) {
                 $this->Session->setFlash(__('Docente cadastrado'));
                 $perguntas = $this->Pergunta->find('first', array('conditions' => array('Tipo.name' => 'Docente')));
                 if ($perguntas) {
-                    return $this->redirect(array('action' => 'questionarioAdd', $this->Docente->id, 0, true));
+                    return $this->redirect(array('action' => 'questionarioAdd', 'controller' => 'Docentesrespostas', $this->Docente->id, 0, true));
                 }
                 $this->Session->setFlash(__('Não foi possivel responder questionario'));
                 $this->redirect(array('action' => 'index'));
@@ -95,18 +110,28 @@ class DocentesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->Docente->recursive = -1;
+        $this->Docente->recursive = 1;
         $docente = $this->Docente->findById($id);
-
+        $this->set('docente', $docente);
+        
+        $this->Area->recursive = -1;
+        $areas = $this->Area->find('list');
+        $this->set('areas', $areas);
+        
+        $this->Formacao->recursive = 2;
+        $formacoes = $this->Formacao->find('list');
+        $this->set('formacoes', $formacoes);
+        
         if (!$docente) {
             throw new NotFoundException(__('Invalid'));
         }
 
         if ($this->request->is(array('post', 'put'))) {
             $this->Docente->id = $id;
+            $this->request->data['Docente']['Formacao']['Docente']['id'] = $docente['Docente']['id'];
             if ($this->Docente->save($this->request->data)) {
                 $this->Session->setFlash(__('Registro alterado'));
-                return $this->redirect(array('action' => 'index'));
+                $this->redirect(array('action' => 'index'));
             }
         }
 

@@ -22,11 +22,13 @@ class AreasController extends AppController {
         $this->Paginator->settings = $this->paginate;
         $this->Prg->commonProcess();
         $this->Paginator->settings['conditions'] = $this->Area->parseCriteria($this->Prg->parsedParams());
+        $this->Area->recursive = -1;
         $this->set('areas', $this->paginate());
     }
 
     public function index() {         
         $this->Paginator->settings = $this->paginate;
+        $this->Area->recursive = -1;
         $this->set('areas', $this->paginate());
     }
 
@@ -35,6 +37,7 @@ class AreasController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
+        $this->Area->recursive = -1;
         $area = $this->Area->findById($id);
         if (!$area) {
             throw new NotFoundException(__('Invalid'));
@@ -60,6 +63,7 @@ class AreasController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
+        $this->Area->recursive = -1;
         $area = $this->Area->findById($id);
         if (!$area) {
             throw new NotFoundException(__('Invalid'));
@@ -87,6 +91,7 @@ class AreasController extends AppController {
             throw new NotFoundException(__('Invalid id'));
         }
 
+        $this->Area->recursive = -1;
         $area = $this->Area->findById($id);
         if (!$area) {
             throw new NotFoundException(__('Invalid id'));

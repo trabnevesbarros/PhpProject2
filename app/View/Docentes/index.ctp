@@ -4,7 +4,7 @@
     <thead>
     <th><?php echo $this->Paginator->sort('Docente.nome', 'Nome'); ?></th>
     <th><?php echo $this->Paginator->sort('Docente.area', 'Área'); ?></th>
-    <th><?php echo $this->Paginator->sort('Docente.formacao', 'Formação'); ?></th>
+    <th><?php echo 'Nº formações' ?></th>
     <th><?php echo $this->Paginator->sort('Docente.tempo_atuacao', 'Tempo de atuação'); ?></th>
     <th colspan='3'>Ação</th>
 </thead>
@@ -16,8 +16,8 @@
                 echo $this->Html->link($docente['Docente']['nome'], array('action' => 'view', $docente['Docente']['id']));
                 ?>
             </td>           
-            <td><?php echo $docente['Docente']['area']; ?></td>
-            <td><?php echo $docente['Docente']['formacao']; ?></td>
+            <td><?php echo $docente['Area']['name']; ?></td>
+            <td><?php echo $docente['Docente']['formacoes_count']; ?></td>
             <td><?php echo $docente['Docente']['tempo_atuacao']; ?></td>
             <td>
                 <?php

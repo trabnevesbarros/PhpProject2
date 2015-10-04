@@ -15,23 +15,28 @@ class Palavraschave extends AppModel {
         'Docentesresposta' => array(
             'className' => 'Docentesresposta',
             'joinTable' => 'docentes_palavras',
-            'foreignKey' => 'palavraschave_id',
-            'associationForeignKey' => 'docentesresposta_id'
+            'foreignKey' => 'palavrachave_id',
+            'associationForeignKey' => 'docenteresposta_id'
         ),
         'Empregadoresresposta' => array(
             'className' => 'Empregadoresresposta',
             'joinTable' => 'empregadores_palavras',
-            'foreignKey' => 'palavraschave_id',
-            'associationForeignKey' => 'empregadoresresposta_id'
+            'foreignKey' => 'palavrachave_id',
+            'associationForeignKey' => 'empregadorresposta_id'
         ),
         'Trabalhadoresresposta' => array(
             'className' => 'Trabalhadoresresposta',
             'joinTable' => 'trabalhadores_palavras',
-            'foreignKey' => 'palavraschave_id',
-            'associationForeignKey' => 'trabalhadoresresposta_id'
+            'foreignKey' => 'palavrachave_id',
+            'associationForeignKey' => 'trabalhadorresposta_id'
         )
     );
     
+    public $virtualFields = array(
+        'docentes' => 'SELECT count(*) FROM palavraschaves INNER JOIN docentes_palavras ON (docentes_palavras.palavrachave_id = palavraschaves.id) WHERE palavraschaves.id = Palavraschave.id',
+        'empregadores' => 'SELECT count(*) FROM palavraschaves INNER JOIN empregadores_palavras ON (empregadores_palavras.palavrachave_id = palavraschaves.id) WHERE palavraschaves.id = Palavraschave.id',
+        'trabalhadores' => 'SELECT count(*) FROM palavraschaves INNER JOIN trabalhadores_palavras ON (trabalhadores_palavras.palavrachave_id = palavraschaves.id) WHERE palavraschaves.id = Palavraschave.id'
+    );
     public $actsAs = array('Containable');
 }
 

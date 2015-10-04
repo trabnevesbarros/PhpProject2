@@ -16,15 +16,18 @@ class Docente extends AppModel {
             array('rule' => 'notEmpty'),
             array('rule' => 'numeric', 'message' => 'Campo numérico'))
     );
-    
+    public $virtualFields = array(
+        'formacoes_count' => 'SELECT count(*) FROM docentes_formacoes WHERE docente_id = Docente.id',
+        'area' => 'SELECT name FROM areas WHERE id = Docente.area_id'
+    );
     public $hasMany = array('Docentesresposta' => array('dependent' => true));
     public $belongsTo = array('Area' => array('dependent' => true));
     public $hasAndBelongsToMany = array(
         'Formacao'=> array(
             'className' => 'Formacao',
             'joinTable' => 'docentes_formacoes',
-            'foreingKey' => 'docente_id',
-            'associationForeinKey' => 'formacao_id')
+            'foreignKey' => 'docente_id',
+            'associationForeignKey' => 'formacao_id')
     );
     
     public $actsAs = array('Search.Searchable');
@@ -36,13 +39,8 @@ class Docente extends AppModel {
             'required' => false
         ),
         'area_search' => array(
-            'type' => 'ilike',
-            'field' => 'area',
-            'required' => false
-        ),
-        'formacao_search' => array(
-            'type' => 'ilike',
-            'field' => 'formacao',
+            'type' => 'value',
+            'field' => 'area_id',
             'required' => false
         ),
         'tempo_atuacao_search' => array(
@@ -53,8 +51,33 @@ class Docente extends AppModel {
         ),
         'tempo_atuacao_op' => array(
             'type' => 'checkbox'
-        )
+        ),
+        'formacoes' => array(
+            'type' => 'subquery',
+            'method' => 'findByFormacoes',
+            'field' => '"Docente"."id"'
+        ),
     );
+    
+        public function findByFormacoes($data = array()) {
+        $this->Formacao->Behaviors->attach('Containable', array(
+                'autoFields' => false
+            )
+        );
+        $this->Formacao->DocentesFormacao->Behaviors->attach('Search.Searchable');
+        $query = $this->Formacao->DocentesFormacao->getQuery('all', array(
+            'conditions' => array(
+                array('DocentesFormacao.formacao_id' => $data['formacoes'])
+            ),
+            'fields' => array(
+                'docente_id'
+            ),
+            'contain' => array(
+                'Docente'
+            )
+        ));
+        return $query;
+    }
     
     public function filterTempoAtuacao($data, $field = null) {
             if (empty($data['tempo_atuacao_search'])) {

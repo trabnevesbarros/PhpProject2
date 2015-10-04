@@ -30,19 +30,14 @@ $this->params['pass']
                 <td><?php
                     echo $this->Form->input('area_search', array(
                         'div' => false,
-                        'label' => 'Area'
+                        'label' => 'Area',
+                        'type' => 'select',
+                        'class' => 'boxSearch',
+                        'options' => $areas
                             )
                     );
                     ?>
-                </td>
-                <td><?php
-                    echo $this->Form->input('formacao_search', array(
-                        'div' => false,
-                        'label' => 'Formação'
-                            )
-                    );
-                    ?>
-                </td>
+                </td>                
                 <td><?php
                     echo $this->Form->input('tempo_atuacao_search', array(
                         'div' => false,
@@ -50,14 +45,26 @@ $this->params['pass']
                         'type' => 'number'
                             )
                     );
-                    ?>
-                </td>
-                <td class="boxSearch"><?php
                     echo $this->Form->input('tempo_atuacao_op', array(
                         'div' => false,
-                        'label' => 'Operador',
+                        'label' => '',
                         'type' => 'select',
+                        'class' => 'boxSearch',
                         'options' => $operators
+                            )
+                    );
+                    ?>
+                </td>
+            </tr>
+            <tr>
+                <td colspan='3'><?php
+                    echo $this->Form->input('formacoes', array(
+                        'div' => false,
+                        'type' => 'select',
+                        'multiple' => 'true',
+                        'options' => $formacoes,
+                        'label' => 'Formações',
+                        'class' => 'formacoes_input'
                             )
                     );
                     ?>
@@ -72,7 +79,7 @@ $this->params['pass']
     <thead>
     <th><?php echo $this->Paginator->sort('Docente.nome', 'Nome'); ?></th>
     <th><?php echo $this->Paginator->sort('Docente.area', 'Área'); ?></th>
-    <th><?php echo $this->Paginator->sort('Docente.formacao', 'Formação'); ?></th>
+    <th><?php echo 'Nº formações' ?></th>
     <th><?php echo $this->Paginator->sort('Docente.tempo_atuacao', 'Tempo de atuação'); ?></th>
     <th colspan='3'>Ação</th>
 </thead>
@@ -84,8 +91,8 @@ $this->params['pass']
                 echo $this->Html->link($docente['Docente']['nome'], array('action' => 'view', $docente['Docente']['id']));
                 ?>
             </td>           
-            <td><?php echo $docente['Docente']['area']; ?></td>
-            <td><?php echo $docente['Docente']['formacao']; ?></td>
+            <td><?php echo $docente['Area']['name']; ?></td>
+            <td><?php echo $docente['Docente']['formacoes_count']; ?></td>
             <td><?php echo $docente['Docente']['tempo_atuacao']; ?></td>
             <td>
                 <?php

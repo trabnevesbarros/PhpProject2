@@ -9,7 +9,7 @@
 class EmpregadoresController extends AppController {
 
     public $helpers = array('Html', 'Form', 'Paginator');
-    public $uses = array('Empregador', 'Empregadoresresposta', 'Pergunta');
+    public $uses = array('Empregador', 'Empregadoresresposta', 'Pergunta', 'Cargo', 'Formacao');
     public $paginate = array(
         'limit' => 12
     );
@@ -17,6 +17,7 @@ class EmpregadoresController extends AppController {
         'Search.Prg',
         'Paginator'
     );
+
     public $presetVars = array(
         'nome_search' => array(
             'type' => 'value'
@@ -24,23 +25,43 @@ class EmpregadoresController extends AppController {
         'cargo_search' => array(
             'type' => 'value'
         ),
-        'formacao_search' => array(
+        'tempo_atuacao_search' => array(
+            'type' => 'value'
+        ),
+        'tempo_atuacao_op' => array(
+            'type' => 'value'
+            
+        ),
+        'formacoes' => array(
             'type' => 'value'
         )
     );
-
+    
     public function find() {         
         $this->Paginator->settings = $this->paginate;
+        $this->Formacao->recursive = 2;
+        $formacoes = $this->Formacao->find('list');
+        $this->set('formacoes', $formacoes);
+        $cargos = $this->Cargo->find('list');
+        $this->set('cargos', $cargos);
+        $this->set('operators', array(
+            '=' => '=',
+            '>' => '>',
+            '<' => '<',
+            '>=' => '>=',
+            '<=' => '<=',
+            '!=' => '!='
+            ));
         $this->Prg->commonProcess();
         $this->Paginator->settings['conditions'] = $this->Empregador->parseCriteria($this->Prg->parsedParams());
         $this->set('empregadores', $this->paginate());
     }
 
-    public function index() {         
+    public function index() {        
         $this->Paginator->settings = $this->paginate;
         $this->Pergunta->recursive = 0;
-        $this->Empregador->recursive = -1;
-        $this->set('perguntas', $this->Pergunta->find('first', array('conditions' => array('Tipo.name' => 'Empregador'))));
+        $this->Empregador->recursive = 1;
+        $this->set('perguntas', $this->Pergunta->find('first', array('conditions' => array('tipo' => 'Empregador'))));
         $this->set('empregadores', $this->paginate());
     }
 
@@ -49,7 +70,7 @@ class EmpregadoresController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->Empregador->recursive = -1;
+        $this->Empregador->recursive = 1;
         $empregador = $this->Empregador->findById($id);
         if (!$empregador) {
             throw new NotFoundException(__('Invalid'));
@@ -59,13 +80,22 @@ class EmpregadoresController extends AppController {
     }
 
     public function add() {
+        
+        $this->Cargo->recursive = -1;
+        $cargos = $this->Cargo->find('list');
+        $this->set('cargos', $cargos);
+        
+        $this->Formacao->recursive = 2;
+        $formacoes = $this->Formacao->find('list');
+        $this->set('formacoes', $formacoes);
+        
         if ($this->request->is('post')) {
             $this->Empregador->create();
             if ($this->Empregador->save($this->request->data)) {
                 $this->Session->setFlash(__('Empregador cadastrado'));
                 $perguntas = $this->Pergunta->find('first', array('conditions' => array('Tipo.name' => 'Empregador')));
                 if ($perguntas) {
-                    return $this->redirect(array('action' => 'questionarioAdd', $this->Empregador->id, 0, true));
+                    return $this->redirect(array('action' => 'questionarioAdd', 'controller' => 'Empregadoresrespostas', $this->Empregador->id, 0, true));
                 }
                 $this->Session->setFlash(__('Não foi possivel responder questionario'));
                 $this->redirect(array('action' => 'index'));
@@ -80,18 +110,28 @@ class EmpregadoresController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->Empregador->recursive = -1;
+        $this->Empregador->recursive = 1;
         $empregador = $this->Empregador->findById($id);
-
+        $this->set('empregador', $empregador);
+        
+        $this->Cargo->recursive = -1;
+        $cargos = $this->Cargo->find('list');
+        $this->set('cargos', $cargos);
+        
+        $this->Formacao->recursive = 2;
+        $formacoes = $this->Formacao->find('list');
+        $this->set('formacoes', $formacoes);
+        
         if (!$empregador) {
             throw new NotFoundException(__('Invalid'));
         }
 
         if ($this->request->is(array('post', 'put'))) {
             $this->Empregador->id = $id;
+            $this->request->data['Empregador']['Formacao']['Empregador']['id'] = $empregador['Empregador']['id'];
             if ($this->Empregador->save($this->request->data)) {
                 $this->Session->setFlash(__('Registro alterado'));
-                return $this->redirect(array('action' => 'index'));
+                $this->redirect(array('action' => 'index'));
             }
         }
 

@@ -14,8 +14,8 @@ class Docentesresposta extends AppModel {
         'Palavraschave' => array(
             'className' => 'Palavraschave',
             'joinTable' => 'docentes_palavras',
-            'foreignKey' => 'docentesresposta_id',
-            'associationForeignKey' => 'palavraschave_id'
+            'foreignKey' => 'docenteresposta_id',
+            'associationForeignKey' => 'palavrachave_id'
         )
     );
     
@@ -31,21 +31,7 @@ class Docentesresposta extends AppModel {
             'type' => 'query',
             'method' => 'filterPergunta',
             'field' => 'pergunta'
-        ),
-        'range' => array(
-            'type' => 'expression',
-            'method' => 'makeRangeCondition',
-            'field' => 'Docentesresposta.views BETWEEN ? AND ?'
-        ),
-        'enhanced_search' => array(
-            'type' => 'like',
-            'encode' => true,
-            'before' => false,
-            'after' => false,
-            'field' => array(
-                'ThisModel.name', 'OtherModel.name'
-            )
-        ),
+        )
     );
     
     public function filterPergunta($data, $field = null) {

@@ -31,19 +31,19 @@ class Formacao extends AppModel {
         'Docente'=> array(
             'className' => 'Docente',
             'joinTable' => 'docentes_formacoes',
-            'foreingKey' => 'formacao_id',
+            'foreigngKey' => 'formacao_id',
             'associationForeinKey' => 'docente_id'),
        
         'Empregador'=> array(
             'className' => 'Empregador',
             'joinTable' => 'empregadores_formacoes',
-            'foreingKey' => 'formacao_id',
+            'foreigngKey' => 'formacao_id',
             'associationForeinKey' => 'empregador_id'),
         
         'Trabalhador'=> array(
             'className' => 'Trabalhador',
             'joinTable' => 'trabalhadores_formacoes',
-            'foreingKey' => 'formacao_id',
+            'foreigngKey' => 'formacao_id',
             'associationForeinKey' => 'trabalhador_id')
     );
 }

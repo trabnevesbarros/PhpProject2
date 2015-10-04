@@ -39,6 +39,7 @@ class DocentesrespostasController extends AppController {
     }
 
     public function questionarioFind($docenteId = null) {
+        $this->Paginator->settings = $this->paginate;
         $this->Prg->commonProcess();
 
         if (!$docenteId) {
@@ -54,14 +55,13 @@ class DocentesrespostasController extends AppController {
         $this->Pergunta->recursive = 1;
 
         $conditions = $this->Docentesresposta->parseCriteria($this->Prg->parsedParams());
-        $conditions['Tipo.name'] = 'Docente';
+        $conditions['tipo'] = 'Docente';
         $this->Paginator->settings['conditions'] = $conditions;
         $this->Paginator->settings['contain'] = array(
             'Docentesresposta' =>
             array('conditions' =>
                 array('docente_id' => $docenteId)
-            ),
-            'Tipo',
+            )
         );
         $this->Paginator->settings['limit'] = 12;
 
@@ -72,26 +72,27 @@ class DocentesrespostasController extends AppController {
     }
 
     public function questionarioIndex($docenteId = null) {
+        $this->Paginator->settings = $this->paginate;
         if (!$docenteId) {
             throw new NotFoundException(__('Invalid'));
         }
 
+        $this->Docente->recursive = -1;
         $docente = $this->Docente->findById($docenteId);
         if (!$docente) {
             throw new NotFoundException(__('Invalid'));
         }
 
         $this->Pergunta->virtualFields['status'] = 'CASE WHEN "Pergunta"."id" IN (select pergunta_id from docentesrespostas where docente_id = ' . $docenteId . ') THEN true ELSE false END';
-        $this->Pergunta->recursive = 2;
-        $this->paginate['Pergunta'] = array('contain' =>
+        $this->Pergunta->recursive = 1;
+        $this->Paginator->settings['Pergunta'] = array('contain' =>
             array(
                 'Docentesresposta' =>
                 array('conditions' =>
                     array('docente_id' => $docenteId)
-                ),
-                'Tipo',
+                )
             ),
-            'conditions' => array('Tipo.name' => 'Docente'),
+            'conditions' => array('tipo' => 'Docente'),
             'limit' => 12
         );
 
@@ -138,7 +139,7 @@ class DocentesrespostasController extends AppController {
             }
 
             $this->Pergunta->recursive = 0;
-            $perguntas = $this->Pergunta->find('all', array('conditions' => array('Tipo.name' => 'Docente')));
+            $perguntas = $this->Pergunta->find('all', array('conditions' => array('tipo' => 'Docente')));
             if (!$perguntas) {
                 throw new NotFoundException(__('Invalid'));
             }
@@ -171,7 +172,7 @@ class DocentesrespostasController extends AppController {
             if (!$first) {
                 return $this->redirect(array('action' => 'questionarioIndex', $docenteId));
             } else {
-                return $this->redirect(array('action' => 'index'));
+                return $this->redirect(array('action' => 'index', 'controller' => 'Docentes'));
             }
         }
     }
@@ -234,7 +235,7 @@ class DocentesrespostasController extends AppController {
         }
 
         $this->Palavraschave->recursive = -1;
-        $this->paginate['Palavraschave'] = array(
+        $this->Paginator->settings['Palavraschave'] = array(
             'paramType' => 'querystring',
             'limit' => 12,
             'joins' => array(
@@ -242,11 +243,11 @@ class DocentesrespostasController extends AppController {
                     'type' => 'INNER',
                     'table' => 'docentes_palavras',
                     'alias' => 'DocentesPalavra',
-                    'conditions' => array('DocentesPalavra.palavraschave_id = Palavraschave.id')
+                    'conditions' => array('DocentesPalavra.palavrachave_id = Palavraschave.id')
                 )
             ),
             'conditions' => array(
-                'docentesresposta_id' => $respostaId
+                'docenteresposta_id' => $respostaId
             )
         );
 
@@ -289,12 +290,11 @@ class DocentesrespostasController extends AppController {
                 $values = array('Palavraschave' => array('palavra' => $words[$i], 'compare' => $compare));
                 $palavra = $this->Palavraschave->save($values);
             }
-            $palavraIds[] = (int) $palavra['Palavraschave']['id'];
+            $palavraIds[] = $palavra['Palavraschave']['id'];
         }
 
         if (!empty($palavraIds)) {
-            $resposta = $resposta['Docentesresposta'];
-            $resposta['Palavraschave'] = array_unique($palavraIds);
+            $resposta['Palavraschave']['Palavraschave'] = array_unique($palavraIds);
             $this->Docentesresposta->id = $respostaId;
             $this->Docentesresposta->save($resposta);
         }

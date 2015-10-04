@@ -23,11 +23,13 @@ class FormacoesController extends AppController {
         $this->Paginator->settings = $this->paginate;
         $this->Prg->commonProcess();
         $this->Paginator->settings['conditions'] = $this->Formacao->parseCriteria($this->Prg->parsedParams());
+        $this->Formacao->recursive = -1;
         $this->set('formacoes', $this->paginate());
     }
 
     public function index() {
         $this->Paginator->settings = $this->paginate;
+        $this->Formacao->recursive = -1;
         $this->set('formacoes', $this->paginate());
     }
 
@@ -36,6 +38,7 @@ class FormacoesController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
+        $this->Formacao->recursive = -1;
         $formacao = $this->Formacao->findById($id);
         if (!$formacao) {
             throw new NotFoundException(__('Invalid'));
@@ -60,7 +63,7 @@ class FormacoesController extends AppController {
         if (!$id) {
             throw new NotFoundException(__('Invalid'));
         }
-
+        $this->Formacao->recursive = -1;
         $formacao = $this->Formacao->findById($id);
         if (!$formacao) {
             throw new NotFoundException(__('Invalid'));
@@ -88,6 +91,7 @@ class FormacoesController extends AppController {
             throw new NotFoundException(__('Invalid id'));
         }
 
+        $this->Formacao->recursive = -1;
         $formacao = $this->Formacao->findById($id);
         if (!$formacao) {
             throw new NotFoundException(__('Invalid id'));
