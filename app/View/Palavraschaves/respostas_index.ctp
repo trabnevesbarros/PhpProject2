@@ -2,19 +2,34 @@
 
 <table>
     <thead>
-    <th>Pergunta</th>
+    <th>Nome</th>    
     <th>Tipo</th>
+    <th>Pergunta</th>
 </thead>
 <tbody>
     <?php foreach ($palavra_respostas as $resposta): ?>
-        <tr>      
+        <tr>
             <td>
-                <?php echo $this->Html->link($resposta['Pergunta']['pergunta'], array(
-                    'controller' => $resposta['Tipo']['name'].'srespostas', 
-                    'action' => 'questionarioView', $resposta['id'])) ?>
+                <?php echo $resposta[$resposta['Tipo']['name']]['nome']; ?>
             </td>
             <td>
                 <?php echo $resposta['Tipo']['name']; ?>
+            </td>
+            <td>
+                <?php
+                $value = $resposta['Pergunta']['pergunta'];
+                if (strlen($value) > 50) {
+                    $value = substr($value, 0, 50) . "...";
+                }
+                $controllers = array(
+                    'Trabalhador' => 'Trabalhadoresrespostas',
+                    'Docente' => 'Docentesrespostas',
+                    'Empregador' => 'Empregadoresrespostas'
+                );
+                echo $this->Html->link($value, array(
+                    'controller' => $controllers[$resposta['Tipo']['name']], 
+                    'action' => 'questionarioView', $resposta['id'])) 
+                ?>
             </td>
         </tr>
     <?php endforeach; ?>

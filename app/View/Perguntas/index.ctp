@@ -10,8 +10,15 @@
     <tbody>
         <?php foreach ($perguntas as $pergunta):?>
             <tr>
-                
-                <td><?php echo $this->Html->link($pergunta['Pergunta']['pergunta'], array('action' => 'view', $pergunta['Pergunta']['id']));  ?></td>
+                <td>
+                <?php 
+                $value = $pergunta['Pergunta']['pergunta'];
+                if (strlen($value) > 50) {
+                    $value = substr($value, 0, 50) . "...";
+                }
+                echo $this->Html->link($value, array('action' => 'view', $pergunta['Pergunta']['id']));  
+                ?>
+                </td>
                 
                 <td><?php echo $pergunta['Pergunta']['tipo'];  ?></td>
                 

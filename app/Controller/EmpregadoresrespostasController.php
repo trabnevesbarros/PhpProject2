@@ -275,9 +275,9 @@ class EmpregadoresrespostasController extends AppController {
         $this->loadModel('Stopword');
         $stopwords = $this->Stopword->find('list', array('fields' => array('compare')));
 
-        $string = trim($resposta['Empregadoresresposta']['resposta']);
-        $compares = array_diff(preg_split("/[ \n\r]+/", $this->Acentos->removeAcentos(utf8_decode($string))), $stopwords);
-        $words = preg_split("/[ \n\r]+/", $string);
+        $string = strtolower(trim($resposta['Empregadoresresposta']['resposta']));
+        $compares = array_diff(preg_split("/\P{L}+/u", $this->Acentos->removeAcentos($string)), $stopwords);
+        $words = preg_split("/\P{L}+/u", $string);
 
         //similar_text($string2, $string1, $percent));
 
@@ -294,7 +294,7 @@ class EmpregadoresrespostasController extends AppController {
         }
 
         if (!empty($palavraIds)) {
-            $resposta['Palavraschave']['Palavraschave'] = array_unique($palavraIds);
+            $resposta['Palavraschave'] = array_unique($palavraIds);
             $this->Empregadoresresposta->id = $respostaId;
             $this->Empregadoresresposta->save($resposta);
         }

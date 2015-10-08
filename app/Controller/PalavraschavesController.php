@@ -43,7 +43,7 @@ class PalavraschavesController extends AppController {
         if ($this->request->is('post')) {
             $this->Palavraschave->create();
             $data = $this->request->data;
-            $data['Palavraschave']['palavra'] = preg_split("/[ \n\r]+/", $data['Palavraschave']['palavra'])[0];
+            $data['Palavraschave']['palavra'] = preg_split("/\P{L}+/u", $data['Palavraschave']['palavra'])[0];
             $data['Palavraschave']['compare'] = $this->Acentos->removeAcentos(utf8_decode($data['Palavraschave']['palavra']));
             if ($this->Palavraschave->save($data)) {
                 $this->Session->setFlash('Palavraschave cadastrado');
@@ -67,7 +67,7 @@ class PalavraschavesController extends AppController {
         if ($this->request->is(array('post', 'put'))) {
             $this->Palavraschave->id = $id;
             $data = $this->request->data;
-            $data['Palavraschave']['palavra'] = preg_split("/[ \n\r]+/", $data['Palavraschave']['palavra'])[0];
+            $data['Palavraschave']['palavra'] = preg_split("/\P{L}+/u", $data['Palavraschave']['palavra'])[0];
             $data['Palavraschave']['compare'] = $this->Acentos->removeAcentos(utf8_decode($data['Palavraschave']['palavra']));
             if ($this->Palavraschave->save($data)) {
                 $this->Session->setFlash('Registro Alterado');

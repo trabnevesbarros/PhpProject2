@@ -42,7 +42,8 @@ class DocentesController extends AppController {
         $this->Formacao->recursive = 2;
         $formacoes = $this->Formacao->find('list');
         $this->set('formacoes', $formacoes);
-        $areas = $this->Area->find('list');
+        $areas[''] = '--';
+        $areas += $this->Area->find('list');
         $this->set('areas', $areas);
         $this->set('operators', array(
             '=' => '=',

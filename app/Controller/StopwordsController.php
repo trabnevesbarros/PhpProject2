@@ -52,7 +52,7 @@ class StopwordsController extends AppController {
             if (empty($this->request->data)) {
                 $this->Session->setFlash('Não foi possivel cadastrar stop words');
             } else {
-                $rows = preg_split("/[ \n\r]+/", trim($this->request->data['Stopword']['termos']));
+                $rows = preg_split("/\P{L}+/u", trim($this->request->data['Stopword']['termos']));
                 foreach ($rows as $row) {
                     $data = array('Stopword' => array('termo' => $row, 'compare' => $this->Acentos->removeAcentos(utf8_decode($row))));
                     $this->Stopword->create();
