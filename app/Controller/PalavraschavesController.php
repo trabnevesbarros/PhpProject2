@@ -14,11 +14,21 @@ class PalavraschavesController extends AppController {
         'Paginator',
         'Acentos'
     );
+    public $presetVars = array('palavra_search' => array('type' => 'value'));
+    
     public $uses = array('Palavraschave','Pergunta', 'Tipo', 'Docentesresposta', 'Empregadoresresposta', 'Trabalhadoresresposta');
     public $paginate = array(
         'limit' => 12,
     );
 
+    public function find() {         
+        $this->Paginator->settings = $this->paginate;
+        $this->Prg->commonProcess();
+        $this->Paginator->settings['conditions'] = $this->Palavraschave->parseCriteria($this->Prg->parsedParams());
+        $this->Palavraschave->recursive = -1;        
+        $this->set('palavraschaves', $this->paginate());
+    }
+    
     public function index() {
         $this->Paginator->settings = $this->paginate;
         $this->Palavraschave->recursive = -1;        
@@ -101,43 +111,119 @@ class PalavraschavesController extends AppController {
         }
         return $this->redirect(array('action' => 'index'));
     }
-
-    public function respostasIndex($palavraId) {
+    
+    public function docenteRespostas($palavraId = null) {
         if (!$palavraId) {
             throw new NotFoundException(__('Invalid'));
         }
-
-        $this->Palavraschave->recursive = 2;
+        
+        $this->Palavraschave->recursive = -1;
         $palavra = $this->Palavraschave->findById($palavraId);
-
-
+        
         if (!$palavra) {
             throw new NotFoundException(__('Invalid'));
         }
-
-        $palavra_respostas = null;
         
-        foreach ($palavra as $key => $respostas) {
-            if ($key != 'Palavraschave') {
-                foreach ($respostas as $resposta) {
-                    $palavra_respostas[] = $resposta;
-                }
-            }
+        $this->Palavraschave->DocentesPalavra->bindModel(
+            array('belongsTo' => array(
+                'Docentesresposta' => array(
+                    'foreignKey' => 'docenteresposta_id'
+                )
+            ))
+        );
+        
+        $this->Paginator->settings['DocentesPalavra'] = array(
+            'contain' => array(
+                'Docentesresposta'
+            ),
+            'limit' => 12,
+            'conditions' => array('DocentesPalavra.palavrachave_id' => $palavraId)
+        );
+        
+        $docentesrespostas = $this->paginate('DocentesPalavra');
+        
+        foreach ($docentesrespostas as $key => $docentesresposta) {
+            $docentesrespostas[$key] = $docentesresposta['Docentesresposta'];
         }
-
-        if (!$palavra_respostas) {
+        
+        $this->set('palavra', $palavra['Palavraschave']);
+        $this->set('docentesrespostas', $docentesrespostas);
+    }
+    
+    public function trabalhadorRespostas($palavraId = null) {
+        if (!$palavraId) {
             throw new NotFoundException(__('Invalid'));
         }
-
-        $this->Pergunta->recursive = 0;
-        foreach ($palavra_respostas as $key => $resposta) {
-            $pergunta = $this->Pergunta->findById($resposta['pergunta_id']);
-            $palavra_respostas[$key]['Pergunta'] = $pergunta['Pergunta'];
-            $palavra_respostas[$key]['Tipo'] = $pergunta['Tipo'];
+        
+        $this->Palavraschave->recursive = -1;
+        $palavra = $this->Palavraschave->findById($palavraId);
+        
+        if (!$palavra) {
+            throw new NotFoundException(__('Invalid'));
         }
-
+        
+        $this->Palavraschave->TrabalhadoresPalavra->bindModel(
+            array('belongsTo' => array(
+                'Trabalhadoresresposta' => array(
+                    'foreignKey' => 'trabalhadorresposta_id'
+                )
+            ))
+        );
+        
+        $this->Paginator->settings['TrabalhadoresPalavra'] = array(
+            'contain' => array(
+                'Trabalhadoresresposta'
+            ),
+            'limit' => 12,
+            'conditions' => array('TrabalhadoresPalavra.palavrachave_id' => $palavraId)
+        );
+        
+        $trabalhadoresrespostas = $this->paginate('TrabalhadoresPalavra');
+        
+        foreach ($trabalhadoresrespostas as $key => $trabalhadoresresposta) {
+            $trabalhadoresrespostas[$key] = $trabalhadoresresposta['Trabalhadoresresposta'];
+        }
+        
         $this->set('palavra', $palavra['Palavraschave']);
-        $this->set('palavra_respostas', $palavra_respostas);
+        $this->set('trabalhadoresrespostas', $trabalhadoresrespostas);
+    }
+    
+    public function empregadorRespostas($palavraId = null) {
+        if (!$palavraId) {
+            throw new NotFoundException(__('Invalid'));
+        }
+        
+        $this->Palavraschave->recursive = -1;
+        $palavra = $this->Palavraschave->findById($palavraId);
+        
+        if (!$palavra) {
+            throw new NotFoundException(__('Invalid'));
+        }
+        
+        $this->Palavraschave->EmpregadoresPalavra->bindModel(
+            array('belongsTo' => array(
+                'Empregadoresresposta' => array(
+                    'foreignKey' => 'empregadorresposta_id'
+                )
+            ))
+        );
+        
+        $this->Paginator->settings['EmpregadoresPalavra'] = array(
+            'contain' => array(
+                'Empregadoresresposta'
+            ),
+            'limit' => 12,
+            'conditions' => array('EmpregadoresPalavra.palavrachave_id' => $palavraId)
+        );
+        
+        $empregadoresrespostas = $this->paginate('EmpregadoresPalavra');
+        
+        foreach ($empregadoresrespostas as $key => $empregadoresresposta) {
+            $empregadoresrespostas[$key] = $empregadoresresposta['Empregadoresresposta'];
+        }
+        
+        $this->set('palavra', $palavra['Palavraschave']);
+        $this->set('empregadoresrespostas', $empregadoresrespostas);
     }
 
 }

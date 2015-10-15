@@ -19,6 +19,12 @@ class Trabalhadoresresposta extends AppModel {
         )
     );
     
+    public $virtualFields = array(
+        'trabalhador' => 'select nome from trabalhadores where trabalhadores.id = Trabalhadoresresposta.trabalhador_id',
+        'pergunta' => 'select perguntas.pergunta from perguntas where perguntas.id = Trabalhadoresresposta.pergunta_id',
+        'tipo' => 'select tipos.name from perguntas inner join tipos on (tipos.id = perguntas.tipo_id) where perguntas.id = Trabalhadoresresposta.pergunta_id'
+    );
+    
     public $actsAs = array('Containable', 'Search.Searchable');
     
     public $filterArgs = array(

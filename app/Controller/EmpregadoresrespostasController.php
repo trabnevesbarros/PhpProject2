@@ -18,6 +18,7 @@ class EmpregadoresrespostasController extends AppController {
     public $paginate = array(
         'limit' => 12
     );
+    
     public $presetVars = array('pergunta_search' => array('type' => 'value'));
 
     public function index() {         

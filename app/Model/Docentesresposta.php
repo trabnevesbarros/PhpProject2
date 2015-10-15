@@ -18,6 +18,11 @@ class Docentesresposta extends AppModel {
             'associationForeignKey' => 'palavrachave_id'
         )
     );
+
+    public $virtualFields = array(
+        'docente' => 'select nome from docentes where docentes.id = Docentesresposta.docente_id',
+        'pergunta' => 'select perguntas.pergunta from perguntas where perguntas.id = Docentesresposta.pergunta_id',     
+    );
     
     public $actsAs = array('Containable', 'Search.Searchable');
     

@@ -19,6 +19,11 @@ class Empregadoresresposta extends AppModel {
         )
     );
     
+    public $virtualFields = array(
+        'empregador' => 'select nome from empregadores where empregadores.id = Empregadoresresposta.empregador_id',
+        'pergunta' => 'select perguntas.pergunta from perguntas where perguntas.id = Empregadoresresposta.pergunta_id'
+    );
+    
     public $actsAs = array('Containable', 'Search.Searchable');
     
     public $filterArgs = array(
