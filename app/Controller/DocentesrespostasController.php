@@ -194,9 +194,9 @@ class DocentesrespostasController extends AppController {
             if ($this->Docentesresposta->save($this->request->data)) {
                 $this->palavrasAdd($respostaId);
                 $this->Session->setFlash(__('Registro alterado'));
-                return $this->redirect(array(
+                /*return $this->redirect(array(
                             'action' => 'questionarioIndex',
-                            $resposta['Docentesresposta']['docente_id']));
+                            $resposta['Docentesresposta']['docente_id']));*/
             }
         }
 
@@ -276,11 +276,12 @@ class DocentesrespostasController extends AppController {
         $stopwords = $this->Stopword->find('list', array('fields' => array('compare')));
 
         $string = strtolower(trim($resposta['Docentesresposta']['resposta']));
-        $compares = array_diff(preg_split("/\P{L}+/u", $this->Acentos->removeAcentos($string)), $stopwords);
-        $words = preg_split("/\P{L}+/u", $string);
+        $compares = array_diff(preg_split("/\s+/", $this->Acentos->removeAcentos($string)), $stopwords);
+        $words = preg_split("/\s+/", $string);
 
         //similar_text($string2, $string1, $percent));
-
+        debug($compares);
+        debug($words);
         $this->Palavraschave->recursive = -1;
         $palavraIds = array();
         foreach ($compares as $i => $compare) {
@@ -295,6 +296,7 @@ class DocentesrespostasController extends AppController {
 
         if (!empty($palavraIds)) {
             $resposta['Palavraschave'] = array_unique($palavraIds);
+            debug($resposta['Palavraschave']);
             $this->Docentesresposta->id = $respostaId;
             $this->Docentesresposta->save($resposta);
         }

@@ -277,8 +277,8 @@ class EmpregadoresrespostasController extends AppController {
         $stopwords = $this->Stopword->find('list', array('fields' => array('compare')));
 
         $string = strtolower(trim($resposta['Empregadoresresposta']['resposta']));
-        $compares = array_diff(preg_split("/\P{L}+/u", $this->Acentos->removeAcentos($string)), $stopwords);
-        $words = preg_split("/\P{L}+/u", $string);
+        $compares = array_diff(preg_split("/\s+/", $this->Acentos->removeAcentos($string)), $stopwords);
+        $words = preg_split("/\s+/", $string);
 
         //similar_text($string2, $string1, $percent));
 

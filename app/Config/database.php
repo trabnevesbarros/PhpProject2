@@ -5,9 +5,9 @@ class DATABASE_CONFIG {
 		'datasource' => 'Database/Postgres',
 		'persistent' => false,
 		'host' => 'localhost',
-		'login' => 'victorvbc',
-		'password' => 'reload',
-		'database' => 'apl.old2',
+		'login' => 'postgres',
+		'password' => 'postgres',
+		'database' => 'observatorio2',
 		'prefix' => '',
 		'encoding' => 'utf8'
 	);
