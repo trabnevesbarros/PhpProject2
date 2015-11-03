@@ -278,7 +278,7 @@ class TrabalhadoresrespostasController extends AppController {
 
         $string = strtolower(trim($resposta['Trabalhadoresresposta']['resposta']));
         $compares = array_diff(preg_split("/\s+/", $this->Acentos->removeAcentos($string)), $stopwords);
-        $words = preg_split("/\s+/", $string);
+        $words = preg_split("/\s+/", $this->Acentos->removePontuacao($string));
 
         //similar_text($string2, $string1, $percent));
 
@@ -300,12 +300,11 @@ class TrabalhadoresrespostasController extends AppController {
             $this->Trabalhadoresresposta->save($resposta);
         }
     }
-    public function teste() {
+    /*public function teste() {
         set_time_limit(999999999);
         $respostas = $this->Trabalhadoresresposta->find('all');
         foreach($respostas as $resposta) {
             $this->palavrasAdd($resposta['Trabalhadoresresposta']['id']);
         }
-    }
-
+    }*/
 }

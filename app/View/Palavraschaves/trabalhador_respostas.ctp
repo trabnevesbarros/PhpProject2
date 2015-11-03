@@ -9,7 +9,7 @@
     <?php foreach ($trabalhadoresrespostas as $trabalhadoresresposta): ?>
         <tr>
             <td>
-                <?php echo $trabalhadoresresposta['trabalhador']; ?>
+                <?php echo $this->Html->link($trabalhadoresresposta['trabalhador'], array('controller' => 'trabalhadoresrespostas', 'action' => 'questionarioIndex', $trabalhadoresresposta['trabalhador_id'])); ?>
             </td>
             <td>
                 <?php

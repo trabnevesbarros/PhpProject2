@@ -1,4 +1,4 @@
-<h1>Formação</h1>
+<h1>Perguntas</h1>
 
 <table>
     <thead>

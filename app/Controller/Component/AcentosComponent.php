@@ -22,5 +22,11 @@ class AcentosComponent extends Component {
         $str = preg_replace('/_+/', ' ', $str);
         return trim($str);
     }
+    
+    public function removePontuacao($str) {
+        $str = preg_replace('/[\p{P}]/ui', '_', $str);
+        $str = preg_replace('/_+/', ' ', $str);
+        return trim($str);
+    }
 
 }

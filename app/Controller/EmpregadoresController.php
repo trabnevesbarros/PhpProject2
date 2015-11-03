@@ -54,6 +54,7 @@ class EmpregadoresController extends AppController {
             ));
         $this->Prg->commonProcess();
         $this->Paginator->settings['conditions'] = $this->Empregador->parseCriteria($this->Prg->parsedParams());
+        $this->set('perguntas', $this->Pergunta->find('first', array('conditions' => array('tipo' => 'Empregador'))));
         $this->set('empregadores', $this->paginate());
     }
 

@@ -9,7 +9,7 @@
     <?php foreach ($empregadoresrespostas as $empregadoresresposta): ?>
         <tr>
             <td>
-                <?php echo $empregadoresresposta['empregador']; ?>
+                <?php echo $this->Html->link($empregadoresresposta['empregador'], array('controller' => 'empregadoresrespostas', 'action' => 'questionarioIndex', $empregadoresresposta['empregador_id'])); ?>
             </td>
             <td>
                 <?php

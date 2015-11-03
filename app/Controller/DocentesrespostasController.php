@@ -194,9 +194,9 @@ class DocentesrespostasController extends AppController {
             if ($this->Docentesresposta->save($this->request->data)) {
                 $this->palavrasAdd($respostaId);
                 $this->Session->setFlash(__('Registro alterado'));
-                /*return $this->redirect(array(
+                return $this->redirect(array(
                             'action' => 'questionarioIndex',
-                            $resposta['Docentesresposta']['docente_id']));*/
+                            $resposta['Docentesresposta']['docente_id']));
             }
         }
 
@@ -277,11 +277,10 @@ class DocentesrespostasController extends AppController {
 
         $string = strtolower(trim($resposta['Docentesresposta']['resposta']));
         $compares = array_diff(preg_split("/\s+/", $this->Acentos->removeAcentos($string)), $stopwords);
-        $words = preg_split("/\s+/", $string);
+        $words = preg_split("/\s+/", $this->Acentos->removePontuacao($string));
 
         //similar_text($string2, $string1, $percent));
-        debug($compares);
-        debug($words);
+        
         $this->Palavraschave->recursive = -1;
         $palavraIds = array();
         foreach ($compares as $i => $compare) {
@@ -296,16 +295,15 @@ class DocentesrespostasController extends AppController {
 
         if (!empty($palavraIds)) {
             $resposta['Palavraschave'] = array_unique($palavraIds);
-            debug($resposta['Palavraschave']);
             $this->Docentesresposta->id = $respostaId;
             $this->Docentesresposta->save($resposta);
         }
     }
-    public function teste() {
+    /*public function teste() {
         set_time_limit(999999999);
         $respostas = $this->Docentesresposta->find('all');
         foreach($respostas as $resposta) {
             $this->palavrasAdd($resposta['Docentesresposta']['id']);
         }
-    }
+    }*/
 }

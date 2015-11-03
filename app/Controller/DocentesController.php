@@ -55,6 +55,7 @@ class DocentesController extends AppController {
             ));
         $this->Prg->commonProcess();
         $this->Paginator->settings['conditions'] = $this->Docente->parseCriteria($this->Prg->parsedParams());
+        $this->set('perguntas', $this->Pergunta->find('first', array('conditions' => array('tipo' => 'Docente'))));
         $this->set('docentes', $this->paginate());
     }
 

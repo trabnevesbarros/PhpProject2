@@ -54,6 +54,7 @@ class TrabalhadoresController extends AppController {
             ));
         $this->Prg->commonProcess();
         $this->Paginator->settings['conditions'] = $this->Trabalhador->parseCriteria($this->Prg->parsedParams());
+        $this->set('perguntas', $this->Pergunta->find('first', array('conditions' => array('tipo' => 'Trabalhador'))));
         $this->set('trabalhadores', $this->paginate());
     }
 
