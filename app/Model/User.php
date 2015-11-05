@@ -41,7 +41,7 @@ class User extends AppModel {
             ),
             'unique' => array(
                 'rule' => array('isUnique'),
-                'message' => 'Este e-mail já existe',
+                'message' => 'Este e-mail já existe'
             ),
         ),
         'password_update' => array(
@@ -49,7 +49,7 @@ class User extends AppModel {
         'password_confirm_update' => array(
              'equaltofield' => array(
                 'rule' => array('equaltofield','password_update'),
-                'message' => 'Both passwords must match.',
+                'message' => 'As senhas não são iguais',
                 'required' => false
             )
         )

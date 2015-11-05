@@ -132,12 +132,13 @@ class UsersController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $user = $this->User->findById();
+        $user = $this->User->findById($id);
         if (!$user) {
             throw new NotFoundException(__('Invalid'));
         }
 
         if ($this->request->is(array('post', 'put'))) {
+            $this->User->id = $id;
             if ($this->User->save($this->request->data)) {
                 $this->Session->setFlash(__('Registro alterado'));
                 return $this->redirect(array('action' => 'index'));
@@ -145,7 +146,7 @@ class UsersController extends AppController {
         }
         if (!$this->request->data) {
             $this->request->data = $user;
-            unset($this->request->data['User']['password']);
+            unset($this->request->data['User']['password']);            
         }
     }
 

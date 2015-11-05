@@ -11,15 +11,6 @@
     </li>
     <li>
         <?php
-        if ($this->Session->check('Auth.User')) {
-            echo $this->Html->link('Logout', array('controller' => 'users', 'action' => 'logout'));
-        } else {
-            echo $this->Html->link('Login', array('controller' => 'users', 'action' => 'login'));
-        }
-        ?>                        
-    </li>
-    <li>
-        <?php
         if ($this->Session->check('Auth.User.super')) {
             echo $this->Html->link('Users', array('controller' => 'users', 'action' => 'index'));
         }
@@ -46,5 +37,13 @@
     <li>
         <?php echo $this->Html->link('Palavras-chave', array('controller' => 'palavraschaves', 'action' => 'index')); ?>
     </li>
-
+    <li>
+        <?php
+        if ($this->Session->check('Auth.User')) {
+            echo $this->Html->link('Logout', array('controller' => 'users', 'action' => 'logout'), array('id' => 'logout'));
+        } else {
+            echo $this->Html->link('Login', array('controller' => 'users', 'action' => 'login'));
+        }
+        ?>                        
+    </li>
 </ul>
