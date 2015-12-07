@@ -7,7 +7,7 @@ class DATABASE_CONFIG {
 		'host' => 'localhost',
 		'login' => 'postgres',
 		'password' => 'postgres',
-		'database' => 'observatorio2',
+		'database' => 'observatorio',
 		'prefix' => '',
 		'encoding' => 'utf8'
 	);
