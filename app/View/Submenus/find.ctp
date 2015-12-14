@@ -1,7 +1,7 @@
-<h1>Menues</h1>
+<h1>Submenues</h1>
 
 <?php
-echo $this->Form->create('Menu', array(
+echo $this->Form->create('Submenu', array(
     'url' => array_merge(
             array(
         'action' => 'find'
@@ -56,29 +56,31 @@ echo $this->Form->input('name_search', array(
 
 <table>
     <thead>
-    <th><?php echo $this->Paginator->sort('Menu.name', 'Titulo'); ?></th>
-    <th><?php echo $this->Paginator->sort('Menu.controller', 'Controller'); ?></th>
-    <th><?php echo $this->Paginator->sort('Menu.action', 'Action'); ?></th>
+    <th><?php echo $this->Paginator->sort('Submenu.name', 'Titulo'); ?></th>
+    <th><?php echo $this->Paginator->sort('Submenu.controller', 'Controller'); ?></th>
+    <th><?php echo $this->Paginator->sort('Submenu.menu_id', 'Menu'); ?></th>
+    <th><?php echo $this->Paginator->sort('Submenu.action', 'Action'); ?></th>
     <th colspan='3'>Ação</th>
 </thead>
 <tbody>
-<?php foreach ($menus as $menu): ?>
+<?php foreach ($submenus as $submenu): ?>
         <tr>      
             <td>
     <?php
-    echo $this->Html->link($menu['Menu']['name'], array('action' => 'view', $menu['Menu']['id']));
+    echo $this->Html->link($submenu['Submenu']['name'], array('action' => 'view', $submenu['Submenu']['id']));
     ?>
             </td>           
-            <td><?php echo $menu['Menu']['controller']; ?></td>
-            <td><?php echo $menu['Menu']['action']; ?></td>
+            <td><?php echo $submenu['Submenu']['controller']; ?></td>
+            <td><?php echo $submenu['Submenu']['action']; ?></td>
+            <td><?php echo $submenu['Submenu']['menus']; ?></td>
             <td>
     <?php
-    echo $this->Html->link('Alterar', array('action' => 'edit', $menu['Menu']['id']));
+    echo $this->Html->link('Alterar', array('action' => 'edit', $submenu['Submenu']['id']));
     ?>
             </td>
             <td>
     <?php
-    echo $this->Form->postLink('Remover', array('action' => 'delete', $menu['Menu']['id']), array('confirm' => 'Você tem certeza?'));
+    echo $this->Form->postLink('Remover', array('action' => 'delete', $submenu['Submenu']['id']), array('confirm' => 'Você tem certeza?'));
     ?>
             </td>
             <td>
@@ -91,7 +93,7 @@ echo $this->Form->input('name_search', array(
 </table>
 
 <?php
-echo $this->Html->link('Adicionar menu', array('action' => 'add'));
+echo $this->Html->link('Adicionar submenu', array('action' => 'add'));
 echo '<br/>';
 echo $this->Html->link('Voltar', array('action' => 'index'));
 ?>

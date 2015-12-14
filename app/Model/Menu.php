@@ -10,7 +10,7 @@ Class Menu extends AppModel{
     public $useTable = 'menus';
     
     public $validate = array(
-        'titulo' => array(
+        'name' => array(
             array('rule' => 'notEmpty')
         )
     );
@@ -21,7 +21,17 @@ Class Menu extends AppModel{
     public $filterArgs = array(
         'name_search' => array(
             'type' => 'ilike',
-            'field' => 'titulo',
+            'field' => 'name',
+            'required' => false
+        ),
+        'controller' => array(
+            'type' => 'ilike',
+            'field' => 'controller',
+            'required' => false
+        ),
+        'action' => array(
+            'type' => 'ilike',
+            'field' => 'action',
             'required' => false
         )
     );

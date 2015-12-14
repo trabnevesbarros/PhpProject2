@@ -16,6 +16,11 @@
         }
         ?>
     </li>
+    <?php
+    foreach ($array as $value) {
+        
+    }
+    ?>
     <li>
         <?php echo $this->Html->link('Docentes', array('controller' => 'docentes', 'action' => 'index')); ?>
     </li>

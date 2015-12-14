@@ -6,10 +6,10 @@
  * and open the template in the editor.
  */
 
-class MenusController extends AppController {
+class SubmenusController extends AppController {
 
     public $helpers = array('Html', 'Form', 'Paginator');
-    public $uses = array('Menu');
+    public $uses = array('Submenu', 'Menu');
     public $paginate = array(
         'limit' => 12
     );
@@ -29,12 +29,11 @@ class MenusController extends AppController {
 
     public function index() {
         $this->Paginator->settings = $this->paginate;
-        $this->Menu->recursive = 0;
-        $this->set('menus', $this->paginate());
+        $this->Submenu->recursive = 1;
+        $this->set('submenus', $this->paginate());
         
     }
 
-    
     public function add() {
         $controller = array();
         foreach ($this->Ctrl->get() as $key => $value) {
@@ -48,21 +47,24 @@ class MenusController extends AppController {
             'add' => 'adicionar',
             'find' => 'pesquisar'
         ));
-
+        
+        $this->set('menus', $this->Menu->find('list'));
+        
+        
         if ($this->request->is('post')) {
-            $this->Menu->create();
+            $this->Submenu->create();
             
-            if ($this->Menu->save($this->request->data)) {
-                $this->Session->setFlash(__('Menu cadastrado'));
+            if ($this->Submenu->save($this->request->data)) {
+                $this->Session->setFlash(__('Submenu cadastrado'));
                 $this->redirect(array('action' => 'index'));
             } else {
-                $this->Session->setFlash(__('Não foi possivel cadastrar menu'));
+                $this->Session->setFlash(__('Não foi possivel cadastrar submenu'));
             }
         }
 
         $this->Prg->commonProcess();
-        $this->Paginator->settings['conditions'] = $this->Menu->parseCriteria($this->Prg->parsedParams());
-        $this->set('menus', $this->paginate());
+        $this->Paginator->settings['conditions'] = $this->Submenu->parseCriteria($this->Prg->parsedParams());
+        $this->set('submenus', $this->paginate());
     }
 
     public function edit($id = null) {
@@ -82,21 +84,25 @@ class MenusController extends AppController {
             'add' => 'adicionar',
             'find' => 'pesquisar'
         ));
-        $menu = $this->Menu->findById($id);
-        if (!$menu) {
+        
+        
+        $this->set('menus', $this->Menu->find('list'));
+        
+        $submenu = $this->Submenu->findById($id);
+        if (!$submenu) {
             throw new NotFoundException(__('Invalid'));
         }
 
         if ($this->request->is(array('post', 'put'))) {
-            $this->Menu->id = $id;
-            if ($this->Menu->save($this->request->data)) {
+            $this->Submenu->id = $id;
+            if ($this->Submenu->save($this->request->data)) {
                 $this->Session->setFlash(__('Registro alterado'));
                 $this->redirect(array('action' => 'index'));
             }
         }
 
         if (!$this->request->data) {
-            $this->request->data = $menu;
+            $this->request->data = $submenu;
         }
     }
 
@@ -109,14 +115,14 @@ class MenusController extends AppController {
             throw new NotFoundException(__('Invalid'));
         }
 
-        $this->Menu->recursive = -1;
-        $menu = $this->Menu->findById($id);
-        if (!$menu) {
+        $this->Submenu->recursive = -1;
+        $submenu = $this->Submenu->findById($id);
+        if (!$submenu) {
             throw new NotFoundException(__('Invalid'));
         }
 
-        if ($this->Menu->delete($id)) {
-            $this->Session->setFlash(__('Menu removido'));
+        if ($this->Submenu->delete($id)) {
+            $this->Session->setFlash(__('Submenu removido'));
         } else {
             $this->Session->setFlash(__('Não foi possivel remover empregador'));
         }
@@ -138,11 +144,12 @@ class MenusController extends AppController {
             'add' => 'adicionar',
             'find' => 'pesquisar'
         ));
+        $this->set('menus', $this->Menu->find('list'));
         
         $this->Paginator->settings = $this->paginate;
         $this->Prg->commonProcess();
-        $this->Paginator->settings['conditions'] = $this->Menu->parseCriteria($this->Prg->parsedParams());
-        $this->set('menus', $this->paginate());
+        $this->Paginator->settings['conditions'] = $this->Submenu->parseCriteria($this->Prg->parsedParams());
+        $this->set('submenus', $this->paginate());
     }
 
 }

@@ -2,7 +2,7 @@
 
 <table>
     <thead>
-    <th><?php echo $this->Paginator->sort('Menu.titulo', 'Titulo'); ?></th>
+    <th><?php echo $this->Paginator->sort('Menu.name', 'Titulo'); ?></th>
     <th><?php echo $this->Paginator->sort('Menu.controller', 'Controller'); ?></th>
     <th><?php echo $this->Paginator->sort('Menu.action', 'Ação'); ?></th>
     <th colspan='2'>Ação</th>
@@ -12,7 +12,7 @@
         <tr>      
             <td>
                 <?php
-                echo $this->Html->link($menu['Menu']['titulo'], array('action' => 'view', $menu['Menu']['id']));
+                echo $menu['Menu']['name'];
                 ?>
             </td>
             <td><?php echo $menu['Menu']['controller']; ?></td>
