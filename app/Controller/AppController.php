@@ -48,4 +48,11 @@ class AppController extends Controller {
         )
     );
 
+    function beforeRender() {
+        parent::beforeRender();
+        $this->loadModel('Menu');
+        $this->Menu->recursive = 1;
+        $this->set('listaMenus', $this->Menu->find('all'));
+        
+    }
 }

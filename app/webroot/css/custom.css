@@ -8,6 +8,72 @@ and open the template in the editor.
     Author     : michel
 */
 
+
+body, 
+.menu,
+.sub-menu {
+  margin: 0;
+  padding: 0;
+}
+
+.clearfix:after{
+  content: '.';
+  display: block;
+  clear: both;
+  height: 0;
+  line-height: 0;
+  font-size: 0;
+  visibility: hidden;
+  overflow: hidden;
+}
+.menu,
+.sub-menu {
+  list-style: none;
+  
+}
+.sub-menu {
+  //background: #444;
+}
+.menu a {
+  text-decoration: none;
+  display: block;
+  padding: 10px;
+  color: #fff;
+  font-family: sans-serif;
+  font-size: 14px;
+  text-transform: uppercase;
+  font-weight: 700;
+
+}
+.menu li {
+  position: relative;
+}
+.menu > li {
+//  float: left;
+}
+.menu > li:hover {
+  //background: #444;
+}
+.menu li:hover > .sub-menu {
+  display: block;
+}
+
+.sub-menu {
+  display: none;
+  position: relative;
+  min-width: 150px;
+  
+}
+
+.sub-menu li:hover {
+  background: #555;
+}
+
+.sub-menu .sub-menu {
+  top: 0;
+  left: 100%;
+}
+
 .search {
     border-radius: 25px;
     border: 2px solid #8AC007;
@@ -81,10 +147,6 @@ and open the template in the editor.
     margin-left: 0%;
     overflow-y: auto;
     background: #8eb0cc;
-    -webkit-transition: all 0.5s ease;
-    -moz-transition: all 0.5s ease;
-    -o-transition: all 0.5s ease;
-    transition: all 0.5s ease;
 }
 
 #wrapper.toggled #sidebar-wrapper {
@@ -101,54 +163,6 @@ and open the template in the editor.
     margin-right: 1em;
 }
 
-/* Sidebar Styles */
-
-.sidebar-nav {
-    top: 0;
-    width: 0em;
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.sidebar-nav li {
-    text-indent: 1em;
-    line-height: 2em;
-}
-
-.sidebar-nav li a {
-    display: block;
-    text-decoration: none;
-    color: #000;
-}
-
-.sidebar-nav li a:hover {
-    text-decoration: none;
-    color: #fff;
-    background: rgba(255,255,255,0.2);
-}
-
-.sidebar-nav li a:active,
-.sidebar-nav li a:focus {
-    text-decoration: none;
-}
-
-.sidebar-nav > .sidebar-brand {
-    height: 2.5em;
-    font-size: 1.75em;
-    line-height: 2.5em;
-}
-
-.sidebar-nav > .sidebar-brand a {
-    color: #000;
-}
-
-.sidebar-nav > .sidebar-brand {
-    color: #fff;
-    pointer-events: none;
-    background: none;
-}
-
 #logout {
     color: red;
 }
@@ -163,7 +177,7 @@ and open the template in the editor.
     }
 
     #sidebar-wrapper {
-        width: 11em;
+        width: 200px;
     }
 
     #wrapper.toggled #sidebar-wrapper {

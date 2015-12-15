@@ -18,6 +18,7 @@
 ?>
 <!DOCTYPE html>
 <html>
+    
     <head>
         <?php
         echo $this->Html->charset();
@@ -39,7 +40,20 @@
             </div>
             <div id="content">
                 <div id="sidebar-wrapper">
-                    <?php echo $this->element('sidebar'); ?>
+                    <div class="menu-container">
+                        <ul class="menu">
+                            <?php
+                            foreach ($listaMenus as $lMenu) {
+                                echo '<li>' . $this->Html->link($lMenu['Menu']['name'], array('controller' => $lMenu['Menu']['controller'], 'action' => $lMenu['Menu']['action']));
+                                echo '<ul class="sub-menu">';
+                                foreach ($lMenu['Submenu'] as $lSubmenu) {
+                                    echo '<li>' . $this->Html->link($lSubmenu['name'], array('controller' => $lSubmenu['controller'], 'action' => $lSubmenu['action'])) . '</li>';
+                                }
+                                echo '</ul></li>';
+                            }
+                            ?>
+                        </ul>
+                    </div>
                 </div>
                 <div id="page-content-wrapper">
                     <?php echo $this->Session->flash(); ?>
@@ -47,8 +61,12 @@
                 </div>
             </div>
         </div>
-        <div id="footer">  
-            <?php echo $this->element('footerIf'); ?>
+        <div id="footer"> 
+            <?php echo $this->element('footerIf');
+            foreach ($listaMenus as $lMenu) {
+                debug($lMenu);
+            }
+            ?>
         </div>
         <?php echo $this->element('sql_dump'); ?>
     </body>

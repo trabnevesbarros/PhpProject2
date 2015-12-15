@@ -9,7 +9,7 @@
 class MenusController extends AppController {
 
     public $helpers = array('Html', 'Form', 'Paginator');
-    public $uses = array('Menu');
+    public $uses = array('Menu', 'Submenu');
     public $paginate = array(
         'limit' => 12
     );
@@ -33,12 +33,26 @@ class MenusController extends AppController {
         $this->set('menus', $this->paginate());
         
     }
+    
+    public function view($id = null) {
+        if (!$id) {
+            throw new NotFoundException(__('Invalid'));
+        }
 
+        $menu = $this->Menu->findById($id);
+        if (!$menu) {
+            throw new NotFoundException(__('Invalid'));
+        }
+
+        $this->set('menu', $menu);
+    }
     
     public function add() {
         $controller = array();
         foreach ($this->Ctrl->get() as $key => $value) {
-            $controller[$key] = $key;
+            $aux = strtolower(str_replace("Controller", "", $key));
+            
+            $controller[$aux] = $key;
             
         }
         $this->set('controller', $controller);
@@ -72,7 +86,9 @@ class MenusController extends AppController {
         }
         $controller = array();
         foreach ($this->Ctrl->get() as $key => $value) {
-            $controller[$key] = $key;
+            $aux = strtolower(str_replace("Controller", "", $key));
+            
+            $controller[$aux] = $key;
             
         }
         $this->set('controller', $controller);
@@ -144,5 +160,7 @@ class MenusController extends AppController {
         $this->Paginator->settings['conditions'] = $this->Menu->parseCriteria($this->Prg->parsedParams());
         $this->set('menus', $this->paginate());
     }
-
+    
+ 
+    
 }

@@ -18,7 +18,8 @@
             </td>
             <td><?php echo $submenu['Submenu']['controller']; ?></td>
             <td><?php echo $submenu['Submenu']['action']; ?></td>
-            <td><?php echo $submenu['Submenu']['menu']; ?></td>
+            <td><?php echo $this->Html->link($submenu['Menu']['name'], array('controller' => 'Menus' ,'action' => 'view', $submenu['Menu']['id']));  ?></td>
+  
             <td>
                 <?php
                 echo $this->Html->link('Alterar', array('action' => 'edit', $submenu['Submenu']['id']));

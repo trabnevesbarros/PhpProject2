@@ -21,11 +21,14 @@ class SubmenusController extends AppController {
     public $presetVars = array(
         'name_search' => array(
             'type' => 'value'),
-        'controller' => array(
+        'controller_search' => array(
             'type' => 'value'),
-        'action' => array(
+        'action_search' => array(
             'type' => 'value'
-            ));
+            ),
+        'menu_search' => array(
+            'type' => 'valuee'
+        ));
 
     public function index() {
         $this->Paginator->settings = $this->paginate;
@@ -37,7 +40,9 @@ class SubmenusController extends AppController {
     public function add() {
         $controller = array();
         foreach ($this->Ctrl->get() as $key => $value) {
-            $controller[$key] = $key;
+            $aux = strtolower(str_replace("Controller", "", $key));
+            
+            $controller[$aux] = $key;
             
         }
         $this->set('controller', $controller);
@@ -74,7 +79,9 @@ class SubmenusController extends AppController {
         }
         $controller = array();
         foreach ($this->Ctrl->get() as $key => $value) {
-            $controller[$key] = $key;
+            $aux = strtolower(str_replace("Controller", "", $key));
+            
+            $controller[$aux] = $key;
             
         }
         $this->set('controller', $controller);
@@ -144,7 +151,9 @@ class SubmenusController extends AppController {
             'add' => 'adicionar',
             'find' => 'pesquisar'
         ));
-        $this->set('menus', $this->Menu->find('list'));
+        $menus = array('' => '--');
+        $menus += $this->Menu->find('list');
+        $this->set('menus', $menus);
         
         $this->Paginator->settings = $this->paginate;
         $this->Prg->commonProcess();

@@ -1,4 +1,4 @@
-<h1>Submenues</h1>
+<h1>Submenus</h1>
 
 <?php
 echo $this->Form->create('Submenu', array(
@@ -26,7 +26,7 @@ echo $this->Form->input('name_search', array(
 ?>
                 </td>            
                 <td><?php
-                    echo $this->Form->input('controller', array(
+                    echo $this->Form->input('controller_search', array(
                         'div' => false,
                         'label' => 'Controller',
                         'type' => 'select',
@@ -39,11 +39,21 @@ echo $this->Form->input('name_search', array(
             </tr>
             <tr>
                 <td><?php
-                    echo $this->Form->input('action', array(
+                    echo $this->Form->input('action_search', array(
                         'div' => false,
                         'type' => 'select',
                         'options' => $action,
                         'label' => 'Action'
+                            )
+                    );
+?>
+                </td>
+                <td><?php
+                    echo $this->Form->input('menu_search', array(
+                        'div' => false,
+                        'type' => 'select',
+                        'options' => $menus,
+                        'label' => 'Menu'
                             )
                     );
 ?>
@@ -58,8 +68,9 @@ echo $this->Form->input('name_search', array(
     <thead>
     <th><?php echo $this->Paginator->sort('Submenu.name', 'Titulo'); ?></th>
     <th><?php echo $this->Paginator->sort('Submenu.controller', 'Controller'); ?></th>
-    <th><?php echo $this->Paginator->sort('Submenu.menu_id', 'Menu'); ?></th>
     <th><?php echo $this->Paginator->sort('Submenu.action', 'Action'); ?></th>
+    <th><?php echo $this->Paginator->sort('Submenu.menu_id', 'Menu'); ?></th>
+    
     <th colspan='3'>Ação</th>
 </thead>
 <tbody>
@@ -72,7 +83,7 @@ echo $this->Form->input('name_search', array(
             </td>           
             <td><?php echo $submenu['Submenu']['controller']; ?></td>
             <td><?php echo $submenu['Submenu']['action']; ?></td>
-            <td><?php echo $submenu['Submenu']['menus']; ?></td>
+            <td><?php echo $this->Html->link($submenu['Menu']['name'], array('controller' => 'Menus' ,'action' => 'view', $submenu['Menu']['id']));  ?></td>
             <td>
     <?php
     echo $this->Html->link('Alterar', array('action' => 'edit', $submenu['Submenu']['id']));

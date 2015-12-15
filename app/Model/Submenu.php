@@ -21,7 +21,22 @@ Class Submenu extends AppModel{
     public $filterArgs = array(
         'name_search' => array(
             'type' => 'ilike',
-            'field' => 'titulo',
+            'field' => 'name',
+            'required' => false
+        ),
+        'controller_search' => array(
+            'type' => 'ilike',
+            'field' => 'controller',
+            'required' => false
+        ),
+        'action_search' => array(
+            'type' => 'ilike',
+            'field' => 'action',
+            'required' => false
+        ),
+        'menu_search' => array(
+            'type' => 'value',
+            'field' => 'menu_id',
             'required' => false
         )
     );
