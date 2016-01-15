@@ -62,10 +62,11 @@ class MenusController extends AppController {
             'add' => 'adicionar',
             'find' => 'pesquisar'
         ));
-
+        
         if ($this->request->is('post')) {
             $this->Menu->create();
             
+            $this->request->data['Menu']['ordem'] = $this->Menu->find('count');    
             if ($this->Menu->save($this->request->data)) {
                 $this->Session->setFlash(__('Menu cadastrado'));
                 $this->redirect(array('action' => 'index'));

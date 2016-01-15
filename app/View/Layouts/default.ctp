@@ -63,9 +63,7 @@
         </div>
         <div id="footer"> 
             <?php echo $this->element('footerIf');
-            foreach ($listaMenus as $lMenu) {
-                debug($lMenu);
-            }
+            
             ?>
         </div>
         <?php echo $this->element('sql_dump'); ?>
