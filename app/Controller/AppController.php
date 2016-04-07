@@ -52,7 +52,7 @@ class AppController extends Controller {
         parent::beforeRender();
         $this->loadModel('Menu');
         $this->Menu->recursive = 1;
-        $this->set('listaMenus', $this->Menu->find('all'));
+        $this->set('listaMenus', $this->Menu->find('all', array('order' => array('Menu.order' => 'asc'))));
         
     }
 }

@@ -24,6 +24,11 @@
 /** General Style Info **/
 
 
+#seta{
+    width: 20px;
+    height: 20px;
+}
+
 body {
     
     background: #fff;

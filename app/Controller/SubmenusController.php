@@ -93,7 +93,7 @@ class SubmenusController extends AppController {
         ));
         
         
-        $this->set('menus', $this->Menu->find('list'));
+        $this->set('menu', $this->Menu->find('list'));
         
         $submenu = $this->Submenu->findById($id);
         if (!$submenu) {
@@ -135,6 +135,8 @@ class SubmenusController extends AppController {
         }
         return $this->redirect(array('action' => 'index'));
     }
+    
+    
     public function find() {  
         
         $controller = array();

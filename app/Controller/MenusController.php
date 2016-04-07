@@ -11,7 +11,8 @@ class MenusController extends AppController {
     public $helpers = array('Html', 'Form', 'Paginator');
     public $uses = array('Menu', 'Submenu');
     public $paginate = array(
-        'limit' => 12
+        'limit' => 12,
+        'order' => array('Menu.order' => 'asc')
     );
     public $components = array(
         'Search.Prg',
@@ -25,15 +26,14 @@ class MenusController extends AppController {
             'type' => 'value'),
         'action' => array(
             'type' => 'value'
-            ));
+    ));
 
     public function index() {
         $this->Paginator->settings = $this->paginate;
         $this->Menu->recursive = 0;
         $this->set('menus', $this->paginate());
-        
     }
-    
+
     public function view($id = null) {
         if (!$id) {
             throw new NotFoundException(__('Invalid'));
@@ -46,27 +46,26 @@ class MenusController extends AppController {
 
         $this->set('menu', $menu);
     }
-    
+
     public function add() {
         $controller = array();
         foreach ($this->Ctrl->get() as $key => $value) {
             $aux = strtolower(str_replace("Controller", "", $key));
-            
+
             $controller[$aux] = $key;
-            
         }
         $this->set('controller', $controller);
-        
+
         $this->set('action', array(
             'index' => 'listar',
             'add' => 'adicionar',
             'find' => 'pesquisar'
         ));
-        
+
         if ($this->request->is('post')) {
             $this->Menu->create();
-            
-            $this->request->data['Menu']['ordem'] = $this->Menu->find('count');    
+
+            $this->request->data['Menu']['order'] = $this->Menu->find('count');
             if ($this->Menu->save($this->request->data)) {
                 $this->Session->setFlash(__('Menu cadastrado'));
                 $this->redirect(array('action' => 'index'));
@@ -80,20 +79,64 @@ class MenusController extends AppController {
         $this->set('menus', $this->paginate());
     }
 
-    public function edit($id = null) {
+    public function move($id = null, $type = true) { // true - down, false - up
+        if ($this->request->is('get')) {
+            throw new UnauthorizedException(__('Not allowed'));
+        }
         
+        if (!$id) {
+            throw new NotFoundException(__('Invalid'));
+        }
+        
+        $menusrfs = array();
+        
+        $this->Menu->recursive = -1;
+
+        $menu = $this->Menu->findById($id);
+        if (!$menu) {
+            throw new NotFoundException(__('Invalid'));
+        }
+
+        if ($menu['Menu']['order'] != 0 && !$type) {
+            $menub = $this->Menu->findByOrder($menu['Menu']['order']-1);
+            $menu['Menu']['order']--;
+            $menub['Menu']['order']++;
+            $menusrfs[] = $menu;
+            $menusrfs[] = $menub;
+            if ($this->Menu->saveMany($menusrfs)) {
+                $this->Session->setFlash(__('Ordem alterada'));
+            } else {
+               $this->Session->setFlash(__('Não foi possível alterar a ordem'));
+            }
+        } else if ($menu['Menu']['order'] != $this->Menu->find('count')-1 && $type) {
+            $menub = $this->Menu->findByOrder($menu['Menu']['order']+1);
+            $menu['Menu']['order']++;
+            $menub['Menu']['order']--;
+            $menusrfs[] = $menu;
+            $menusrfs[] = $menub;
+            if ($this->Menu->saveMany($menusrfs)) {
+                $this->Session->setFlash(__('Ordem alterada'));
+            } else {
+               $this->Session->setFlash(__('Não foi possível alterar a ordem'));
+            }
+        }
+            return $this->redirect(array('action' => 'index'));
+        
+    }
+
+    public function edit($id = null) {
+
         if (!$id) {
             throw new NotFoundException(__('Invalid'));
         }
         $controller = array();
         foreach ($this->Ctrl->get() as $key => $value) {
             $aux = strtolower(str_replace("Controller", "", $key));
-            
+
             $controller[$aux] = $key;
-            
         }
         $this->set('controller', $controller);
-        
+
         $this->set('action', array(
             'index' => 'listar',
             'add' => 'adicionar',
@@ -131,7 +174,6 @@ class MenusController extends AppController {
         if (!$menu) {
             throw new NotFoundException(__('Invalid'));
         }
-
         if ($this->Menu->delete($id)) {
             $this->Session->setFlash(__('Menu removido'));
         } else {
@@ -139,29 +181,27 @@ class MenusController extends AppController {
         }
         return $this->redirect(array('action' => 'index'));
     }
-    public function find() {  
-        
+
+    public function find() {
+
         $controller = array();
         $controller[''] = '--';
         foreach ($this->Ctrl->get() as $key => $value) {
             $controller[$key] = $key;
-            
         }
         $this->set('controller', $controller);
-        
+
         $this->set('action', array(
             '' => '--',
             'index' => 'listar',
             'add' => 'adicionar',
             'find' => 'pesquisar'
         ));
-        
+
         $this->Paginator->settings = $this->paginate;
         $this->Prg->commonProcess();
         $this->Paginator->settings['conditions'] = $this->Menu->parseCriteria($this->Prg->parsedParams());
         $this->set('menus', $this->paginate());
     }
-    
- 
-    
+
 }
