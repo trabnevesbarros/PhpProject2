@@ -59,7 +59,7 @@ class Docente extends AppModel {
         ),
     );
     
-        public function findByFormacoes($data = array()) {
+    public function findByFormacoes($data = array()) {
         $this->Formacao->Behaviors->attach('Containable', array(
                 'autoFields' => false
             )

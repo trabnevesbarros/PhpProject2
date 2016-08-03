@@ -295,6 +295,7 @@ class TrabalhadoresrespostasController extends AppController {
         }
 
         if (!empty($palavraIds)) {
+            //$resposta['Palavraschave']['Palavraschave'] = array_count_values($palavraIds);
             $resposta['Palavraschave']['Palavraschave'] = array_unique($palavraIds);
             $this->Trabalhadoresresposta->id = $respostaId;
             $this->Trabalhadoresresposta->save($resposta);
